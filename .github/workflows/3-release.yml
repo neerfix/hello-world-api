@@ -1,0 +1,34 @@
+name: 🏁 3 - Release
+
+# Run this workflow every time a new commit pushed to your repository
+on:
+  release:
+    types: # This configuration does not affect the page_build event above
+      - published
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment: production
+    # needs: test
+#    FIXME edit script to AWS
+    steps:
+      - name: Configure SSH
+        run: |
+          mkdir -p ~/.ssh/
+          echo "$SSH_KEY" > ~/.ssh/staging.key
+          chmod 600 ~/.ssh/staging.key
+          cat >>~/.ssh/config <<END
+          Host staging
+            HostName $SSH_HOST
+            User $SSH_USER
+            IdentityFile ~/.ssh/staging.key
+            StrictHostKeyChecking no
+          END
+        env:
+          SSH_USER: ${{ secrets.USERNAME }}
+          SSH_KEY: ${{ secrets.SSH_KEY }}
+          SSH_HOST: ${{ secrets.HOST }}
+
+      #    FIXME edit script to AWS
+      - name: Check out the source
+        run: ssh staging -p ${{ secrets.PORT }}

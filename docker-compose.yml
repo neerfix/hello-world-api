@@ -1,0 +1,42 @@
+version: '3.1'
+services:
+  web:
+    image: nginx:latest
+    ports:
+      - "5080:80"
+    volumes:
+      - .:/app:cached
+      - .docker/nginx/nginx.conf:/etc/nginx/conf.d/default.conf
+    depends_on:
+      - "php"
+
+  php:
+    build: .docker/php
+    working_dir: /app
+    volumes:
+      - .:/app:cached
+      - ./vendor:/app/vendor
+    environment:
+      APP_ENV: dev
+    depends_on:
+      - mysql
+      - redis
+
+  redis:
+    image: "redis:alpine"
+
+  mysql:
+    ports:
+      - "5306:3306"
+    image: mysql:8.0.27
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: www
+      TZ: Europe/Paris
+    volumes:
+      - db_data:/var/lib/mysql
+    depends_on:
+      - "redis"
+
+volumes:
+  db_data:
