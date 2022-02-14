@@ -7,10 +7,6 @@ jobs:
   merge:
     runs-on: ubuntu-latest
     steps:
-# FIXME sleep for lint
-      - name: Sleep for 100 seconds
-        run: sleep 100s
-        shell: bash
       - name: Merge pull requests (automerge-action)
         # You may pin to the exact commit or the version.
         # uses: pascalgn/automerge-action@01fb84a9d077930bf9d16d1f7fa3fe2ffe45aabe
