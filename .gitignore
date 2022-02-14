@@ -15,3 +15,4 @@
 ###< friendsofphp/php-cs-fixer ###
 
 /.idea/
+api.iml
