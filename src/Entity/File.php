@@ -178,5 +178,4 @@ class File
 
         return $this;
     }
-
 }
