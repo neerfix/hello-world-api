@@ -16,14 +16,14 @@ class Following
      * @ORM\ManyToOne(targetEntity="User", inversedBy="followings")
      * @JoinColumn(name="main_user_id", referencedColumnName="id")
      */
-    private User $idMainUser;
+    private User $mainUserId;
 
     /**
      * @ORM\Id()
      * @ORM\ManyToOne(targetEntity="User", inversedBy="followers")
      * @JoinColumn(name="follower_id", referencedColumnName="id")
      */
-    private User $idFollower;
+    private User $followerId;
 
     /**
      * @ORM\Column(name="status", type="string", length="255")
@@ -40,26 +40,26 @@ class Following
      */
     private DateTime $updatedAt;
 
-    public function getIdMainUser(): ?User
+    public function getMainUserId(): ?User
     {
-        return $this->idMainUser;
+        return $this->mainUserId;
     }
 
-    public function setIdMainUser(?User $idMainUser): Following
+    public function setMainUserId(?User $mainUserId): Following
     {
-        $this->idMainUser = $idMainUser;
+        $this->mainUserId = $mainUserId;
 
         return $this;
     }
 
-    public function getIdFollower(): ?User
+    public function getFollowerId(): ?User
     {
-        return $this->idFollower;
+        return $this->followerId;
     }
 
-    public function setIdFollower(?User $idFollower): Following
+    public function setFollowerId(?User $followerId): Following
     {
-        $this->idFollower = $idFollower;
+        $this->followerId = $followerId;
 
         return $this;
     }

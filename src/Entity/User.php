@@ -59,9 +59,43 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private string $username;
 
     /**
-     * @ORM\Column(name="is_verify", type="string", length="180", unique=true)
+     * @ORM\Column(name="is_verify", type="string", length="180")
      */
     private bool $isVerify;
+
+    /**
+     * @OneToMany(targetEntity="Travel", mappedBy="user_id")
+     */
+    private Collection $travels;
+
+    /**
+     * @OneToMany(targetEntity="Login", mappedBy="user_id")
+     */
+    private Collection $logins;
+
+    /**
+     * @OneToMany(targetEntity="Following", mappedBy="main_user_id")
+     */
+    private Collection $followings;
+
+    /**
+     * @OneToMany(targetEntity="Following", mappedBy="follower_id")
+     */
+    private Collection $followers;
+
+    /**
+     * @OneToMany(targetEntity="File",mappedBy="user_id")
+     */
+    private Collection $files;
+
+    public function __construct()
+    {
+        $this->travels = new ArrayCollection();
+        $this->logins = new ArrayCollection();
+        $this->followings = new ArrayCollection();
+        $this->followers = new ArrayCollection();
+        $this->files = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -201,6 +235,155 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setIsVerify(bool $isVerify): User
     {
         $this->isVerify = $isVerify;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Travel[]
+     */
+    public function getTravels(): Collection
+    {
+        return $this->travels;
+    }
+
+    public function addTravel(Travel $travel): User
+    {
+        if (!$this->travels->contains($travel)) {
+            $this->travels[] = $travel;
+            $travel->setUserId($this);
+        }
+
+        return $this;
+    }
+
+    public function removeTravel(Travel $travel): User
+    {
+        if ($this->travels->removeElement($travel)) {
+            // set the owning side to null (unless already changed)
+            if ($travel->getUserId() === $this) {
+                $travel->setUserId(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Login[]
+     */
+    public function getLogins(): Collection
+    {
+        return $this->logins;
+    }
+
+    public function addLogin(Login $login): User
+    {
+        if (!$this->logins->contains($login)) {
+            $this->logins[] = $login;
+            $login->setUserId($this);
+        }
+
+        return $this;
+    }
+
+    public function removeLogin(Login $login): User
+    {
+        if ($this->logins->removeElement($login)) {
+            // set the owning side to null (unless already changed)
+            if ($login->getUserId() === $this) {
+                $login->setUserId(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Following[]
+     */
+    public function getFollowings(): Collection
+    {
+        return $this->followings;
+    }
+
+    public function addFollowing(Following $following): User
+    {
+        if (!$this->followings->contains($following)) {
+            $this->followings[] = $following;
+            $following->setMainUserId($this);
+        }
+
+        return $this;
+    }
+
+    public function removeFollowing(Following $following): User
+    {
+        if ($this->followings->removeElement($following)) {
+            // set the owning side to null (unless already changed)
+            if ($following->getMainUserId() === $this) {
+                $following->setMainUserId(null);
+            }
+        }
+
+        return $this;
+    }
+    /**
+     * @return Collection|Follower[]
+     */
+    public function getFollowers(): Collection
+    {
+        return $this->followers;
+    }
+
+    public function addFollower(Follower $follower): User
+    {
+        if (!$this->followers->contains($follower)) {
+            $this->followers[] = $follower;
+            $followers->setFollowerId($this);
+        }
+
+        return $this;
+    }
+
+    public function removeFollower(Follower $follower): User
+    {
+        if ($this->followers->removeElement($follower)) {
+            // set the owning side to null (unless already changed)
+            if ($follower->getFollowerId() === $this) {
+                $follower->setFollowerId(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|File[]
+     */
+    public function getFiles(): Collection
+    {
+        return $this->files;
+    }
+
+    public function addFile(File $file): User
+    {
+        if (!$this->files->contains($file)) {
+            $this->files[] = $file;
+            $file->setUserId($this);
+        }
+
+        return $this;
+    }
+
+    public function removeFile(File $file): User
+    {
+        if ($this->files->removeElement($file)) {
+            // set the owning side to null (unless already changed)
+            if ($file->getUserId() === $this) {
+                $file->setUserId(null);
+            }
+        }
 
         return $this;
     }

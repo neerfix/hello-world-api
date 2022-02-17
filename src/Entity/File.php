@@ -63,7 +63,7 @@ class File
     /**
      * @OneToMany(targetEntity="AlbumFile", mappedBy="file_id")
      */
-    private AlbumFile $albumFiles;
+    private Collection $albumFiles;
 
     public function __construct()
     {

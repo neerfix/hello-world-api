@@ -29,11 +29,6 @@ class Album
      */
     private string $description;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="User", inversedBy="albums")
-     * @JoinColumn(name="user_id", referencedColumnName="id")
-     */
-    private User $userId;
 
     /**
      * @ORM\ManyToOne(targetEntity="Travel", inversedBy="albums")
@@ -90,18 +85,6 @@ class Album
     public function setDescription(?string $description): self
     {
         $this->description = $description;
-
-        return $this;
-    }
-
-    public function getUserId(): ?User
-    {
-        return $this->userId;
-    }
-
-    public function setUserId(?User $userId): Album
-    {
-        $this->userId = $userId;
 
         return $this;
     }

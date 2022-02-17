@@ -62,14 +62,14 @@ class Travel
     private DateTime $updatedAt;
 
     /**
-     * @OneToMany(targetEntity="Travel", mappedBy="travel_id")
+     * @OneToMany(targetEntity="Album", mappedBy="travel_id")
      */
-    private Album $albums;
+    private Collection $albums;
 
     /**
      * @OneToMany(targetEntity="Step", mappedBy="travel_id")
      */
-    private Step $steps;
+    private Collection $steps;
 
     public function __construct()
     {

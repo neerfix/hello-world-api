@@ -67,7 +67,7 @@ class Place
     /**
      * @OneToMany(targetEntity="Step", mappedBy="step_id")
      */
-    private $steps;
+    private Collection $steps;
 
     public function __construct()
     {
