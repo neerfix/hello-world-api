@@ -147,7 +147,7 @@ class Album
         return $this->steps;
     }
 
-    public function addStep(Step $step): self
+    public function addStep(Step $step): Album
     {
         if (!$this->steps->contains($step)) {
             $this->steps[] = $step;
@@ -157,7 +157,7 @@ class Album
         return $this;
     }
 
-    public function removeStep(Step $step): self
+    public function removeStep(Step $step): Album
     {
         if ($this->steps->removeElement($step)) {
             $step->removeAlbumId($this);
