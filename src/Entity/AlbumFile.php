@@ -9,27 +9,35 @@ use Doctrine\ORM\Mapping as ORM;
 #[ORM\Entity(repositoryClass: AlbumFileRepository::class)]
 class AlbumFile
 {
-    #[ORM\Id]
-    #[ORM\GeneratedValue]
-    #[ORM\Column(type: 'integer')]
-    private $id;
+    
+    /**
+     * @ORM\Id()
+     * @ORM\ManyToOne(targetEntity="File")
+     */
+    
+    private File $fileId;
 
-    #[ORM\Column(type: 'datetime_immutable')]
-    private $created_at;
+    /**
+     * @ORM\Id()
+     * @ORM\ManyToOne(targetEntity="Album")
+     */
+    private Album $albumId;
 
-    #[ORM\Column(type: 'datetime_immutable')]
-    private $updated_at;
+    /** 
+     * @ORM\Column(name="created_at", type="date")
+     */
+    private DateTime $createdAt;
 
-    #[ORM\Column(type: 'integer')]
-    private $sequence;
+    /**
+     * @ORM\Column(name="updated_at", type="date")
+     */
+    private DateTime $updatedAt;
 
-    #[ORM\ManyToOne(targetEntity: File::class, inversedBy: 'albumFiles')]
-    #[ORM\JoinColumn(nullable: false)]
-    private $file_id;
+    /**
+     * @ORM\Column(name="sequence", type="integer")
+     */
+    private int $sequence;
 
-    #[ORM\ManyToOne(targetEntity: Album::class, inversedBy: 'albumFiles')]
-    #[ORM\JoinColumn(nullable: false)]
-    private $album_id;
 
     public function __construct()
     {
@@ -37,31 +45,26 @@ class AlbumFile
         $this->file_id = new ArrayCollection();
     }
 
-    public function getId(): ?int
+    public function getCreatedAt(): ?\DateTime
     {
-        return $this->id;
+        return $this->createdAt;
     }
 
-    public function getCreatedAt(): ?\DateTimeImmutable
+    public function setCreatedAt(\DateTime $createdAt): AlbumFile
     {
-        return $this->created_at;
-    }
-
-    public function setCreatedAt(\DateTimeImmutable $created_at): self
-    {
-        $this->created_at = $created_at;
+        $this->createdAt = $createdAt;
 
         return $this;
     }
 
-    public function getUpdatedAt(): ?\DateTimeImmutable
+    public function getUpdatedAt(): ?\DateTime
     {
-        return $this->updated_at;
+        return $this->updatedAt;
     }
 
-    public function setUpdatedAt(\DateTimeImmutable $updated_at): self
+    public function setUpdatedAt(\DateTime $updatedAt): AlbumFile
     {
-        $this->updated_at = $updated_at;
+        $this->updatedAt = $updatedAt;
 
         return $this;
     }
@@ -71,7 +74,7 @@ class AlbumFile
         return $this->sequence;
     }
 
-    public function setSequence(int $sequence): self
+    public function setSequence(int $sequence): AlbumFile
     {
         $this->sequence = $sequence;
 
@@ -80,24 +83,24 @@ class AlbumFile
 
     public function getFileId(): ?File
     {
-        return $this->file_id;
+        return $this->fileId;
     }
 
-    public function setFileId(?File $file_id): self
+    public function setFileId(?File $fileId): AlbumFile
     {
-        $this->file_id = $file_id;
+        $this->fileId = $fileId;
 
         return $this;
     }
 
     public function getAlbumId(): ?Album
     {
-        return $this->album_id;
+        return $this->albumId;
     }
 
-    public function setAlbumId(?Album $album_id): self
+    public function setAlbumId(?Album $albumId): AlbumFile
     {
-        $this->album_id = $album_id;
+        $this->albumId = $albumId;
 
         return $this;
     }
