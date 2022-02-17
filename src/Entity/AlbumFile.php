@@ -9,13 +9,11 @@ use Doctrine\ORM\Mapping as ORM;
 #[ORM\Entity(repositoryClass: AlbumFileRepository::class)]
 class AlbumFile
 {
-    
     /**
      * @ORM\Id()
      * @ORM\ManyToOne(targetEntity="File")
      * @JoinColumn(name="file_id", referencedColumnName="id")
      */
-    
     private File $fileId;
 
     /**
@@ -25,7 +23,7 @@ class AlbumFile
      */
     private Album $albumId;
 
-    /** 
+    /**
      * @ORM\Column(name="created_at", type="date")
      */
     private DateTime $createdAt;
@@ -39,7 +37,6 @@ class AlbumFile
      * @ORM\Column(name="sequence", type="integer")
      */
     private int $sequence;
-
 
     public function __construct()
     {
