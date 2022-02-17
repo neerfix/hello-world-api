@@ -47,7 +47,6 @@ class Album
      */
     private DateTime $updatedAt;
 
-    #[ORM\ManyToMany(targetEntity: Step::class, mappedBy: 'album_id')]
     /**
      * @ORM\ManyToMany(targetEntity="Step", inversedBy="albums")
      * @JoinTable(name="step_albums",
