@@ -10,38 +10,58 @@ use Doctrine\ORM\Mapping as ORM;
 #[ORM\Entity(repositoryClass: FileRepository::class)]
 class File
 {
-    #[ORM\Id]
-    #[ORM\GeneratedValue]
-    #[ORM\Column(type: 'integer')]
-    private $id;
+    /**
+     * @ORM\Id()
+     * @ORM\GeneratedValue()
+     * @ORM\Column(name="id", type="integer", length="180", unique=true)
+     */
+    private int $id;
 
-    #[ORM\Column(type: 'string', length: 255, nullable: true)]
-    private $extension;
+    /**
+     * @ORM\Column(name="extension", type="string", length="255")
+     */
+    private string $extension;
 
-    #[ORM\Column(type: 'datetime_immutable')]
-    private $created_at;
+    /**
+     * @ORM\Column(name="created_at", type="date")
+     */
+    private DateTime $createdAt;
 
-    #[ORM\Column(type: 'datetime_immutable')]
-    private $updated_at;
+    /**
+     * @ORM\Column(name="updated_at", type="date")
+     */
+    private $updatedAt;
 
-    #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'files')]
-    #[ORM\JoinColumn(nullable: false)]
-    private $user_id;
+    /**
+     * @ORM/ManyToOne(targetEntity="User", inversedBy:"files")
+     * @ORM/Column(name="user_id", nullable="false")
+     */
+    private User $userId;
 
-    #[ORM\Column(type: 'string', length: 255)]
-    private $uuid;
+    /**
+     * @ORM\Column(name="uuid", type="string", length="255")
+     */
+    private string $uuid;
 
-    #[ORM\Column(type: 'string', length: 255, nullable: true)]
+    /**
+     * @ORM\Column(name="type", type="string", length="255")
+     */
     private $type;
 
-    #[ORM\Column(type: 'string', length: 255, nullable: true)]
-    private $mime_type;
+    /**
+     * @ORM\Column(name="mime_type", type="string", length="255")
+     */
+    private $mimeType;
 
-    #[ORM\Column(type: 'integer')]
-    private $size;
+    /**
+     * @ORM\Column(name="size", type="integer")
+     */
+    private int $size;
 
-    #[ORM\OneToMany(mappedBy: 'file_id', targetEntity: AlbumFile::class)]
-    private $albumFiles;
+    /**
+     * @OneToMany(targetEntity="AlbumFile", mappedBy="file_id")
+     */
+    private AlbumFile $albumFiles;
 
     public function __construct()
     {
@@ -58,45 +78,45 @@ class File
         return $this->extension;
     }
 
-    public function setExtension(?string $extension): self
+    public function setExtension(?string $extension): File
     {
         $this->extension = $extension;
 
         return $this;
     }
 
-    public function getCreatedAt(): ?\DateTimeImmutable
+    public function getCreatedAt(): ?\DateTime
     {
-        return $this->created_at;
+        return $this->createdAt;
     }
 
-    public function setCreatedAt(\DateTimeImmutable $created_at): self
+    public function setCreatedAt(\DateTime $createdAt): File
     {
-        $this->created_at = $created_at;
+        $this->createdAt = $createdAt;
 
         return $this;
     }
 
-    public function getUpdatedAt(): ?\DateTimeImmutable
+    public function getUpdatedAt(): ?\DateTime
     {
-        return $this->updated_at;
+        return $this->updatedAt;
     }
 
-    public function setUpdatedAt(\DateTimeImmutable $updated_at): self
+    public function setUpdatedAt(\DateTime $updatedAt): File
     {
-        $this->updated_at = $updated_at;
+        $this->updatedAt = $updatedAt;
 
         return $this;
     }
 
     public function getUserId(): ?User
     {
-        return $this->user_id;
+        return $this->userId;
     }
 
-    public function setUserId(?User $user_id): self
+    public function setUserId(?User $userId): File
     {
-        $this->user_id = $user_id;
+        $this->userId = $userId;
 
         return $this;
     }
@@ -106,7 +126,7 @@ class File
         return $this->uuid;
     }
 
-    public function setUuid(string $uuid): self
+    public function setUuid(string $uuid): File
     {
         $this->uuid = $uuid;
 
@@ -118,7 +138,7 @@ class File
         return $this->type;
     }
 
-    public function setType(?string $type): self
+    public function setType(?string $type): File
     {
         $this->type = $type;
 
@@ -127,12 +147,12 @@ class File
 
     public function getMimeType(): ?string
     {
-        return $this->mime_type;
+        return $this->mimeType;
     }
 
-    public function setMimeType(?string $mime_type): self
+    public function setMimeType(?string $mimeType): File
     {
-        $this->mime_type = $mime_type;
+        $this->mimeType = $mimeType;
 
         return $this;
     }
@@ -142,7 +162,7 @@ class File
         return $this->size;
     }
 
-    public function setSize(int $size): self
+    public function setSize(int $size): File
     {
         $this->size = $size;
 
@@ -157,7 +177,7 @@ class File
         return $this->albumFiles;
     }
 
-    public function addAlbumFile(AlbumFile $albumFile): self
+    public function addAlbumFile(AlbumFile $albumFile): File
     {
         if (!$this->albumFiles->contains($albumFile)) {
             $this->albumFiles[] = $albumFile;
@@ -167,7 +187,7 @@ class File
         return $this;
     }
 
-    public function removeAlbumFile(AlbumFile $albumFile): self
+    public function removeAlbumFile(AlbumFile $albumFile): File
     {
         if ($this->albumFiles->removeElement($albumFile)) {
             // set the owning side to null (unless already changed)
