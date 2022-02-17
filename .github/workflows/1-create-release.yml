@@ -1,4 +1,4 @@
-name: 📦 1 - Create a release on merge
+name: 1 📦 - Create a release on merge
 
 # Run this workflow every time a new commit pushed to your repository
 on:
