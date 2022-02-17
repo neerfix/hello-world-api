@@ -22,6 +22,23 @@ Prerequisites : Docker Desktop ( check it here : https://www.docker.com/products
 ### linux
 
 Same macOS
+
+## Fichier /etc/hosts
+
+Modifier le fichier `/etc/hosts` pour ajouter la ligne suivante :
+
+```
+ sudo nano /etc/hosts
+```
+
+```
+/etc/hosts
+
+
+
+127.0.0.1       api.dev.hello-world.ovh
+```
+
 --- ---
 ## Commands :
  
