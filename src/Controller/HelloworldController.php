@@ -38,15 +38,9 @@ abstract class HelloworldController extends AbstractController
         $user = parent::getUser();
 
         // No user
-        if (empty($user)) {
+        if (empty($user) || !($user instanceof User)) {
             return null;
         }
-
-        // User not logged
-        if (!($user instanceof User)) {
-            return null;
-        }
-
         return $user;
     }
 }
