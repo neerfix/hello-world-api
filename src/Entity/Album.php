@@ -10,32 +10,50 @@ use Doctrine\ORM\Mapping as ORM;
 #[ORM\Entity(repositoryClass: AlbumRepository::class)]
 class Album
 {
-    #[ORM\Id]
-    #[ORM\GeneratedValue]
-    #[ORM\Column(type: 'integer')]
+    /**
+     * @ORM\Id()
+     * @ORM\GeneratedValue()
+     * @ORM\Column(name="id", type="integer", length="180", unique=true)
+     */
     private int $id;
 
-    #[ORM\Column(type: 'string', length: 255)]
+    /**
+     * @ORM\Column(name="title", type="string", length="255")
+     */
     private string $title;
 
-    #[ORM\Column(type: 'string', length: 255, nullable: true)]
+    /**
+     * @ORM\Column(name="description", type="string", length="255", nullable=true)
+     */
     private string $description;
 
-    #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'albums')]
-    #[ORM\JoinColumn(nullable: false)]
+    /**
+     * @ORM\ManyToOne(targetEntity="User", inversedBy="albums")
+     */
     private User $userId;
 
-    #[ORM\ManyToOne(targetEntity: travel::class, inversedBy: 'albums')]
-    #[ORM\JoinColumn(nullable: false)]
+    /**
+     * @ORM\ManyToOne(targetEntity="Travel", inversedBy="albums")
+     */
     private Travel $travelId;
 
-    #[ORM\Column(type: 'datetime_immutable')]
+    /**
+     * @ORM\Column(name="created_at", type="date")
+     */
     private DateTime $createdAt;
 
-    #[ORM\Column(type: 'datetime_immutable')]
+    /**
+     * @ORM\Column(name="updated_at", type="date")
+     */
     private DateTime $updatedAt;
 
     #[ORM\ManyToMany(targetEntity: Step::class, mappedBy: 'album_id')]
+    /**
+     * @ORM\ManyToMany(targetEntity="Step", inversedBy="albums")
+     * @JoinTable(name="step_albums",
+     * joinColumns={@JoinColumn(name="album_id",referencedColumnName="id")},
+     * inverseJoinColumns={@JoinColumn(name="step_id", referencesColumnName="id")}
+     */
     private Collection $steps;
 
     public function __construct()
