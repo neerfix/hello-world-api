@@ -7,44 +7,69 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
-#[ORM\Entity(repositoryClass: TravelRepository::class)]
+/**
+ * @Entity(repositoryClass="TravelRepository")
+ */
 class Travel
 {
-    #[ORM\Id]
-    #[ORM\GeneratedValue]
-    #[ORM\Column(type: 'integer')]
-    private $id;
+    /**
+     * @ORM\Id()
+     * @ORM\GeneratedValue()
+     * @ORM\Column(name="id", type="integer", length="180", unique=true)
+     */
+    private int $id;
 
-    #[ORM\Column(type: 'float', nullable: true)]
-    private $budget;
+    /**
+     * @ORM\Column(name="budget", type="string", length="255")
+     */
+    private string $budget;
 
-    #[ORM\Column(type: 'boolean')]
-    private $is_shared;
+    /**
+     * @ORM\Column(name="is_shared", type="boolean")
+     */
+    private bool $isShared;
 
-    #[ORM\Column(type: 'text', nullable: true)]
-    private $description;
+    /**
+     * @ORM\Column(name="description", type="text")
+     */
+    private string $description;
 
-    #[ORM\Column(type: 'datetime_immutable')]
-    private $started_at;
+    /**
+     * @ORM\Column(name="started_at", type="date")
+     */
+    private DateTime $startedAt;
 
-    #[ORM\Column(type: 'datetime_immutable')]
-    private $ended_at;
+    /**
+     * @ORM\Column(name="ended_at", type="date")
+     */
+    private DateTime $endedAt;
 
-    #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'travel')]
-    #[ORM\JoinColumn(nullable: false)]
-    private $user_id;
 
-    #[ORM\Column(type: 'datetime_immutable')]
-    private $createdÃ_at;
+    /**
+     * @ORM/ManyToOne(targetEntity="User", inversedBy:"travel")
+     * @ORM/Column(name="user_id", nullable="false")
+     */
+    private User $userId;
 
-    #[ORM\Column(type: 'datetime_immutable')]
-    private $updated_at;
+    /**
+     * @ORM\Column(name="created_at", type="date")
+     */
+    private DateTime $createdAt;
 
-    #[ORM\OneToMany(mappedBy: 'travel_id', targetEntity: Album::class)]
-    private $albums;
+    /**
+     * @ORM\Column(name="updated_at", type="date")
+     */
+    private DateTime $updatedAt;
 
-    #[ORM\OneToMany(mappedBy: 'travel_id', targetEntity: Step::class)]
-    private $steps;
+    /**
+     * @OneToMany(targetEntity="Travel", mappedBy="travel_id")
+     */
+    private Album $albums;
+
+    /**
+     * @OneToMany(targetEntity="Step", mappedBy="travel_id")
+     */
+    private Step $steps;
 
     public function __construct()
     {
@@ -62,7 +87,7 @@ class Travel
         return $this->budget;
     }
 
-    public function setBudget(?float $budget): self
+    public function setBudget(?float $budget): Travel
     {
         $this->budget = $budget;
 
@@ -71,12 +96,12 @@ class Travel
 
     public function getIsShared(): ?bool
     {
-        return $this->is_shared;
+        return $this->isShared;
     }
 
-    public function setIsShared(bool $is_shared): self
+    public function setIsShared(bool $isShared): Travel
     {
-        $this->is_shared = $is_shared;
+        $this->isShared = $isShared;
 
         return $this;
     }
@@ -86,69 +111,69 @@ class Travel
         return $this->description;
     }
 
-    public function setDescription(?string $description): self
+    public function setDescription(?string $description): Travel
     {
         $this->description = $description;
 
         return $this;
     }
 
-    public function getStartedAt(): ?\DateTimeImmutable
+    public function getStartedAt(): ?\DateTime
     {
-        return $this->started_at;
+        return $this->startedAt;
     }
 
-    public function setStartedAt(\DateTimeImmutable $started_at): self
+    public function setStartedAt(\DateTime $startedAt): Travel
     {
-        $this->started_at = $started_at;
+        $this->startedAt = $startedAt;
 
         return $this;
     }
 
-    public function getEndedAt(): ?\DateTimeImmutable
+    public function getEndedAt(): ?\DateTime
     {
-        return $this->ended_at;
+        return $this->endedAt;
     }
 
-    public function setEndedAt(\DateTimeImmutable $ended_at): self
+    public function setEndedAt(\DateTime $endedAt): Travel
     {
-        $this->ended_at = $ended_at;
+        $this->endedAt = $endedAt;
 
         return $this;
     }
 
     public function getUserId(): ?User
     {
-        return $this->user_id;
+        return $this->userId;
     }
 
-    public function setUserId(?User $user_id): self
+    public function setUserId(?User $userId): Travel
     {
-        $this->user_id = $user_id;
+        $this->userId = $userId;
 
         return $this;
     }
 
-    public function getCreatedÃAt(): ?\DateTimeImmutable
+    public function getCreatedAt(): ?\DateTime
     {
-        return $this->createdÃ_at;
+        return $this->createdAt;
     }
 
-    public function setCreatedÃAt(\DateTimeImmutable $createdÃ_at): self
+    public function setCreatedAt(\DateTime $createdAt): Travel
     {
-        $this->createdÃ_at = $createdÃ_at;
+        $this->createdAt = $createdAt;
 
         return $this;
     }
 
-    public function getUpdatedAt(): ?\DateTimeImmutable
+    public function getUpdatedAt(): ?\DateTime
     {
-        return $this->updated_at;
+        return $this->updatedAt;
     }
 
-    public function setUpdatedAt(\DateTimeImmutable $updated_at): self
+    public function setUpdatedAt(\DateTime $updatedAt): Travel
     {
-        $this->updated_at = $updated_at;
+        $this->updatedAt = $updatedAt;
 
         return $this;
     }
@@ -161,7 +186,7 @@ class Travel
         return $this->albums;
     }
 
-    public function addAlbum(Album $album): self
+    public function addAlbum(Album $album): Travel
     {
         if (!$this->albums->contains($album)) {
             $this->albums[] = $album;
@@ -171,7 +196,7 @@ class Travel
         return $this;
     }
 
-    public function removeAlbum(Album $album): self
+    public function removeAlbum(Album $album): Travel
     {
         if ($this->albums->removeElement($album)) {
             // set the owning side to null (unless already changed)
@@ -191,7 +216,7 @@ class Travel
         return $this->steps;
     }
 
-    public function addStep(Step $step): self
+    public function addStep(Step $step): Travel
     {
         if (!$this->steps->contains($step)) {
             $this->steps[] = $step;
@@ -201,7 +226,7 @@ class Travel
         return $this;
     }
 
-    public function removeStep(Step $step): self
+    public function removeStep(Step $step): Travel
     {
         if ($this->steps->removeElement($step)) {
             // set the owning side to null (unless already changed)
