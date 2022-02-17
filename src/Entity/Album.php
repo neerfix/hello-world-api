@@ -29,11 +29,13 @@ class Album
 
     /**
      * @ORM\ManyToOne(targetEntity="User", inversedBy="albums")
+     * @JoinColumn(name="user_id", referencedColumnName="id")
      */
     private User $userId;
 
     /**
      * @ORM\ManyToOne(targetEntity="Travel", inversedBy="albums")
+     * @JoinColumn(name="travel_id", referencedColumnName="id")
      */
     private Travel $travelId;
 
