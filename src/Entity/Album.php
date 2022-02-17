@@ -13,33 +13,30 @@ class Album
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: 'integer')]
-    private $id;
+    private int $id;
 
     #[ORM\Column(type: 'string', length: 255)]
-    private $title;
+    private string $title;
 
     #[ORM\Column(type: 'string', length: 255, nullable: true)]
-    private $description;
+    private string $description;
 
     #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'albums')]
     #[ORM\JoinColumn(nullable: false)]
-    private $user_id;
+    private User $userId;
 
     #[ORM\ManyToOne(targetEntity: travel::class, inversedBy: 'albums')]
     #[ORM\JoinColumn(nullable: false)]
-    private $travel_id;
+    private Travel $travelId;
 
     #[ORM\Column(type: 'datetime_immutable')]
-    private $created_at;
+    private DateTime $createdAt;
 
     #[ORM\Column(type: 'datetime_immutable')]
-    private $updated_at;
+    private DateTime $updatedAt;
 
     #[ORM\ManyToMany(targetEntity: Step::class, mappedBy: 'album_id')]
-    private $steps;
-
-    #[ORM\OneToMany(mappedBy: 'album_id', targetEntity: AlbumFile::class)]
-    private $albumFiles;
+    private Collection $steps;
 
     public function __construct()
     {
@@ -78,48 +75,48 @@ class Album
 
     public function getUserId(): ?User
     {
-        return $this->user_id;
+        return $this->userId;
     }
 
     public function setUserId(?User $userId): Album
     {
-        $this->user_id = $user_id;
+        $this->userId = $userId;
 
         return $this;
     }
 
-    public function getTravelId(): ?travel
+    public function getTravelId(): ?Travel
     {
-        return $this->travel_id;
+        return $this->travelId;
     }
 
-    public function setTravelId(?travel $travel_id): self
+    public function setTravelId(?Travel $travel_id): self
     {
-        $this->travel_id = $travel_id;
+        $this->travelId = $travelId;
 
         return $this;
     }
 
     public function getCreatedAt(): ?\DateTimeImmutable
     {
-        return $this->created_at;
+        return $this->createdAt;
     }
 
     public function setCreatedAt(\DateTimeImmutable $created_at): self
     {
-        $this->created_at = $created_at;
+        $this->createdAt = $createdAt;
 
         return $this;
     }
 
     public function getUpdatedAt(): ?\DateTimeImmutable
     {
-        return $this->updated_at;
+        return $this->updatedAt;
     }
 
     public function setUpdatedAt(\DateTimeImmutable $updated_at): self
     {
-        $this->updated_at = $updated_at;
+        $this->updatedAt = $updatedAt;
 
         return $this;
     }
@@ -146,36 +143,6 @@ class Album
     {
         if ($this->steps->removeElement($step)) {
             $step->removeAlbumId($this);
-        }
-
-        return $this;
-    }
-
-    /**
-     * @return Collection|AlbumFile[]
-     */
-    public function getAlbumFiles(): Collection
-    {
-        return $this->albumFiles;
-    }
-
-    public function addAlbumFile(AlbumFile $albumFile): self
-    {
-        if (!$this->albumFiles->contains($albumFile)) {
-            $this->albumFiles[] = $albumFile;
-            $albumFile->setAlbumId($this);
-        }
-
-        return $this;
-    }
-
-    public function removeAlbumFile(AlbumFile $albumFile): self
-    {
-        if ($this->albumFiles->removeElement($albumFile)) {
-            // set the owning side to null (unless already changed)
-            if ($albumFile->getAlbumId() === $this) {
-                $albumFile->setAlbumId(null);
-            }
         }
 
         return $this;
