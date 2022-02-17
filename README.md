@@ -15,7 +15,7 @@ Prerequisites : Docker Desktop ( check it here : https://www.docker.com/products
 
 - Clone this repo
 - Got to project directory ( with preference with a WSL2 terminal ) 
-- If not installed in your WSL2 distro, install make ( Example for Debian : ```sudo apt-get install make``` )
+- If not installed in your WSL2 distro, install make, yarn & composer ( Example for Debian : ```sudo apt-get install make``` )
 - Launch the command : 
 ``` make ```
 
