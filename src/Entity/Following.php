@@ -5,56 +5,61 @@ namespace App\Entity;
 use App\Repository\FollowingRepository;
 use Doctrine\ORM\Mapping as ORM;
 
-#[ORM\Entity(repositoryClass: FollowingRepository::class)]
+/**
+ * @Entity(repositoryClass="FollowingRepository")
+ */
 class Following
 {
-    #[ORM\Id]
-    #[ORM\GeneratedValue]
-    #[ORM\Column(type: 'integer')]
-    private $id;
 
-    #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'followings')]
-    #[ORM\JoinColumn(nullable: false)]
-    private $id_main_user;
+    /**
+     * @ORM\Id()
+     * @ORM\ManyToOne(targetEntity="User", inversedBy="followings")
+     * @JoinColumn(name="main_user_id", referencedColumnName="id")
+     */
+    private User $idMainUser;
 
-    #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'followers')]
-    #[ORM\JoinColumn(nullable: false)]
-    private $id_follower;
+    /**
+     * @ORM\Id()
+     * @ORM\ManyToOne(targetEntity="User", inversedBy="followers")
+     * @JoinColumn(name="follower_id", referencedColumnName="id")
+     */
+    private User $idFollower;
 
-    #[ORM\Column(type: 'string', length: 255)]
-    private $status;
+    /**
+     * @ORM\Column(name="status", type="string", length="255")
+     */
+    private string $status;
 
-    #[ORM\Column(type: 'datetime_immutable')]
-    private $created_at;
+    /**
+     * @ORM\Column(name="created_at", type="date")
+     */
+    private DateTime $createdAt;
 
-    #[ORM\Column(type: 'datetime_immutable')]
-    private $updated_at;
-
-    public function getId(): ?int
-    {
-        return $this->id;
-    }
+    /**
+     * @ORM\Column(name="updated_at", type="date")
+     */
+    private DateTime $updatedAt;
 
     public function getIdMainUser(): ?User
     {
-        return $this->id_main_user;
+        return $this->idMainUser;
     }
 
-    public function setIdMainUser(?User $id_main_user): self
+    public function setIdMainUser(?User $idMainUser): Following
     {
-        $this->id_main_user = $id_main_user;
+        $this->idMainUser = $idMainUser;
 
         return $this;
     }
 
     public function getIdFollower(): ?User
     {
-        return $this->id_follower;
+        return $this->idFollower;
     }
 
-    public function setIdFollower(?User $id_follower): self
+    public function setIdFollower(?User $idFollower): Following
     {
-        $this->id_follower = $id_follower;
+        $this->idFollower = $idFollower;
 
         return $this;
     }
@@ -64,33 +69,33 @@ class Following
         return $this->status;
     }
 
-    public function setStatus(string $status): self
+    public function setStatus(string $status): Following
     {
         $this->status = $status;
 
         return $this;
     }
 
-    public function getCreatedAt(): ?\DateTimeImmutable
+    public function getCreatedAt(): ?\DateTime
     {
-        return $this->created_at;
+        return $this->createdAt;
     }
 
-    public function setCreatedAt(\DateTimeImmutable $created_at): self
+    public function setCreatedAt(\DateTime $createdAt): Following
     {
-        $this->created_at = $created_at;
+        $this->createdAt = $createdAt;
 
         return $this;
     }
 
-    public function getUpdatedAt(): ?\DateTimeImmutable
+    public function getUpdatedAt(): ?\DateTime
     {
-        return $this->updated_at;
+        return $this->updatedAt;
     }
 
-    public function setUpdatedAt(\DateTimeImmutable $updated_at): self
+    public function setUpdatedAt(\DateTime $updatedAt): Following
     {
-        $this->updated_at = $updated_at;
+        $this->updatedAt = $updatedAt;
 
         return $this;
     }

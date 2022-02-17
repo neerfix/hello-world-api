@@ -6,7 +6,9 @@ use App\Repository\AlbumFileRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 
-#[ORM\Entity(repositoryClass: AlbumFileRepository::class)]
+/**
+ * @Entity(repositoryClass="AlbumFileRepository")
+ */
 class AlbumFile
 {
     
