@@ -7,42 +7,66 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
-#[ORM\Entity(repositoryClass: PlaceRepository::class)]
+/**
+ * @Entity(repositoryClass="PlaceRepository")
+ */
 class Place
 {
-    #[ORM\Id]
-    #[ORM\GeneratedValue]
-    #[ORM\Column(type: 'integer')]
-    private $id;
+    /**
+     * @ORM\Id()
+     * @ORM\GeneratedValue()
+     * @ORM\Column(name="id", type="integer", length="180", unique=true)
+     */
+    private int $id;
 
-    #[ORM\Column(type: 'string', length: 255, nullable: true)]
-    private $address;
+    /**
+     * @ORM\Column(name="address", type="string", length="255")
+     */
+    private string $address;
 
-    #[ORM\Column(type: 'string', length: 255, nullable: true)]
-    private $city;
+    /**
+     * @ORM\Column(name="city", type="string", length="255")
+     */
+    private string $city;
 
-    #[ORM\Column(type: 'string', length: 255, nullable: true)]
-    private $zipcode;
+    /**
+     * @ORM\Column(name="zipcode", type="string", length="255")
+     */
+    private string $zipcode;
 
-    #[ORM\Column(type: 'string', length: 255, nullable: true)]
-    private $country;
+    /**
+     * @ORM\Column(name="country", type="string", length="255")
+     */
+    private string $country;
 
-    #[ORM\Column(type: 'string', length: 255, nullable: true)]
-    private $name;
+    /**
+     * @ORM\Column(name="name", type="string", length="255")
+     */
+    private string $name;
 
-    #[ORM\Column(type: 'float')]
-    private $latitude;
+    /**
+     * @ORM\Column(name="latitude", type="string", length="255")
+     */
+    private string $latitude;
 
-    #[ORM\Column(type: 'float')]
-    private $longitude;
+    /**
+     * @ORM\Column(name="longitude", type="string", length="255")
+     */
+    private string $longitude;
 
-    #[ORM\Column(type: 'datetime_immutable')]
-    private $created_at;
+    /**
+     * @ORM\Column(name="created_at", type="date")
+     */
+    private DateTime $createdAt;
 
-    #[ORM\Column(type: 'datetime_immutable')]
-    private $updated_at;
+    /**
+     * @ORM\Column(name="updated_at", type="date")
+     */
+    private DateTime $updatedAt;
 
-    #[ORM\OneToMany(mappedBy: 'placeÃ_id', targetEntity: Step::class)]
+    /**
+     * @OneToMany(targetEntity="Step", mappedBy="step_id")
+     */
     private $steps;
 
     public function __construct()
@@ -60,7 +84,7 @@ class Place
         return $this->address;
     }
 
-    public function setAddress(?string $address): self
+    public function setAddress(?string $address): Place
     {
         $this->address = $address;
 
@@ -72,7 +96,7 @@ class Place
         return $this->city;
     }
 
-    public function setCity(?string $city): self
+    public function setCity(?string $city): Place
     {
         $this->city = $city;
 
@@ -84,7 +108,7 @@ class Place
         return $this->zipcode;
     }
 
-    public function setZipcode(?string $zipcode): self
+    public function setZipcode(?string $zipcode): Place
     {
         $this->zipcode = $zipcode;
 
@@ -96,7 +120,7 @@ class Place
         return $this->country;
     }
 
-    public function setCountry(?string $country): self
+    public function setCountry(?string $country): Place
     {
         $this->country = $country;
 
@@ -108,7 +132,7 @@ class Place
         return $this->name;
     }
 
-    public function setName(?string $name): self
+    public function setName(?string $name): Place
     {
         $this->name = $name;
 
@@ -120,7 +144,7 @@ class Place
         return $this->latitude;
     }
 
-    public function setLatitude(float $latitude): self
+    public function setLatitude(float $latitude): Place
     {
         $this->latitude = $latitude;
 
@@ -132,33 +156,33 @@ class Place
         return $this->longitude;
     }
 
-    public function setLongitude(float $longitude): self
+    public function setLongitude(float $longitude): Place
     {
         $this->longitude = $longitude;
 
         return $this;
     }
 
-    public function getCreatedAt(): ?\DateTimeImmutable
+    public function getCreatedAt(): ?\DateTime
     {
-        return $this->created_at;
+        return $this->createdAt;
     }
 
-    public function setCreatedAt(\DateTimeImmutable $created_at): self
+    public function setCreatedAt(\DateTime $createdAt): Place
     {
-        $this->created_at = $created_at;
+        $this->createdAt = $createdAt;
 
         return $this;
     }
 
-    public function getUpdatedAt(): ?\DateTimeImmutable
+    public function getUpdatedAt(): ?\DateTime
     {
-        return $this->updated_at;
+        return $this->updatedAt;
     }
 
-    public function setUpdatedAt(\DateTimeImmutable $updated_at): self
+    public function setUpdatedAt(\DateTime $updatedAt): Place
     {
-        $this->updated_at = $updated_at;
+        $this->updatedAt = $updatedAt;
 
         return $this;
     }
@@ -171,22 +195,22 @@ class Place
         return $this->steps;
     }
 
-    public function addStep(Step $step): self
+    public function addStep(Step $step): Place
     {
         if (!$this->steps->contains($step)) {
             $this->steps[] = $step;
-            $step->setPlaceÃId($this);
+            $step->setPlaceï¿½Id($this);
         }
 
         return $this;
     }
 
-    public function removeStep(Step $step): self
+    public function removeStep(Step $step): Place
     {
         if ($this->steps->removeElement($step)) {
             // set the owning side to null (unless already changed)
-            if ($step->getPlaceÃId() === $this) {
-                $step->setPlaceÃId(null);
+            if ($step->getPlaceï¿½Id() === $this) {
+                $step->setPlaceï¿½Id(null);
             }
         }
 
