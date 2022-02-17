@@ -7,40 +7,61 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
-#[ORM\Entity(repositoryClass: StepRepository::class)]
+/**
+ * @Entity(repositoryClass="StepRepository")
+ */
 class Step
 {
-    #[ORM\Id]
-    #[ORM\GeneratedValue]
-    #[ORM\Column(type: 'integer')]
-    private $id;
+    /**
+     * @ORM\Id()
+     * @ORM\GeneratedValue()
+     * @ORM\Column(name="id", type="integer", length="180", unique=true)
+     */
+    private int $id;
 
-    #[ORM\ManyToOne(targetEntity: travel::class, inversedBy: 'steps')]
-    #[ORM\JoinColumn(nullable: false)]
-    private $travel_id;
+    /**
+     * @ORM/ManyToOne(targetEntity="Travel", inversedBy:"steps")
+     * @ORM/Column(name="travel_id", nullable="false")
+     */
+    private Travel $travelId;
 
-    #[ORM\ManyToMany(targetEntity: Album::class, inversedBy: 'steps')]
-    private $album_id;
+    /**
+     * @ORM\ManyToMany(targetEntity="Album", inversedBy="steps")
+     * @JoinTable(name="step_albums",
+     * joinColumns={@JoinColumn(name="step_id", referencesColumnName="id")},
+     * inverseJoinColumns={@JoinColumn(name="album_id",referencedColumnName="id")}
+     */
+    private Album $albumId;
 
-    #[ORM\ManyToOne(targetEntity: Place::class, inversedBy: 'steps')]
-    #[ORM\JoinColumn(nullable: false)]
-    private $placeÃ_id;
+    /**
+     * @ORM/ManyToOne(targetEntity="Place", inversedBy:"steps")
+     * @ORM/Column(name="place_id")
+     */
+    private Place $placeId;
 
-    #[ORM\Column(type: 'datetime_immutable')]
-    private $started_at;
+    /**
+     * @ORM\Column(name="started_at", type="date")
+     */
+    private DateTime $startedAt;
 
-    #[ORM\Column(type: 'datetime_immutable')]
-    private $ended_at;
+    /**
+     * @ORM\Column(name="ended_at", type="date")
+     */
+    private DateTime $endedAt;
 
-    #[ORM\Column(type: 'datetime_immutable')]
-    private $created_at;
+    /**
+     * @ORM\Column(name="created_at", type="date")
+     */
+    private DateTime $createdAt;
 
-    #[ORM\Column(type: 'datetime_immutable')]
-    private $updated_at;
+    /**
+     * @ORM\Column(name="updated_at", type="date")
+     */
+    private DateTime $updatedAt;
 
     public function __construct()
     {
-        $this->album_id = new ArrayCollection();
+        $this->albumId = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -50,12 +71,12 @@ class Step
 
     public function getTravelId(): ?travel
     {
-        return $this->travel_id;
+        return $this->travelId;
     }
 
-    public function setTravelId(?travel $travel_id): self
+    public function setTravelId(?travel $travelId): Step
     {
-        $this->travel_id = $travel_id;
+        $this->travelId = $travelId;
 
         return $this;
     }
@@ -65,81 +86,81 @@ class Step
      */
     public function getAlbumId(): Collection
     {
-        return $this->album_id;
+        return $this->albumId;
     }
 
-    public function addAlbumId(Album $albumId): self
+    public function addAlbumId(Album $albumId): Step
     {
-        if (!$this->album_id->contains($albumId)) {
-            $this->album_id[] = $albumId;
+        if (!$this->albumId->contains($albumId)) {
+            $this->albumId[] = $albumId;
         }
 
         return $this;
     }
 
-    public function removeAlbumId(Album $albumId): self
+    public function removeAlbumId(Album $albumId): Step
     {
-        $this->album_id->removeElement($albumId);
+        $this->albumId->removeElement($albumId);
 
         return $this;
     }
 
-    public function getPlaceÃId(): ?Place
+    public function getPlaceId(): ?Place
     {
-        return $this->placeÃ_id;
+        return $this->placeId;
     }
 
-    public function setPlaceÃId(?Place $placeÃ_id): self
+    public function setPlaceId(?Place $placeId): Step
     {
-        $this->placeÃ_id = $placeÃ_id;
+        $this->placeId = $placeId;
 
         return $this;
     }
 
-    public function getStartedAt(): ?\DateTimeImmutable
+    public function getStartedAt(): ?\DateTime
     {
-        return $this->started_at;
+        return $this->startedAt;
     }
 
-    public function setStartedAt(\DateTimeImmutable $started_at): self
+    public function setStartedAt(\DateTime $startedAt): Step
     {
-        $this->started_at = $started_at;
+        $this->startedAt = $startedAt;
 
         return $this;
     }
 
-    public function getEndedAt(): ?\DateTimeImmutable
+    public function getEndedAt(): ?\DateTime
     {
-        return $this->ended_at;
+        return $this->endedAt;
     }
 
-    public function setEndedAt(\DateTimeImmutable $ended_at): self
+    public function setEndedAt(\DateTime $endedAt): Step
     {
-        $this->ended_at = $ended_at;
+        $this->endedAt = $endedAt;
 
         return $this;
     }
 
-    public function getCreatedAt(): ?\DateTimeImmutable
+    public function getCreatedAt(): ?\DateTime
     {
-        return $this->created_at;
+        return $this->createdAt;
     }
 
-    public function setCreatedAt(\DateTimeImmutable $created_at): self
+    public function setCreatedAt(\DateTime $createdAt): Step
     {
-        $this->created_at = $created_at;
+        $this->createdAt = $createdAt;
 
         return $this;
     }
 
-    public function getUpdatedAt(): ?\DateTimeImmutable
+    public function getUpdatedAt(): ?\DateTime
     {
-        return $this->updated_at;
+        return $this->updatedAt;
     }
 
-    public function setUpdatedAt(\DateTimeImmutable $updated_at): self
+    public function setUpdatedAt(\DateTime $updatedAt): Step
     {
-        $this->updated_at = $updated_at;
+        $this->updatedAt = $updatedAt;
 
         return $this;
     }
