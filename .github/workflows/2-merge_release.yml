@@ -4,7 +4,7 @@ name: 🗳 2 - Merge release
 on:
   pull_request:
     branches:
-      - 'release**'
+      - 'master'
 jobs:
   merge:
     runs-on: ubuntu-latest
