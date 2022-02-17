@@ -5,38 +5,58 @@ namespace App\Entity;
 use App\Repository\LoginRepository;
 use Doctrine\ORM\Mapping as ORM;
 
-#[ORM\Entity(repositoryClass: LoginRepository::class)]
+/**
+ * @Entity(repositoryClass="LoginRepository")
+ */
 class Login
 {
-    #[ORM\Id]
-    #[ORM\GeneratedValue]
-    #[ORM\Column(type: 'integer')]
-    private $id;
+    /**
+     * @ORM\Id()
+     * @ORM\GeneratedValue()
+     * @ORM\Column(name="id", type="integer", length="180", unique=true)
+     */
+    private int $id;
 
-    #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'logins')]
-    #[ORM\JoinColumn(nullable: false)]
-    private $user_id;
+    /**
+     * @ORM\ManyToOne(targetEntity="User", inversedBy="logins")
+     * @JoinColumn(name="user_id", referencedColumnName="id")
+     */
+    private User $userId;
 
-    #[ORM\Column(type: 'string', length: 255, nullable: true)]
-    private $application_version;
+    /**
+     * @ORM\Column(name="application_version", type="string", length="255")
+     */
+    private string $applicationVersion;
 
-    #[ORM\Column(type: 'string', length: 50, nullable: true)]
-    private $ip_address;
+    /**
+     * @ORM\Column(name="ip_address", type="string", length="255")
+     */
+    private string $ipAddress;
 
-    #[ORM\Column(type: 'string', length: 255, nullable: true)]
-    private $user_agent;
+    /**
+     * @ORM\Column(name="user_agent", type="string", length="255")
+     */
+    private string $userAgent;
 
-    #[ORM\Column(type: 'boolean', nullable: true)]
-    private $is_successful;
+    /**
+     * @ORM\Column(name="is_successful", type="boolean")
+     */
+    private bool $isSuccessful;
 
-    #[ORM\Column(type: 'string', length: 255, nullable: true)]
-    private $failureÃ_reason;
+    /**
+     * @ORM\Column(name="failure_reason", type="string", length="255")
+     */
+    private string $failureReason;
 
-    #[ORM\Column(type: 'datetime_immutable')]
-    private $created_at;
+    /**
+     * @ORM\Column(name="created_at", type="date")
+     */
+    private DateTime $createdAt;
 
-    #[ORM\Column(type: 'datetime_immutable')]
-    private $updated_at;
+    /**
+     * @ORM\Column(name="updated_at", type="date")
+     */
+    private DateTime $updatedAt;
 
     public function getId(): ?int
     {
@@ -48,7 +68,7 @@ class Login
         return $this->user_id;
     }
 
-    public function setUserId(?User $user_id): self
+    public function setUserId(?User $user_id): Login
     {
         $this->user_id = $user_id;
 
@@ -60,7 +80,7 @@ class Login
         return $this->application_version;
     }
 
-    public function setApplicationVersion(?string $application_version): self
+    public function setApplicationVersion(?string $application_version): Login
     {
         $this->application_version = $application_version;
 
@@ -69,72 +89,72 @@ class Login
 
     public function getIpAddress(): ?string
     {
-        return $this->ip_address;
+        return $this->ipAddress;
     }
 
-    public function setIpAddress(?string $ip_address): self
+    public function setIpAddress(?string $ipAddress): Login
     {
-        $this->ip_address = $ip_address;
+        $this->ipAddress = $ipAddress;
 
         return $this;
     }
 
     public function getUserAgent(): ?string
     {
-        return $this->user_agent;
+        return $this->userAgent;
     }
 
-    public function setUserAgent(?string $user_agent): self
+    public function setUserAgent(?string $userAgent): Login
     {
-        $this->user_agent = $user_agent;
+        $this->userAgent = $userAgent;
 
         return $this;
     }
 
     public function getIsSuccessful(): ?bool
     {
-        return $this->is_successful;
+        return $this->isSuccessful;
     }
 
-    public function setIsSuccessful(?bool $is_successful): self
+    public function setIsSuccessful(?bool $isSuccessful): Login
     {
-        $this->is_successful = $is_successful;
+        $this->isSuccessful = $isSuccessful;
 
         return $this;
     }
 
-    public function getFailureÃReason(): ?string
+    public function getFailureï¿½Reason(): ?string
     {
-        return $this->failureÃ_reason;
+        return $this->failureReason;
     }
 
-    public function setFailureÃReason(?string $failureÃ_reason): self
+    public function setFailureï¿½Reason(?string $failureReason): Login
     {
-        $this->failureÃ_reason = $failureÃ_reason;
+        $this->failureReason = $failureReason;
 
         return $this;
     }
 
-    public function getCreatedAt(): ?\DateTimeImmutable
+    public function getCreatedAt(): ?\DateTime
     {
-        return $this->created_at;
+        return $this->createdAt;
     }
 
-    public function setCreatedAt(\DateTimeImmutable $created_at): self
+    public function setCreatedAt(\DateTime $createdAt): Login
     {
-        $this->created_at = $created_at;
+        $this->createdAt = $createdAt;
 
         return $this;
     }
 
-    public function getUpdatedAt(): ?\DateTimeImmutable
+    public function getUpdatedAt(): ?\DateTime
     {
-        return $this->updated_at;
+        return $this->updatedAt;
     }
 
-    public function setUpdatedAt(\DateTimeImmutable $updated_at): self
+    public function setUpdatedAt(\DateTime $updatedAt): Login
     {
-        $this->updated_at = $updated_at;
+        $this->updatedAt = $updatedAt;
 
         return $this;
     }
