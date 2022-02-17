@@ -3,97 +3,134 @@
 namespace App\Entity;
 
 use App\Repository\UserRepository;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
+use DateTime;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
+use Symfony\Component\Security\Core\User\UserInterface;
 
-#[ORM\Entity(repositoryClass: UserRepository::class)]
-class User
+/**
+ * @ORM\Entity(repositoryClass=UserRepository::class)
+ */
+class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
-    #[ORM\Id]
-    #[ORM\GeneratedValue]
-    #[ORM\Column(type: 'integer')]
-    private $id;
+    /**
+     * @ORM\Column(name="id", type="string", length="180", unique=true)
+     */
+    private int $id;
 
-    #[ORM\Column(type: 'string', length: 255)]
-    private $pseudo;
+    /**
+     * @ORM\Column(name="uuid", type="string", length="180", unique=true)
+     */
+    private string $uuid;
 
-    #[ORM\Column(type: 'string', length: 255, nullable: true)]
-    private $phone_number;
+    /**
+     * @ORM\Column(name="roles", type="json")
+     */
+    private array $roles = [];
 
-    #[ORM\Column(type: 'string', length: 255)]
-    private $email;
+    /**
+     * @ORM\Column(name="password", type="string")
+     */
+    private string $password;
 
-    #[ORM\Column(type: 'boolean')]
-    private $is_verified;
+    /**
+     * @ORM\Column(name="email", type="string", length="255", unique=true)
+     */
+    private string $email;
 
-    #[ORM\Column(type: 'datetime_immutable')]
-    private $created_at;
+    /**
+     * @ORM\Column(name="date_of_birth", type="date")
+     */
+    private DateTime $dateOfBirth;
 
-    #[ORM\Column(type: 'datetime_immutable')]
-    private $updated_at;
+    /**
+     * @ORM\Column(name="firstname", type="string", length="50", nullable=true)
+     */
+    private string $firstname;
 
-    #[ORM\Column(type: 'string', length: 255)]
-    private $profile_Ãpicture;
+    /**
+     * @ORM\Column(name="lastname", type="string", length="70", nullable=true)
+     */
+    private string $lastname;
 
-    #[ORM\OneToMany(mappedBy: 'user_id', targetEntity: Login::class)]
-    private $logins;
+    /**
+     * @ORM\Column(name="username", type="string", length="55", unique=true)
+     */
+    private string $username;
 
-    #[ORM\OneToMany(mappedBy: 'user_id', targetEntity: Travel::class)]
-    private $travel;
-
-    #[ORM\OneToMany(mappedBy: 'id_main_user', targetEntity: Following::class)]
-    private $followings;
-
-    #[ORM\OneToMany(mappedBy: 'id_follower', targetEntity: Following::class)]
-    private $followers;
-
-    #[ORM\OneToMany(mappedBy: 'user_id', targetEntity: File::class)]
-    private $files;
-
-    #[ORM\OneToOne(targetEntity: File::class, cascade: ['persist', 'remove'])]
-    private $profile_picture;
-
-    #[ORM\OneToMany(mappedBy: 'user_id', targetEntity: Album::class)]
-    private $albums;
-
-    public function __construct()
-    {
-        $this->logins = new ArrayCollection();
-        $this->travel = new ArrayCollection();
-        $this->followings = new ArrayCollection();
-        $this->followers = new ArrayCollection();
-        $this->files = new ArrayCollection();
-        $this->albums = new ArrayCollection();
-    }
+    /**
+     * @ORM\Column(name="is_verify", type="string", length="180", unique=true)
+     */
+    private bool $isVerify;
 
     public function getId(): ?int
     {
         return $this->id;
     }
 
-    public function getPseudo(): ?string
+    public function getUuid(): ?string
     {
-        return $this->pseudo;
+        return $this->uuid;
     }
 
-    public function setPseudo(string $pseudo): self
+    public function setUuid(string $uuid): User
     {
-        $this->pseudo = $pseudo;
+        $this->uuid = $uuid;
 
         return $this;
     }
 
-    public function getPhoneNumber(): ?string
+    /**
+     * A visual identifier that represents this user.
+     *
+     * @see UserInterface
+     */
+    public function getUserIdentifier(): string
     {
-        return $this->phone_number;
+        return (string) $this->uuid;
     }
 
-    public function setPhoneNumber(?string $phone_number): self
+    /**
+     * @see UserInterface
+     */
+    public function getRoles(): array
     {
-        $this->phone_number = $phone_number;
+        $roles = $this->roles;
+        // guarantee every user at least has ROLE_USER
+        $roles[] = 'ROLE_USER';
+
+        return array_unique($roles);
+    }
+
+    public function setRoles(array $roles): User
+    {
+        $this->roles = $roles;
 
         return $this;
+    }
+
+    /**
+     * @see PasswordAuthenticatedUserInterface
+     */
+    public function getPassword(): string
+    {
+        return $this->password;
+    }
+
+    public function setPassword(string $password): User
+    {
+        $this->password = $password;
+
+        return $this;
+    }
+
+    /**
+     * @see UserInterface
+     */
+    public function eraseCredentials()
+    {
+        // If you store any temporary, sensitive data on the user, clear it here
+        // $this->plainPassword = null;
     }
 
     public function getEmail(): ?string
@@ -101,249 +138,69 @@ class User
         return $this->email;
     }
 
-    public function setEmail(string $email): self
+    public function setEmail(string $email): User
     {
         $this->email = $email;
 
         return $this;
     }
 
-    public function getIsVerified(): ?bool
+    public function getDateOfBirth(): ?DateTime
     {
-        return $this->is_verified;
+        return $this->dateOfBirth;
     }
 
-    public function setIsVerified(bool $is_verified): self
+    public function setDateOfBirth(DateTime $dateOfBirth): User
     {
-        $this->is_verified = $is_verified;
+        $this->dateOfBirth = $dateOfBirth;
 
         return $this;
     }
 
-    public function getCreatedAt(): ?\DateTimeImmutable
+    public function getFirstname(): ?string
     {
-        return $this->created_at;
+        return $this->firstname;
     }
 
-    public function setCreatedAt(\DateTimeImmutable $created_at): self
+    public function setFirstname(string $firstname): User
     {
-        $this->created_at = $created_at;
+        $this->firstname = $firstname;
 
         return $this;
     }
 
-    public function getUpdatedAt(): ?\DateTimeImmutable
+    public function getLastname(): ?string
     {
-        return $this->updated_at;
+        return $this->lastname;
     }
 
-    public function setUpdatedAt(\DateTimeImmutable $updated_at): self
+    public function setLastname(string $lastname): User
     {
-        $this->updated_at = $updated_at;
+        $this->lastname = $lastname;
 
         return $this;
     }
 
-    public function getProfileÃpicture(): ?string
+    public function getUsername(): ?string
     {
-        return $this->profile_Ãpicture;
+        return $this->username;
     }
 
-    public function setProfileÃpicture(string $profile_Ãpicture): self
+    public function setUsername(string $username): User
     {
-        $this->profile_Ãpicture = $profile_Ãpicture;
+        $this->username = $username;
 
         return $this;
     }
 
-    /**
-     * @return Collection|Login[]
-     */
-    public function getLogins(): Collection
+    public function getIsVerify(): ?bool
     {
-        return $this->logins;
+        return $this->isVerify;
     }
 
-    public function addLogin(Login $login): self
+    public function setIsVerify(bool $isVerify): User
     {
-        if (!$this->logins->contains($login)) {
-            $this->logins[] = $login;
-            $login->setUserId($this);
-        }
-
-        return $this;
-    }
-
-    public function removeLogin(Login $login): self
-    {
-        if ($this->logins->removeElement($login)) {
-            // set the owning side to null (unless already changed)
-            if ($login->getUserId() === $this) {
-                $login->setUserId(null);
-            }
-        }
-
-        return $this;
-    }
-
-    /**
-     * @return Collection|Travel[]
-     */
-    public function getTravel(): Collection
-    {
-        return $this->travel;
-    }
-
-    public function addTravel(Travel $travel): self
-    {
-        if (!$this->travel->contains($travel)) {
-            $this->travel[] = $travel;
-            $travel->setUserId($this);
-        }
-
-        return $this;
-    }
-
-    public function removeTravel(Travel $travel): self
-    {
-        if ($this->travel->removeElement($travel)) {
-            // set the owning side to null (unless already changed)
-            if ($travel->getUserId() === $this) {
-                $travel->setUserId(null);
-            }
-        }
-
-        return $this;
-    }
-
-    /**
-     * @return Collection|Following[]
-     */
-    public function getFollowings(): Collection
-    {
-        return $this->followings;
-    }
-
-    public function addFollowing(Following $following): self
-    {
-        if (!$this->followings->contains($following)) {
-            $this->followings[] = $following;
-            $following->setIdMainUser($this);
-        }
-
-        return $this;
-    }
-
-    public function removeFollowing(Following $following): self
-    {
-        if ($this->followings->removeElement($following)) {
-            // set the owning side to null (unless already changed)
-            if ($following->getIdMainUser() === $this) {
-                $following->setIdMainUser(null);
-            }
-        }
-
-        return $this;
-    }
-
-    /**
-     * @return Collection|Following[]
-     */
-    public function getFollowers(): Collection
-    {
-        return $this->followers;
-    }
-
-    public function addFollower(Following $follower): self
-    {
-        if (!$this->followers->contains($follower)) {
-            $this->followers[] = $follower;
-            $follower->setIdFollower($this);
-        }
-
-        return $this;
-    }
-
-    public function removeFollower(Following $follower): self
-    {
-        if ($this->followers->removeElement($follower)) {
-            // set the owning side to null (unless already changed)
-            if ($follower->getIdFollower() === $this) {
-                $follower->setIdFollower(null);
-            }
-        }
-
-        return $this;
-    }
-
-    /**
-     * @return Collection|File[]
-     */
-    public function getFiles(): Collection
-    {
-        return $this->files;
-    }
-
-    public function addFile(File $file): self
-    {
-        if (!$this->files->contains($file)) {
-            $this->files[] = $file;
-            $file->setUserId($this);
-        }
-
-        return $this;
-    }
-
-    public function removeFile(File $file): self
-    {
-        if ($this->files->removeElement($file)) {
-            // set the owning side to null (unless already changed)
-            if ($file->getUserId() === $this) {
-                $file->setUserId(null);
-            }
-        }
-
-        return $this;
-    }
-
-    public function getProfilePicture(): ?File
-    {
-        return $this->profile_picture;
-    }
-
-    public function setProfilePicture(?File $profile_picture): self
-    {
-        $this->profile_picture = $profile_picture;
-
-        return $this;
-    }
-
-    /**
-     * @return Collection|Album[]
-     */
-    public function getAlbums(): Collection
-    {
-        return $this->albums;
-    }
-
-    public function addAlbum(Album $album): self
-    {
-        if (!$this->albums->contains($album)) {
-            $this->albums[] = $album;
-            $album->setUserId($this);
-        }
-
-        return $this;
-    }
-
-    public function removeAlbum(Album $album): self
-    {
-        if ($this->albums->removeElement($album)) {
-            // set the owning side to null (unless already changed)
-            if ($album->getUserId() === $this) {
-                $album->setUserId(null);
-            }
-        }
+        $this->isVerify = $isVerify;
 
         return $this;
     }
