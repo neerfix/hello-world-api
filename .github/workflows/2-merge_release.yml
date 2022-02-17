@@ -2,9 +2,12 @@ name: 🗳 2 - Merge release
 
 # Run this workflow every time a new commit pushed to your repository
 on:
+  pull_request_target:
+    branches: 
+      - 'master'
   pull_request:
     branches:
-      - 'master'
+      - 'release**'
 jobs:
   merge:
     runs-on: ubuntu-latest
