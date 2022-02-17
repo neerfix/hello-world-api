@@ -7,8 +7,9 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
+
 /**
- * @Entity(repositoryClass="PlaceRepository")
+ * @ORM\Entity(repositoryClass="PlaceRepository")
  */
 class Place
 {
@@ -65,7 +66,7 @@ class Place
     private DateTime $updatedAt;
 
     /**
-     * @OneToMany(targetEntity="Step", mappedBy="step_id")
+     * @ORM\OneToMany(targetEntity="Step", mappedBy="step_id")
      */
     private Collection $steps;
 

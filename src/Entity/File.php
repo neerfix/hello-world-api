@@ -8,7 +8,7 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @Entity(repositoryClass="FileRepository")
+ * @ORM\Entity(repositoryClass="FileRepository")
  */
 class File
 {
@@ -35,8 +35,8 @@ class File
     private $updatedAt;
 
     /**
-     * @ORM/ManyToOne(targetEntity="User", inversedBy:"files")
-     * @ORM/Column(name="user_id", nullable="false")
+     * @ORM\ManyToOne(targetEntity="User", inversedBy:"files")
+     * @ORM\Column(name="user_id", nullable="false")
      */
     private User $userId;
 
@@ -61,7 +61,7 @@ class File
     private int $size;
 
     /**
-     * @OneToMany(targetEntity="AlbumFile", mappedBy="file_id")
+     * @ORM\OneToMany(targetEntity="AlbumFile", mappedBy="file_id")
      */
     private Collection $albumFiles;
 

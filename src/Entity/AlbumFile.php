@@ -7,7 +7,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @Entity(repositoryClass="AlbumFileRepository")
+ * @ORM\Entity(repositoryClass="AlbumFileRepository")
  */
 class AlbumFile
 {
@@ -21,7 +21,7 @@ class AlbumFile
     /**
      * @ORM\Id()
      * @ORM\ManyToOne(targetEntity="Album")
-     * @JoinColumn(name="album_id", referencedColumnName="id")
+     * @ORM\JoinColumn(name="album_id", referencedColumnName="id")
      */
     private Album $albumId;
 

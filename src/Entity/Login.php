@@ -6,7 +6,7 @@ use App\Repository\LoginRepository;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @Entity(repositoryClass="LoginRepository")
+ * @ORM\Entity(repositoryClass="LoginRepository")
  */
 class Login
 {
@@ -19,7 +19,7 @@ class Login
 
     /**
      * @ORM\ManyToOne(targetEntity="User", inversedBy="logins")
-     * @JoinColumn(name="user_id", referencedColumnName="id")
+     * @ORM\JoinColumn(name="user_id", referencedColumnName="id")
      */
     private User $userId;
 

@@ -6,7 +6,7 @@ use App\Repository\FollowingRepository;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @Entity(repositoryClass="FollowingRepository")
+ * @ORM\Entity(repositoryClass="FollowingRepository")
  */
 class Following
 {
@@ -14,14 +14,14 @@ class Following
     /**
      * @ORM\Id()
      * @ORM\ManyToOne(targetEntity="User", inversedBy="followings")
-     * @JoinColumn(name="main_user_id", referencedColumnName="id")
+     * @ORM\JoinColumn(name="main_user_id", referencedColumnName="id")
      */
     private User $mainUserId;
 
     /**
      * @ORM\Id()
      * @ORM\ManyToOne(targetEntity="User", inversedBy="followers")
-     * @JoinColumn(name="follower_id", referencedColumnName="id")
+     * @ORM\JoinColumn(name="follower_id", referencedColumnName="id")
      */
     private User $followerId;
 

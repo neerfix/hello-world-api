@@ -8,7 +8,7 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @Entity(repositoryClass="StepRepository")
+ * @ORM\Entity(repositoryClass="StepRepository")
  */
 class Step
 {
@@ -20,22 +20,22 @@ class Step
     private int $id;
 
     /**
-     * @ORM/ManyToOne(targetEntity="Travel", inversedBy:"steps")
-     * @ORM/Column(name="travel_id", nullable="false")
+     * @ORM\ManyToOne(targetEntity="Travel", inversedBy:"steps")
+     * @ORM\Column(name="travel_id", nullable="false")
      */
     private Travel $travelId;
 
     /**
      * @ORM\ManyToMany(targetEntity="Album", inversedBy="steps")
-     * @JoinTable(name="step_albums",
+     * @ORM\JoinTable(name="step_albums",
      * joinColumns={@JoinColumn(name="step_id", referencesColumnName="id")},
      * inverseJoinColumns={@JoinColumn(name="album_id",referencedColumnName="id")}
      */
     private Album $albumId;
 
     /**
-     * @ORM/ManyToOne(targetEntity="Place", inversedBy:"steps")
-     * @ORM/Column(name="place_id")
+     * @ORM\ManyToOne(targetEntity="Place", inversedBy:"steps")
+     * @ORM\Column(name="place_id")
      */
     private Place $placeId;
 

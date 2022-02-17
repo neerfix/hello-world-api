@@ -8,7 +8,7 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @Entity(repositoryClass="AlbumRepository")
+ * @ORM\Entity(repositoryClass="AlbumRepository")
  */
 class Album
 {
@@ -48,7 +48,7 @@ class Album
 
     /**
      * @ORM\ManyToMany(targetEntity="Step", inversedBy="albums")
-     * @JoinTable(name="step_albums",
+     * @ORM\JoinTable(name="step_albums",
      * joinColumns={@JoinColumn(name="album_id",referencedColumnName="id")},
      * inverseJoinColumns={@JoinColumn(name="step_id", referencesColumnName="id")}
      */

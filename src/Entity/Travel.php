@@ -8,7 +8,7 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @Entity(repositoryClass="TravelRepository")
+ * @ORM\Entity(repositoryClass="TravelRepository")
  */
 class Travel
 {
@@ -46,8 +46,8 @@ class Travel
 
 
     /**
-     * @ORM/ManyToOne(targetEntity="User", inversedBy:"travel")
-     * @ORM/Column(name="user_id", nullable="false")
+     * @ORM\ManyToOne(targetEntity="User", inversedBy:"travel")
+     * @ORM\Column(name="user_id", nullable="false")
      */
     private User $userId;
 
@@ -62,12 +62,12 @@ class Travel
     private DateTime $updatedAt;
 
     /**
-     * @OneToMany(targetEntity="Album", mappedBy="travel_id")
+     * @ORM\OneToMany(targetEntity="Album", mappedBy="travel_id")
      */
     private Collection $albums;
 
     /**
-     * @OneToMany(targetEntity="Step", mappedBy="travel_id")
+     * @ORM\OneToMany(targetEntity="Step", mappedBy="travel_id")
      */
     private Collection $steps;
 
