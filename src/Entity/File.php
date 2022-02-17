@@ -40,7 +40,7 @@ class File
     #[ORM\Column(type: 'integer')]
     private $size;
 
-    #[ORM\ManyToMany(targetEntity: AlbumFile::class, mappedBy: 'file_id')]
+    #[ORM\OneToMany(mappedBy: 'file_id', targetEntity: AlbumFile::class)]
     private $albumFiles;
 
     public function __construct()
@@ -161,7 +161,7 @@ class File
     {
         if (!$this->albumFiles->contains($albumFile)) {
             $this->albumFiles[] = $albumFile;
-            $albumFile->addFileId($this);
+            $albumFile->setFileId($this);
         }
 
         return $this;
@@ -170,9 +170,13 @@ class File
     public function removeAlbumFile(AlbumFile $albumFile): self
     {
         if ($this->albumFiles->removeElement($albumFile)) {
-            $albumFile->removeFileId($this);
+            // set the owning side to null (unless already changed)
+            if ($albumFile->getFileId() === $this) {
+                $albumFile->setFileId(null);
+            }
         }
 
         return $this;
     }
+
 }

@@ -38,7 +38,7 @@ class Album
     #[ORM\ManyToMany(targetEntity: Step::class, mappedBy: 'album_id')]
     private $steps;
 
-    #[ORM\ManyToMany(targetEntity: AlbumFile::class, mappedBy: 'album_id')]
+    #[ORM\OneToMany(mappedBy: 'album_id', targetEntity: AlbumFile::class)]
     private $albumFiles;
 
     public function __construct()
@@ -163,7 +163,7 @@ class Album
     {
         if (!$this->albumFiles->contains($albumFile)) {
             $this->albumFiles[] = $albumFile;
-            $albumFile->addAlbumId($this);
+            $albumFile->setAlbumId($this);
         }
 
         return $this;
@@ -172,7 +172,10 @@ class Album
     public function removeAlbumFile(AlbumFile $albumFile): self
     {
         if ($this->albumFiles->removeElement($albumFile)) {
-            $albumFile->removeAlbumId($this);
+            // set the owning side to null (unless already changed)
+            if ($albumFile->getAlbumId() === $this) {
+                $albumFile->setAlbumId(null);
+            }
         }
 
         return $this;

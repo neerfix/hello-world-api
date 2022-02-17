@@ -15,12 +15,6 @@ class AlbumFile
     #[ORM\Column(type: 'integer')]
     private $id;
 
-    #[ORM\ManyToMany(targetEntity: Album::class, inversedBy: 'albumFiles')]
-    private $album_id;
-
-    #[ORM\ManyToMany(targetEntity: File::class, inversedBy: 'albumFiles')]
-    private $file_id;
-
     #[ORM\Column(type: 'datetime_immutable')]
     private $created_at;
 
@@ -29,6 +23,14 @@ class AlbumFile
 
     #[ORM\Column(type: 'integer')]
     private $sequence;
+
+    #[ORM\ManyToOne(targetEntity: File::class, inversedBy: 'albumFiles')]
+    #[ORM\JoinColumn(nullable: false)]
+    private $file_id;
+
+    #[ORM\ManyToOne(targetEntity: Album::class, inversedBy: 'albumFiles')]
+    #[ORM\JoinColumn(nullable: false)]
+    private $album_id;
 
     public function __construct()
     {
@@ -39,54 +41,6 @@ class AlbumFile
     public function getId(): ?int
     {
         return $this->id;
-    }
-
-    /**
-     * @return Collection|Album[]
-     */
-    public function getAlbumId(): Collection
-    {
-        return $this->album_id;
-    }
-
-    public function addAlbumId(Album $albumId): self
-    {
-        if (!$this->album_id->contains($albumId)) {
-            $this->album_id[] = $albumId;
-        }
-
-        return $this;
-    }
-
-    public function removeAlbumId(Album $albumId): self
-    {
-        $this->album_id->removeElement($albumId);
-
-        return $this;
-    }
-
-    /**
-     * @return Collection|File[]
-     */
-    public function getFileId(): Collection
-    {
-        return $this->file_id;
-    }
-
-    public function addFileId(File $fileId): self
-    {
-        if (!$this->file_id->contains($fileId)) {
-            $this->file_id[] = $fileId;
-        }
-
-        return $this;
-    }
-
-    public function removeFileId(File $fileId): self
-    {
-        $this->file_id->removeElement($fileId);
-
-        return $this;
     }
 
     public function getCreatedAt(): ?\DateTimeImmutable
@@ -121,6 +75,30 @@ class AlbumFile
     public function setSequence(int $sequence): self
     {
         $this->sequence = $sequence;
+
+        return $this;
+    }
+
+    public function getFileId(): ?File
+    {
+        return $this->file_id;
+    }
+
+    public function setFileId(?File $file_id): self
+    {
+        $this->file_id = $file_id;
+
+        return $this;
+    }
+
+    public function getAlbumId(): ?Album
+    {
+        return $this->album_id;
+    }
+
+    public function setAlbumId(?Album $album_id): self
+    {
+        $this->album_id = $album_id;
 
         return $this;
     }
