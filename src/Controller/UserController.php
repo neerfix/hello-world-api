@@ -1,11 +1,13 @@
 <?php
 
-use App\Controller\HelloworldController;
-use App\Controller\SecurityService;
-use App\Controller\UserService;
+namespace App\Controller;
+
 use App\Repository\UserRepository;
 use App\Services\RequestService;
 use App\Services\ResponseService;
+use App\Services\SecurityService;
+use App\Services\UserService;
+use Exception;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -15,7 +17,7 @@ use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 class UserController extends HelloworldController
 {
-    // --------------------- >
+    // ------------------------------ >
 
     public function __construct(
         SecurityService $securityService,
@@ -28,8 +30,6 @@ class UserController extends HelloworldController
     ) {
         parent::__construct($securityService, $userService, $requestService, $responseService, $validator, $normalizer);
     }
-
-    // --------------------- >
 
     // ------------------------------ >
 
