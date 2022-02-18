@@ -9,6 +9,7 @@
         "ext-iconv": "*",
         "doctrine/annotations": "^1.13",
         "doctrine/doctrine-migrations-bundle": "^3.0",
+        "ramsey/uuid": "^4.1",
         "doctrine/orm": "^2.7",
         "friendsofphp/php-cs-fixer": "^3.6",
         "symfony/console": "6.0.*",
@@ -17,14 +18,18 @@
         "symfony/framework-bundle": "6.0.*",
         "symfony/runtime": "6.0.*",
         "symfony/security-bundle": "6.0.*",
-        "symfony/serializer": "5.4.*",
-        "symfony/translation": "5.4.*",
+        "symfony/serializer": "6.0.*",
+        "symfony/translation": "6.0.*",
         "symfony/validator": "6.0.*",
-        "symfony/yaml": "6.0.*"
+        "symfony/yaml": "6.0.*",
+        "symfony/mailer": "6.0.*",
+        "nelmio/cors-bundle": "^2.1"
     },
     "require-dev": {
         "doctrine/doctrine-fixtures-bundle": "^3.4",
-        "symfony/maker-bundle": "^1.36"
+        "symfony/debug-bundle": "^6.0",
+        "symfony/maker-bundle": "^1.0",
+        "symfony/var-dumper": "^6.0"
     },
     "config": {
         "allow-plugins": {
