@@ -76,9 +76,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private string $username;
 
     /**
-     * @ORM\Column(name="is_verify", type="string", length="180")
+     * @ORM\Column(name="is_verify", type="boolean", length="180", options={"default"=false})
      */
-    private bool $isVerify;
+    private bool $isVerify = false;
 
     /**
      * @ORM\OneToMany(targetEntity="Travel", mappedBy="user_id")
@@ -104,6 +104,8 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      * @ORM\OneToMany(targetEntity="File",mappedBy="user_id")
      */
     private Collection $files;
+
+    const ALL_ROLES = ["ROLE_USER","ROLE_ADMIN"];
 
     public function getId(): ?int
     {
