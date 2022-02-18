@@ -9,19 +9,18 @@ use App\Services\UserService;
 use App\Services\RequestService;
 use App\Services\ResponseService;
 use App\Services\SecurityService;
+use Symfony\Component\Validator\Constraints\Type;
+use Symfony\Component\Validator\Constraints\NotBlank;
+use Symfony\Component\Validator\Constraints\DateTime;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 
 class RegisterController extends HelloworldController
 {
-    /**
-     * @Route("/auth/register", name="register", methods={ "POST" })
-     *
-     * @throws ExceptionInterface
-     * @throws Exception
-     */
-
+    
     public function __construct(
         SecurityService $securityService,
         UserService $userService,
@@ -32,11 +31,16 @@ class RegisterController extends HelloworldController
     ) {
         parent::__construct($securityService, $userService, $requestService, $responseService, $validator, $normalizer);
     }
-    // @TODO: A changer en JSONResponse quand buildSuccess
-    public function registerAction(Request $request): Response
+    /**
+     * @Route("/auth/register", name="register", methods={ "POST" })
+     *
+     * @throws ExceptionInterface
+     * @throws Exception
+     */
+    public function registerAction(Request $request): JSONResponse
     {
         
-        $errors = $this->validator->validate($request->request->all(), [
+        $errors = $this->validate($request->request->all(), [
             'email' => [new Type(['type' => 'string']), new NotBlank()],
             'username' => [new Type(['type' => 'string']), new NotBlank()],
             'password' => [new Type(['type' => 'string']), new NotBlank()],
@@ -45,9 +49,12 @@ class RegisterController extends HelloworldController
             'lastname' => [new Type(['type' => 'string']), new NotBlank()],
         ]);
 
-        if(empty($errors)) {
-            $requestBody = $request->request->all();
-            $userService->create(
+        // if(!empty($errors)) {
+        //     return $errors;
+        // }
+
+        $requestBody = $request->request->all();
+            $this->userService->create(
                 $requestBody->email,
                 $requestBody->username,
                 $request->password,
@@ -55,15 +62,6 @@ class RegisterController extends HelloworldController
                 $request->firstname,
                 $request->lastname
             );
-            return $this->buildSuccessResponse(Response::HTTP_OK,$user);
-        }
-        else { 
-            return $this->responseService->error422($errors);
-        }
-
-        return $this->json([
-            'message' => 'Welcome to your new controller!',
-            'path' => 'src/Controller/RegisterController.php',
-        ]);
+        return $this->buildSuccessResponse(Response::HTTP_OK,$user);
     }
 }
