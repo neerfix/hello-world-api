@@ -47,9 +47,6 @@ class Album
 
     /**
      * @ORM\ManyToMany(targetEntity="Step", inversedBy="albums")
-     * @ORM\JoinTable(name="step_albums",
-     * joinColumns={@ORM\JoinColumn(name="album_id",referencedColumnName="id")},
-     * inverseJoinColumns={@ORM\JoinColumn(name="step_id", referencedColumnName="id")})
      */
     private Collection $steps;
 
