@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Repository\LoginRepository;
+use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -11,9 +12,9 @@ use Doctrine\ORM\Mapping as ORM;
 class Login
 {
     /**
-     * @ORM\Id()
-     * @ORM\GeneratedValue()
-     * @ORM\Column(name="id", type="integer", length="180", unique=true)
+     * @ORM\Id
+     * @ORM\GeneratedValue
+     * @ORM\Column(name="id", type="integer", unique=true)
      */
     private int $id;
 
@@ -68,7 +69,7 @@ class Login
         return $this->userId;
     }
 
-    public function setUserId(?User $user_id): Login
+    public function setUserId(?User $userId): Login
     {
         $this->userId = $userId;
 
@@ -135,24 +136,24 @@ class Login
         return $this;
     }
 
-    public function getCreatedAt(): ?\DateTime
+    public function getCreatedAt(): ?DateTime
     {
         return $this->createdAt;
     }
 
-    public function setCreatedAt(\DateTime $createdAt): Login
+    public function setCreatedAt(DateTime $createdAt): Login
     {
         $this->createdAt = $createdAt;
 
         return $this;
     }
 
-    public function getUpdatedAt(): ?\DateTime
+    public function getUpdatedAt(): ?DateTime
     {
         return $this->updatedAt;
     }
 
-    public function setUpdatedAt(\DateTime $updatedAt): Login
+    public function setUpdatedAt(DateTime $updatedAt): Login
     {
         $this->updatedAt = $updatedAt;
 

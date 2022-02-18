@@ -5,6 +5,7 @@ namespace App\Repository;
 use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\NonUniqueResultException;
+use Doctrine\ORM\TransactionRequiredException;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -21,16 +22,38 @@ class UserRepository extends ServiceEntityRepository
     }
 
     /**
+     * Find a user from its email.
+     *
      * @throws NonUniqueResultException
+     * @throws TransactionRequiredException
      */
-    public function findOneByEmail(string $email): ?User
+    public function findOneByEmail(string $email, ?int $lockMode = null): ?User
     {
-        return $this->_em->createQueryBuilder()
-            ->select('u')
-            ->from('User', 'u')
-            ->where('u.email = :email')
-            ->setParameter('email', $email)
+        return $this->_findOneBy('email', $email, $lockMode);
+    }
 
-            ->getQuery()->getOneOrNullResult();
+    // ------------------------------ >
+
+    /**
+     * Find a user by a field and value.
+     *
+     * @throws NonUniqueResultException
+     * @throws TransactionRequiredException
+     */
+    private function _findOneBy(string $field, mixed $value, ?int $lockMode = null): ?User
+    {
+        $query = $this
+            ->createQueryBuilder('U')
+
+            ->where("U.{$field} = :value")
+            ->setParameter('value', $value)
+
+            ->getQuery();
+
+        if ((null !== $lockMode) && $this->getEntityManager()->getConnection()->isTransactionActive()) {
+            $query->setLockMode($lockMode);
+        }
+
+        return $query->getOneOrNullResult();
     }
 }

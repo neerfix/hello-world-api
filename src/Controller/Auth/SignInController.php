@@ -2,12 +2,10 @@
 
 namespace App\Controller\Auth;
 
-
 use App\Controller\HelloworldController;
 use App\Services\ResponseService;
 use App\Services\SecurityService;
 use App\Services\UserService;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -16,7 +14,6 @@ use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 class SignInController extends HelloworldController
 {
-
     public function __construct(
         SecurityService $securityService,
         UserService $userService,
@@ -27,7 +24,7 @@ class SignInController extends HelloworldController
         parent::__construct($securityService, $userService, $responseService, $validator, $normalizer);
     }
 
-    /**
+    /*
      * @Route("/auth/login", name="login", methods={ "POST" })
      *
      * @throws ExceptionInterface

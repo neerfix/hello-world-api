@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Repository\FollowingRepository;
+use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -13,7 +14,7 @@ class Following
     /**
      * @ORM\Id()
      * @ORM\ManyToOne(targetEntity="User", inversedBy="followings")
-     * @ORM\JoinColumn(name="main_user_id", referencedColumnName="id")
+     * @ORM\JoinColumn(name="user_id", referencedColumnName="id")
      */
     private User $mainUserId;
 
@@ -75,24 +76,24 @@ class Following
         return $this;
     }
 
-    public function getCreatedAt(): ?\DateTime
+    public function getCreatedAt(): ?DateTime
     {
         return $this->createdAt;
     }
 
-    public function setCreatedAt(\DateTime $createdAt): Following
+    public function setCreatedAt(DateTime $createdAt): Following
     {
         $this->createdAt = $createdAt;
 
         return $this;
     }
 
-    public function getUpdatedAt(): ?\DateTime
+    public function getUpdatedAt(): ?DateTime
     {
         return $this->updatedAt;
     }
 
-    public function setUpdatedAt(\DateTime $updatedAt): Following
+    public function setUpdatedAt(DateTime $updatedAt): Following
     {
         $this->updatedAt = $updatedAt;
 

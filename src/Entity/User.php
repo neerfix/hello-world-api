@@ -15,6 +15,11 @@ use Symfony\Component\Security\Core\User\UserInterface;
  */
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
+    public const ROLE_USER = 'ROLE_USER';
+    public const ROLE_ADMIN = 'ROLE_ADMIN';
+
+    public const ALL_ROLES = [self::ROLE_USER, self::ROLE_ADMIN];
+
     // ------------------------- >
 
     public function __construct()
@@ -29,9 +34,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     // ------------------------- >
 
     /**
-     * @ORM\Id()
-     * @ORM\GeneratedValue()
-     * @ORM\Column(name="id", type="string", length="180", unique=true)
+     * @ORM\Id
+     * @ORM\GeneratedValue
+     * @ORM\Column(name="id", type="integer", unique=true)
      */
     private int $id;
 
@@ -41,9 +46,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private string $uuid;
 
     /**
-     * @ORM\Column(name="roles", type="json")
+     * @ORM\Column(name="roles", type="simple_array", length=255)
      */
-    private array $roles = [];
+    private array $roles = [self::ROLE_USER];
 
     /**
      * @ORM\Column(name="password", type="string")
@@ -91,7 +96,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private Collection $logins;
 
     /**
-     * @ORM\OneToMany(targetEntity="Following", mappedBy="main_user_id")
+     * @ORM\OneToMany(targetEntity="Following", mappedBy="user_id")
      */
     private Collection $followings;
 
@@ -101,11 +106,11 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private Collection $followers;
 
     /**
-     * @ORM\OneToMany(targetEntity="File",mappedBy="user_id")
+     * @ORM\OneToMany(targetEntity="File", mappedBy="user_id")
      */
     private Collection $files;
 
-    const ALL_ROLES = ["ROLE_USER","ROLE_ADMIN"];
+    // ------------------------- >
 
     public function getId(): ?int
     {
@@ -134,14 +139,11 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return (string) $this->uuid;
     }
 
-    /**
-     * @see UserInterface
-     */
     public function getRoles(): array
     {
         $roles = $this->roles;
         // guarantee every user at least has ROLE_USER
-        $roles[] = 'ROLE_USER';
+        $roles[] = self::ROLE_USER;
 
         return array_unique($roles);
     }
@@ -153,9 +155,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    /**
-     * @see PasswordAuthenticatedUserInterface
-     */
     public function getPassword(): string
     {
         return $this->password;

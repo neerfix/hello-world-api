@@ -61,7 +61,7 @@ class UserController extends HelloworldController
 
         // No logged used
         if (empty($loggedUser)) {
-            return $this->responseService->error403('auth.unauthorized', 'Vous n\'êtes pas autorisé à effectué cette action');
+//            return $this->responseService->error403('auth.unauthorized', 'Vous n\'êtes pas autorisé à effectué cette action');
         }
 
         $users = $this->userRepository->findAll();
