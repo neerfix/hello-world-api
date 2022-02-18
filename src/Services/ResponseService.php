@@ -5,6 +5,8 @@ namespace App\Services;
 use Exception;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Validator\ConstraintViolation;
+use Symfony\Component\Validator\ConstraintViolationListInterface;
 
 class ResponseService
 {
@@ -73,5 +75,22 @@ class ResponseService
         }
 
         return new JsonResponse($response, $status);
+    }
+
+    /**
+     * Return errors from a list of constraint violations.
+     *
+     * @throws Exception
+     */
+    public function errorsFromConstraints(ConstraintViolationListInterface $constraintViolations): JsonResponse
+    {
+        $errors = [];
+
+        /** @var ConstraintViolation $constraintViolation */
+        foreach ($constraintViolations as $constraintViolation) {
+            $errors[] = $constraintViolation;
+        }
+
+        return $this->errors(Response::HTTP_UNPROCESSABLE_ENTITY, $errors);
     }
 }

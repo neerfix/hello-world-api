@@ -3,7 +3,6 @@
 namespace App\Controller;
 
 use App\Repository\UserRepository;
-use App\Services\RequestService;
 use App\Services\ResponseService;
 use App\Services\SecurityService;
 use App\Services\UserService;
@@ -22,13 +21,12 @@ class UserController extends HelloworldController
     public function __construct(
         SecurityService $securityService,
         UserService $userService,
-        RequestService $requestService,
         ResponseService $responseService,
         ValidatorInterface $validator,
         NormalizerInterface $normalizer,
         private UserRepository $userRepository
     ) {
-        parent::__construct($securityService, $userService, $requestService, $responseService, $validator, $normalizer);
+        parent::__construct($securityService, $userService, $responseService, $validator, $normalizer);
     }
 
     // ------------------------------ >
