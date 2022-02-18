@@ -183,6 +183,19 @@ class Travel
         return $this;
     }
 
+    public function getName(): string
+    {
+        return $this->name;
+    }
+
+    public function setName(string $name): Travel
+    {
+        $this->name = $name;
+
+        return $this;
+    }
+
+    // FIXME Move or delete this
     /**
      * @return Collection|Album[]
      */
