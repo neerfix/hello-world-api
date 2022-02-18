@@ -46,9 +46,9 @@ class RegisterController extends HelloworldController
             'lastname' => [new Type(['type' => 'string']), new NotBlank()],
         ]);
 
-        // if(!empty($errors)) {
-        //     return $errors;
-        // }
+         if(!empty($errors)) {
+             return $errors;
+         }
 
         $user = $this->userService->create(
                 $request->request->get("email"),
