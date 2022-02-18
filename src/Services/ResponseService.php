@@ -88,7 +88,7 @@ class ResponseService
 
         /** @var ConstraintViolation $constraintViolation */
         foreach ($constraintViolations as $constraintViolation) {
-            $errors[] = $constraintViolation->getConstraint();
+            $errors[] = $this->constraintToError($constraintViolation);
         }
 
         return $this->errors(Response::HTTP_UNPROCESSABLE_ENTITY, $errors);
