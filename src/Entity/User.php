@@ -4,6 +4,8 @@ namespace App\Entity;
 
 use App\Repository\UserRepository;
 use DateTime;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -13,6 +15,19 @@ use Symfony\Component\Security\Core\User\UserInterface;
  */
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
+    // ------------------------- >
+
+    public function __construct()
+    {
+        $this->travels = new ArrayCollection();
+        $this->logins = new ArrayCollection();
+        $this->followings = new ArrayCollection();
+        $this->followers = new ArrayCollection();
+        $this->files = new ArrayCollection();
+    }
+
+    // ------------------------- >
+
     /**
      * @ORM\Id()
      * @ORM\GeneratedValue()
@@ -89,15 +104,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      * @ORM\OneToMany(targetEntity="File",mappedBy="user_id")
      */
     private Collection $files;
-
-    public function __construct()
-    {
-        $this->travels = new ArrayCollection();
-        $this->logins = new ArrayCollection();
-        $this->followings = new ArrayCollection();
-        $this->followers = new ArrayCollection();
-        $this->files = new ArrayCollection();
-    }
 
     public function getId(): ?int
     {
@@ -241,6 +247,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
+    //FIXME move followers into new file Service
     /**
      * @return Collection|Travel[]
      */
@@ -339,17 +346,17 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this->followers;
     }
 
-    public function addFollower(Follower $follower): User
+    public function addFollower(User $follower): User
     {
         if (!$this->followers->contains($follower)) {
             $this->followers[] = $follower;
-            $followers->setFollowerId($this);
+            $follower->setFollowerId($this);
         }
 
         return $this;
     }
 
-    public function removeFollower(Follower $follower): User
+    public function removeFollower(User $follower): User
     {
         if ($this->followers->removeElement($follower)) {
             // set the owning side to null (unless already changed)

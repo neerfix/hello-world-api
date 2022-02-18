@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Repository\TravelRepository;
+use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -18,6 +19,11 @@ class Travel
      * @ORM\Column(name="id", type="integer", length="180", unique=true)
      */
     private int $id;
+
+    /**
+     * @ORM\Column(name="name", type="string", length="255")
+     */
+    private string $name;
 
     /**
      * @ORM\Column(name="budget", type="string", length="255")
@@ -117,24 +123,24 @@ class Travel
         return $this;
     }
 
-    public function getStartedAt(): ?\DateTime
+    public function getStartedAt(): ?DateTime
     {
         return $this->startedAt;
     }
 
-    public function setStartedAt(\DateTime $startedAt): Travel
+    public function setStartedAt(DateTime $startedAt): Travel
     {
         $this->startedAt = $startedAt;
 
         return $this;
     }
 
-    public function getEndedAt(): ?\DateTime
+    public function getEndedAt(): ?DateTime
     {
         return $this->endedAt;
     }
 
-    public function setEndedAt(\DateTime $endedAt): Travel
+    public function setEndedAt(DateTime $endedAt): Travel
     {
         $this->endedAt = $endedAt;
 
@@ -153,24 +159,24 @@ class Travel
         return $this;
     }
 
-    public function getCreatedAt(): ?\DateTime
+    public function getCreatedAt(): ?DateTime
     {
         return $this->createdAt;
     }
 
-    public function setCreatedAt(\DateTime $createdAt): Travel
+    public function setCreatedAt(DateTime $createdAt): Travel
     {
         $this->createdAt = $createdAt;
 
         return $this;
     }
 
-    public function getUpdatedAt(): ?\DateTime
+    public function getUpdatedAt(): ?DateTime
     {
         return $this->updatedAt;
     }
 
-    public function setUpdatedAt(\DateTime $updatedAt): Travel
+    public function setUpdatedAt(DateTime $updatedAt): Travel
     {
         $this->updatedAt = $updatedAt;
 
