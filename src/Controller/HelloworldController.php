@@ -5,6 +5,8 @@ namespace App\Controller;
 use App\Entity\User;
 use App\Services\RequestService;
 use App\Services\ResponseService;
+use App\Services\SecurityService;
+use App\Services\UserService;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
