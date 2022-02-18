@@ -35,7 +35,7 @@ class File
     private $updatedAt;
 
     /**
-     * @ORM\ManyToOne(targetEntity="User", inversedBy:"files")
+     * @ORM\ManyToOne(targetEntity="User", inversedBy="files")
      * @ORM\Column(name="user_id", nullable="false")
      */
     private User $userId;

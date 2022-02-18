@@ -44,9 +44,8 @@ class Travel
      */
     private DateTime $endedAt;
 
-
     /**
-     * @ORM\ManyToOne(targetEntity="User", inversedBy:"travel")
+     * @ORM\ManyToOne(targetEntity="User", inversedBy="travels")
      * @ORM\Column(name="user_id", nullable="false")
      */
     private User $userId;

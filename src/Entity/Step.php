@@ -20,7 +20,7 @@ class Step
     private int $id;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Travel", inversedBy:"steps")
+     * @ORM\ManyToOne(targetEntity="Travel", inversedBy="steps")
      * @ORM\Column(name="travel_id", nullable="false")
      */
     private Travel $travelId;
@@ -28,13 +28,13 @@ class Step
     /**
      * @ORM\ManyToMany(targetEntity="Album", inversedBy="steps")
      * @ORM\JoinTable(name="step_albums",
-     * joinColumns={@JoinColumn(name="step_id", referencesColumnName="id")},
-     * inverseJoinColumns={@JoinColumn(name="album_id",referencedColumnName="id")}
+     * joinColumns={@ORM\JoinColumn(name="step_id", referencedColumnName="id")},
+     * inverseJoinColumns={@ORM\JoinColumn(name="album_id",referencedColumnName="id")})
      */
     private Album $albumId;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Place", inversedBy:"steps")
+     * @ORM\ManyToOne(targetEntity="Place", inversedBy="steps")
      * @ORM\Column(name="place_id")
      */
     private Place $placeId;

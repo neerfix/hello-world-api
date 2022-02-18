@@ -14,6 +14,8 @@ use Symfony\Component\Security\Core\User\UserInterface;
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
     /**
+     * @ORM\Id()
+     * @ORM\GeneratedValue()
      * @ORM\Column(name="id", type="string", length="180", unique=true)
      */
     private int $id;
@@ -64,27 +66,27 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private bool $isVerify;
 
     /**
-     * @OneToMany(targetEntity="Travel", mappedBy="user_id")
+     * @ORM\OneToMany(targetEntity="Travel", mappedBy="user_id")
      */
     private Collection $travels;
 
     /**
-     * @OneToMany(targetEntity="Login", mappedBy="user_id")
+     * @ORM\OneToMany(targetEntity="Login", mappedBy="user_id")
      */
     private Collection $logins;
 
     /**
-     * @OneToMany(targetEntity="Following", mappedBy="main_user_id")
+     * @ORM\OneToMany(targetEntity="Following", mappedBy="main_user_id")
      */
     private Collection $followings;
 
     /**
-     * @OneToMany(targetEntity="Following", mappedBy="follower_id")
+     * @ORM\OneToMany(targetEntity="Following", mappedBy="follower_id")
      */
     private Collection $followers;
 
     /**
-     * @OneToMany(targetEntity="File",mappedBy="user_id")
+     * @ORM\OneToMany(targetEntity="File",mappedBy="user_id")
      */
     private Collection $files;
 

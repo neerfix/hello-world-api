@@ -32,7 +32,7 @@ class Album
 
     /**
      * @ORM\ManyToOne(targetEntity="Travel", inversedBy="albums")
-     * @JoinColumn(name="travel_id", referencedColumnName="id")
+     * @ORM\JoinColumn(name="travel_id", referencedColumnName="id")
      */
     private Travel $travelId;
 
@@ -49,8 +49,8 @@ class Album
     /**
      * @ORM\ManyToMany(targetEntity="Step", inversedBy="albums")
      * @ORM\JoinTable(name="step_albums",
-     * joinColumns={@JoinColumn(name="album_id",referencedColumnName="id")},
-     * inverseJoinColumns={@JoinColumn(name="step_id", referencesColumnName="id")}
+     * joinColumns={@ORM\JoinColumn(name="album_id",referencedColumnName="id")},
+     * inverseJoinColumns={@ORM\JoinColumn(name="step_id", referencedColumnName="id")})
      */
     private Collection $steps;
 

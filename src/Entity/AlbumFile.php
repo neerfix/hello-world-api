@@ -14,7 +14,7 @@ class AlbumFile
     /**
      * @ORM\Id()
      * @ORM\ManyToOne(targetEntity="File")
-     * @JoinColumn(name="file_id", referencedColumnName="id")
+     * @ORM\JoinColumn(name="file_id", referencedColumnName="id")
      */
     private File $fileId;
 
