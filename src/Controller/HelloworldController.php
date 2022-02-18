@@ -41,6 +41,7 @@ abstract class HelloworldController extends AbstractController
         if (empty($user) || !($user instanceof User)) {
             return null;
         }
+
         return $user;
     }
 }

@@ -42,8 +42,8 @@ class AlbumFile
 
     public function __construct()
     {
-        $this->album_id = new ArrayCollection();
-        $this->file_id = new ArrayCollection();
+        $this->albumId = new ArrayCollection();
+        $this->fileId = new ArrayCollection();
     }
 
     public function getCreatedAt(): ?\DateTime
