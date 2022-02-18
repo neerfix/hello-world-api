@@ -10,7 +10,6 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class Following
 {
-
     /**
      * @ORM\Id()
      * @ORM\ManyToOne(targetEntity="User", inversedBy="followings")

@@ -29,7 +29,6 @@ class Album
      */
     private string $description;
 
-
     /**
      * @ORM\ManyToOne(targetEntity="Travel", inversedBy="albums")
      * @ORM\JoinColumn(name="travel_id", referencedColumnName="id")
