@@ -1,13 +1,15 @@
 <?php
 
-namespace App\Controller;
+namespace App\Controller\Auth;
 
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use App\Controller\HelloworldController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use App\Controller\SecurityService;
-use App\Controller\UserService;
+use App\Services\UserService;
+use App\Services\RequestService;
 use App\Services\ResponseService;
+use App\Services\SecurityService;
+use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 
