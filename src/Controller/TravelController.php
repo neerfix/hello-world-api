@@ -51,7 +51,7 @@ class TravelController extends HelloworldController
         }
 
         $errors = $this->validate($request->request->all(), [
-            'email' => [new Type(['type' => 'string']), new NotBlank()],
+            'name' => [new Type(['type' => 'string']), new NotBlank()],
             'password' => [new Type(['type' => 'string']), new NotBlank()],
             'recaptchaResponse' => [new Optional([new Type(['type' => 'string']), new NotBlank()])],
         ]);
@@ -60,9 +60,8 @@ class TravelController extends HelloworldController
             return $errors;
         }
 
-//        $travel = $this->travelService->create(
-//
-//        );
+        $travel = $this->travelService->create(
+        );
 
         $this->buildSuccessResponse(Response::HTTP_CREATED, '$travel', $loggedUser);
     }
