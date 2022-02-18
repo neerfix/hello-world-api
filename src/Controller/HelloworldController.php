@@ -3,7 +3,6 @@
 namespace App\Controller;
 
 use App\Entity\User;
-use App\Services\RequestService;
 use App\Services\ResponseService;
 use App\Services\SecurityService;
 use App\Services\UserService;
@@ -17,7 +16,6 @@ abstract class HelloworldController extends AbstractController
     public function __construct(
         protected SecurityService $securityService,
         protected UserService $userService,
-        protected RequestService $requestService,
         protected ResponseService $responseService,
         ValidatorInterface $validator,
         NormalizerInterface $serializer,
@@ -25,7 +23,6 @@ abstract class HelloworldController extends AbstractController
         parent::__construct(
             $validator,
             $serializer,
-            $this->requestService,
             $this->responseService
         );
     }
