@@ -88,9 +88,39 @@ class ResponseService
 
         /** @var ConstraintViolation $constraintViolation */
         foreach ($constraintViolations as $constraintViolation) {
-            $errors[] = $constraintViolation;
+            $errors[] = $constraintViolation->getConstraint();
         }
 
         return $this->errors(Response::HTTP_UNPROCESSABLE_ENTITY, $errors);
+    }
+
+    /**
+     * Transform a constraint violation into an
+     * error array.
+     *
+     * @throws Exception
+     */
+    private function constraintToError(ConstraintViolation $constraintViolation): array
+    {
+        $code = $constraintViolation->getCode();
+        $fieldName = str_replace(['[', ']'], '', $constraintViolation->getPropertyPath());
+
+        return $this->createError($code, $constraintViolation->getMessage(), $fieldName);
+    }
+
+    /**
+     * Create an error to return.
+     */
+    public function createError(string $code, ?string $message = null, ?string $field = null): array
+    {
+        if (empty($message)) {
+            $message = $code;
+        }
+
+        return [
+            'code' => $code,
+            'message' => $message,
+            'field' => $field,
+        ];
     }
 }
