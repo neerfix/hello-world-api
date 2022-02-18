@@ -30,10 +30,16 @@ _Server_: PHP avec le framework Symfony
 ### Windows
 
 Prerequisites : Docker Desktop ( check it here : https://www.docker.com/products/docker-desktop & helpful to have WSL2, see doc : https://docs.microsoft.com/fr-fr/windows/wsl/install )
+The doc didn't precise that you have to go to the Microsoft Store to install the distro ( Debian have been used by the members of the team )
+- There is a need to activate the docker Desktop integration for WSL2.
 
 - Clone this repo
 - Got to project directory ( with preference with a WSL2 terminal ) 
-- If not installed in your WSL2 distro, install make, yarn & composer ( Example for Debian : ```sudo apt-get install make``` )
+- Launch ``sudo apt-get update```
+- If not installed in your WSL2 distro, install make, composer ( Example for Debian : ```sudo apt-get install make``` )
+- When you are in the terminal of the WSL2 distro, you can use ```cd /mnt/c/users/{your user}```to access your Windows files.
+- Install yarn by the npm package so ```sudo apt-get install npm ``` and ``` npm install yarn -g```
+- Install PHP 8.0 on the Debian
 - Launch the command : 
 ``` make ```
 
