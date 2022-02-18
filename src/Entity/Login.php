@@ -65,24 +65,24 @@ class Login
 
     public function getUserId(): ?User
     {
-        return $this->user_id;
+        return $this->userId;
     }
 
     public function setUserId(?User $user_id): Login
     {
-        $this->user_id = $user_id;
+        $this->userId = $userId;
 
         return $this;
     }
 
     public function getApplicationVersion(): ?string
     {
-        return $this->application_version;
+        return $this->applicationVersion;
     }
 
-    public function setApplicationVersion(?string $application_version): Login
+    public function setApplicationVersion(?string $applicationVersion): Login
     {
-        $this->application_version = $application_version;
+        $this->applicationVersion = $applicationVersion;
 
         return $this;
     }
@@ -123,12 +123,12 @@ class Login
         return $this;
     }
 
-    public function getFailure�Reason(): ?string
+    public function getFailureReason(): ?string
     {
         return $this->failureReason;
     }
 
-    public function setFailure�Reason(?string $failureReason): Login
+    public function setFailureReason(?string $failureReason): Login
     {
         $this->failureReason = $failureReason;
 

@@ -32,7 +32,7 @@ class File
     /**
      * @ORM\Column(name="updated_at", type="date")
      */
-    private $updatedAt;
+    private DateTime $updatedAt;
 
     /**
      * @ORM\ManyToOne(targetEntity="User", inversedBy="files")
@@ -48,12 +48,12 @@ class File
     /**
      * @ORM\Column(name="type", type="string", length="255")
      */
-    private $type;
+    private string $type;
 
     /**
      * @ORM\Column(name="mime_type", type="string", length="255")
      */
-    private $mimeType;
+    private string $mimeType;
 
     /**
      * @ORM\Column(name="size", type="integer")

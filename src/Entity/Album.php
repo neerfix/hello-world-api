@@ -70,7 +70,7 @@ class Album
         return $this->title;
     }
 
-    public function setTitle(string $title): self
+    public function setTitle(string $title): Album
     {
         $this->title = $title;
 
@@ -82,7 +82,7 @@ class Album
         return $this->description;
     }
 
-    public function setDescription(?string $description): self
+    public function setDescription(?string $description): Album
     {
         $this->description = $description;
 
@@ -94,7 +94,7 @@ class Album
         return $this->travelId;
     }
 
-    public function setTravelId(?Travel $travel_id): self
+    public function setTravelId(?Travel $travel_id): Album
     {
         $this->travelId = $travelId;
 
@@ -106,7 +106,7 @@ class Album
         return $this->createdAt;
     }
 
-    public function setCreatedAt(\DateTime $created_at): self
+    public function setCreatedAt(\DateTime $created_at): Album
     {
         $this->createdAt = $createdAt;
 
@@ -118,7 +118,7 @@ class Album
         return $this->updatedAt;
     }
 
-    public function setUpdatedAt(\DateTime $updated_at): self
+    public function setUpdatedAt(\DateTime $updated_at): Album
     {
         $this->updatedAt = $updatedAt;
 

@@ -200,7 +200,7 @@ class Place
     {
         if (!$this->steps->contains($step)) {
             $this->steps[] = $step;
-            $step->setPlace�Id($this);
+            $step->setPlaceId($this);
         }
 
         return $this;
@@ -210,8 +210,8 @@ class Place
     {
         if ($this->steps->removeElement($step)) {
             // set the owning side to null (unless already changed)
-            if ($step->getPlace�Id() === $this) {
-                $step->setPlace�Id(null);
+            if ($step->getPlaceId() === $this) {
+                $step->setPlaceId(null);
             }
         }
 
