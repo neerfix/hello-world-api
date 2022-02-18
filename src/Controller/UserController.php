@@ -12,6 +12,10 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Serializer\Exception\ExceptionInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
+use Symfony\Component\Validator\Constraints\DateTime;
+use Symfony\Component\Validator\Constraints\NotBlank;
+use Symfony\Component\Validator\Constraints\Optional;
+use Symfony\Component\Validator\Constraints\Type;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 class UserController extends HelloworldController
@@ -74,7 +78,6 @@ class UserController extends HelloworldController
      * @throws NonUniqueResultException
      * @throws ORMException
      * @throws OptimisticLockException
-     * @throws WorkingException
      * @throws ExceptionInterface
      * @throws Exception
      */
@@ -132,12 +135,10 @@ class UserController extends HelloworldController
     }
 
     /**
-     * @Route("/users/update", name="user_update, methods={ "POST" })
+     * @Route("/users/update", name="user_update", methods={ "PUT" })
      *
-     * @throws NonUniqueResultException
      * @throws ORMException
      * @throws OptimisticLockException
-     * @throws WorkingException
      * @throws ExceptionInterface
      * @throws Exception
      */
@@ -153,14 +154,13 @@ class UserController extends HelloworldController
         }
 
         $errors = $this->validate($request->request->all(), [
-            'id' => [new Uuid()],
             'email' => [new Email(), new NotBlank()],
             'password' => [new Type(['type' => 'string']), new NotBlank()],
             'birthDate' => [new DateTime(['format' => 'Y-m-d']), new NotBlank()],
             'userName' => [new Type(['type' => 'string'])],
             'firstName' => [new Optional([new Type(['type' => 'string'])])],
             'lastName' => [new Optional([new Type(['type' => 'string'])])],
-            'isVerify' => [new Type(['type' => 'bool'])]
+            'isVerify' => [new Type(['type' => 'bool'])]],
         ]);
 
         // Validation errors
@@ -169,12 +169,11 @@ class UserController extends HelloworldController
         }
 
         $exists = 'no';
-
-        $id = $request->request->get('id');
-
         $birthDate = $this->getDate($request, $request->request->get('birthDate'));
 
-        $user = $repo->find($id);
+        $email =$request->request->get('email');
+        $user =  $repo->findOneByEmail($email);
+
         if($user) {
             $exist = 'yes';
             $user->setEmail($request->request->get('email'));
@@ -185,10 +184,6 @@ class UserController extends HelloworldController
             $user->setLastname($request->request->get('lastName'));
             $user->setIsVerify($request->request->get('isVerify'));
         }
-
-        $response = new Response('{ "id" : '. $id .' '. $exist.'  }');
-        $response->headers->set('Content-Type', 'application/json');
-        $response->headers->set('Access-Control-Allow-Origin', '*');
 
         return $this->buildSuccessResponse(Response::HTTP_ACCEPTED, $user, $user);
     }
