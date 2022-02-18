@@ -1,5 +1,23 @@
 # Hello world - api
 --- ---
+Le carnet de voyage en ligne
+
+## Stack
+_Client_: React JS, Tailwind CSS
+
+_Server_: PHP avec le framework Symfony
+
+## Dream Team
+
+- [@Louise BAULAN](https://github.com/Fayaah)
+- [@Matisse LIVAIN](https://github.com/MLivain)
+- [@Nicolas NOTARARIGO](https://github.com/Neerfix)
+- [@Emeline PAL](https://github.com/emelinepal)
+- [@Aimée RITLENG](https://github.com/Aimee-RTLNG)
+- [@Gregg SANCHEZ](https://github.com/Arty3P)
+- [@Romain FRECHET](https://github.com/Hikari-rom)
+
+
 ## Install project
 
 ### MacOS
@@ -59,9 +77,15 @@ Use ```make db.dev``` to re-install dev data.
 --- ---
 # suivi de sprint
 ## [Sprint 1](https://github.com/helloworld-ynovlyon/api/milestone/1) (14/02/2022 - 18/02/2022)
+### Debut de sprint
+- Nombre d'issues pour ce sprint: 7
+- Poids total du sprint: 33
+
+### Fin de sprint
 - Nombre d'issues pour ce sprint: 11
 - Nombre d'issues réalisés: 3
 - Poids total du sprint: 33
 - Poids total du sprint réalisés: 14
+
 
 ## [Sprint 2](https://github.com/helloworld-ynovlyon/api/milestone/2) (07/03/2022 - 11/03/2022)
