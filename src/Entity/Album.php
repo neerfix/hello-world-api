@@ -90,7 +90,7 @@ class Album
         return $this->travelId;
     }
 
-    public function setTravelId(?Travel $travel_id): Album
+    public function setTravelId(?Travel $travelId): Album
     {
         $this->travelId = $travelId;
 
@@ -102,7 +102,7 @@ class Album
         return $this->createdAt;
     }
 
-    public function setCreatedAt(\DateTime $created_at): Album
+    public function setCreatedAt(\DateTime $createdAt): Album
     {
         $this->createdAt = $createdAt;
 
@@ -114,7 +114,7 @@ class Album
         return $this->updatedAt;
     }
 
-    public function setUpdatedAt(\DateTime $updated_at): Album
+    public function setUpdatedAt(\DateTime $updatedAt): Album
     {
         $this->updatedAt = $updatedAt;
 
