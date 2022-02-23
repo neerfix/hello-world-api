@@ -37,7 +37,7 @@ The doc didn't precise that you have to go to the Microsoft Store to install the
 - Got to project directory ( with preference with a WSL2 terminal ) 
 - Launch ``sudo apt-get update```
 - If not installed in your WSL2 distro, install make, composer ( Example for Debian : ```sudo apt-get install make``` )
-- Add repository links curl -sL https://deb.nodesource.com/setup_14.x | sudo -E bash -
+- Add repository links ``curl -sL https://deb.nodesource.com/setup_14.x | sudo -E bash -``
 - Install yarn by the npm package so ```sudo apt-get install nodejs npm ``` and ``` npm install yarn -g```
 - When you are in the terminal of the WSL2 distro, you can use ```cd /mnt/c/users/{your user}```to access your Windows files.
 - Install PHP 8.0 on the Debian
