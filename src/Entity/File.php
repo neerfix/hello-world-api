@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Repository\FileRepository;
+use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -12,10 +13,22 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class File
 {
+    // -------------------------- >
+
+    public function __construct()
+    {
+        $this->albumFiles = new ArrayCollection();
+
+        $this->setCreatedAt(new DateTime());
+        $this->setUpdatedAt(new DateTime());
+    }
+
+    // -------------------------- >
+
     /**
-     * @ORM\Id()
-     * @ORM\GeneratedValue()
-     * @ORM\Column(name="id", type="integer", length="180", unique=true)
+     * @ORM\Id
+     * @ORM\GeneratedValue
+     * @ORM\Column(name="id", type="integer", unique=true)
      */
     private int $id;
 
@@ -61,14 +74,11 @@ class File
     private int $size;
 
     /**
-     * @ORM\OneToMany(targetEntity="AlbumFile", mappedBy="file_id")
+     * @ORM\OneToMany(targetEntity="AlbumFile", mappedBy="fileId")
      */
     private Collection $albumFiles;
 
-    public function __construct()
-    {
-        $this->albumFiles = new ArrayCollection();
-    }
+    // -------------------------- >
 
     public function getId(): ?int
     {
@@ -87,24 +97,24 @@ class File
         return $this;
     }
 
-    public function getCreatedAt(): ?\DateTime
+    public function getCreatedAt(): ?DateTime
     {
         return $this->createdAt;
     }
 
-    public function setCreatedAt(\DateTime $createdAt): File
+    public function setCreatedAt(DateTime $createdAt): File
     {
         $this->createdAt = $createdAt;
 
         return $this;
     }
 
-    public function getUpdatedAt(): ?\DateTime
+    public function getUpdatedAt(): ?DateTime
     {
         return $this->updatedAt;
     }
 
-    public function setUpdatedAt(\DateTime $updatedAt): File
+    public function setUpdatedAt(DateTime $updatedAt): File
     {
         $this->updatedAt = $updatedAt;
 
@@ -167,36 +177,6 @@ class File
     public function setSize(int $size): File
     {
         $this->size = $size;
-
-        return $this;
-    }
-
-    /**
-     * @return Collection|AlbumFile[]
-     */
-    public function getAlbumFiles(): Collection
-    {
-        return $this->albumFiles;
-    }
-
-    public function addAlbumFile(AlbumFile $albumFile): File
-    {
-        if (!$this->albumFiles->contains($albumFile)) {
-            $this->albumFiles[] = $albumFile;
-            $albumFile->setFileId($this);
-        }
-
-        return $this;
-    }
-
-    public function removeAlbumFile(AlbumFile $albumFile): File
-    {
-        if ($this->albumFiles->removeElement($albumFile)) {
-            // set the owning side to null (unless already changed)
-            if ($albumFile->getFileId() === $this) {
-                $albumFile->setFileId(null);
-            }
-        }
 
         return $this;
     }

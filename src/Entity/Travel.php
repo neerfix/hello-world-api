@@ -9,14 +9,28 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @ORM\Entity(repositoryClass="TravelRepository")
+ * @ORM\Entity(repositoryClass="TravelRepository::class")
  */
 class Travel
 {
+    // -------------------------- >
+
+    public function __construct()
+    {
+        $this->albums = new ArrayCollection();
+        $this->steps = new ArrayCollection();
+
+        // TODO move it from all Entity to AbstractEntity
+        $this->setCreatedAt(new DateTime());
+        $this->setUpdatedAt(new DateTime());
+    }
+
+    // -------------------------- >
+
     /**
-     * @ORM\Id()
-     * @ORM\GeneratedValue()
-     * @ORM\Column(name="id", type="integer", length="180", unique=true)
+     * @ORM\Id
+     * @ORM\GeneratedValue
+     * @ORM\Column(name="id", type="integer", unique=true)
      */
     private int $id;
 
@@ -43,12 +57,12 @@ class Travel
     /**
      * @ORM\Column(name="started_at", type="date")
      */
-    private DateTime $startedAt;
+    private ?DateTime $startedAt = null;
 
     /**
      * @ORM\Column(name="ended_at", type="date")
      */
-    private DateTime $endedAt;
+    private ?DateTime $endedAt = null;
 
     /**
      * @ORM\ManyToOne(targetEntity="User", inversedBy="travels")
@@ -67,24 +81,32 @@ class Travel
     private DateTime $updatedAt;
 
     /**
-     * @ORM\OneToMany(targetEntity="Album", mappedBy="travel_id")
+     * @ORM\OneToMany(targetEntity="Album", mappedBy="travelId")
      */
     private Collection $albums;
 
     /**
-     * @ORM\OneToMany(targetEntity="Step", mappedBy="travel_id")
+     * @ORM\OneToMany(targetEntity="Step", mappedBy="travelId")
      */
     private Collection $steps;
 
-    public function __construct()
-    {
-        $this->albums = new ArrayCollection();
-        $this->steps = new ArrayCollection();
-    }
+    // -------------------------- >
 
-    public function getId(): ?int
+    public function getId(): int
     {
         return $this->id;
+    }
+
+    public function getName(): string
+    {
+        return $this->name;
+    }
+
+    public function setName(string $name): Travel
+    {
+        $this->name = $name;
+
+        return $this;
     }
 
     public function getBudget(): ?float
@@ -92,7 +114,7 @@ class Travel
         return $this->budget;
     }
 
-    public function setBudget(?float $budget): Travel
+    public function setBudget(?float $budget = null): Travel
     {
         $this->budget = $budget;
 
@@ -128,7 +150,7 @@ class Travel
         return $this->startedAt;
     }
 
-    public function setStartedAt(DateTime $startedAt): Travel
+    public function setStartedAt(?DateTime $startedAt = null): Travel
     {
         $this->startedAt = $startedAt;
 
@@ -140,7 +162,7 @@ class Travel
         return $this->endedAt;
     }
 
-    public function setEndedAt(DateTime $endedAt): Travel
+    public function setEndedAt(?DateTime $endedAt = null): Travel
     {
         $this->endedAt = $endedAt;
 
@@ -183,76 +205,13 @@ class Travel
         return $this;
     }
 
-    public function getName(): string
-    {
-        return $this->name;
-    }
-
-    public function setName(string $name): Travel
-    {
-        $this->name = $name;
-
-        return $this;
-    }
-
-    // FIXME Move or delete this
-    /**
-     * @return Collection|Album[]
-     */
     public function getAlbums(): Collection
     {
         return $this->albums;
     }
 
-    public function addAlbum(Album $album): Travel
-    {
-        if (!$this->albums->contains($album)) {
-            $this->albums[] = $album;
-            $album->setTravelId($this);
-        }
-
-        return $this;
-    }
-
-    public function removeAlbum(Album $album): Travel
-    {
-        if ($this->albums->removeElement($album)) {
-            // set the owning side to null (unless already changed)
-            if ($album->getTravelId() === $this) {
-                $album->setTravelId(null);
-            }
-        }
-
-        return $this;
-    }
-
-    /**
-     * @return Collection|Step[]
-     */
     public function getSteps(): Collection
     {
         return $this->steps;
-    }
-
-    public function addStep(Step $step): Travel
-    {
-        if (!$this->steps->contains($step)) {
-            $this->steps[] = $step;
-            $step->setTravelId($this);
-        }
-
-        return $this;
-    }
-
-    public function removeStep(Step $step): Travel
-    {
-        if ($this->steps->removeElement($step)) {
-            // set the owning side to null (unless already changed)
-            if ($step->getTravelId() === $this) {
-                $step->setTravelId(null);
-            }
-        }
-
-        return $this;
     }
 }

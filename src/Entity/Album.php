@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Repository\AlbumRepository;
+use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -12,10 +13,23 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class Album
 {
+    // -------------------------- >
+
+    public function __construct()
+    {
+        $this->steps = new ArrayCollection();
+        $this->albumFiles = new ArrayCollection();
+
+        $this->setCreatedAt(new DateTime());
+        $this->setUpdatedAt(new DateTime());
+    }
+
+    // -------------------------- >
+
     /**
-     * @ORM\Id()
-     * @ORM\GeneratedValue()
-     * @ORM\Column(name="id", type="integer", length="180", unique=true)
+     * @ORM\Id
+     * @ORM\GeneratedValue
+     * @ORM\Column(name="id", type="integer", unique=true)
      */
     private int $id;
 
@@ -50,18 +64,14 @@ class Album
      */
     private Collection $steps;
 
-    public function __construct()
-    {
-        $this->steps = new ArrayCollection();
-        $this->albumFiles = new ArrayCollection();
-    }
+    // -------------------------- >
 
-    public function getId(): ?int
+    public function getId(): int
     {
         return $this->id;
     }
 
-    public function getTitle(): ?string
+    public function getTitle(): string
     {
         return $this->title;
     }
@@ -97,53 +107,26 @@ class Album
         return $this;
     }
 
-    public function getCreatedAt(): ?\DateTime
+    public function getCreatedAt(): ?DateTime
     {
         return $this->createdAt;
     }
 
-    public function setCreatedAt(\DateTime $createdAt): Album
+    public function setCreatedAt(DateTime $createdAt): Album
     {
         $this->createdAt = $createdAt;
 
         return $this;
     }
 
-    public function getUpdatedAt(): ?\DateTime
+    public function getUpdatedAt(): ?DateTime
     {
         return $this->updatedAt;
     }
 
-    public function setUpdatedAt(\DateTime $updatedAt): Album
+    public function setUpdatedAt(DateTime $updatedAt): Album
     {
         $this->updatedAt = $updatedAt;
-
-        return $this;
-    }
-
-    /**
-     * @return Collection|Step[]
-     */
-    public function getSteps(): Collection
-    {
-        return $this->steps;
-    }
-
-    public function addStep(Step $step): Album
-    {
-        if (!$this->steps->contains($step)) {
-            $this->steps[] = $step;
-            $step->addAlbumId($this);
-        }
-
-        return $this;
-    }
-
-    public function removeStep(Step $step): Album
-    {
-        if ($this->steps->removeElement($step)) {
-            $step->removeAlbumId($this);
-        }
 
         return $this;
     }

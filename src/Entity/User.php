@@ -29,9 +29,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     // ------------------------- >
 
     /**
-     * @ORM\Id()
-     * @ORM\GeneratedValue()
-     * @ORM\Column(name="id", type="string", length="180", unique=true)
+     * @ORM\Id
+     * @ORM\GeneratedValue
+     * @ORM\Column(name="id", type="string", unique=true)
      */
     private int $id;
 
@@ -63,12 +63,12 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     /**
      * @ORM\Column(name="firstname", type="string", length="50", nullable=true)
      */
-    private string $firstname;
+    private ?string $firstname = null;
 
     /**
      * @ORM\Column(name="lastname", type="string", length="70", nullable=true)
      */
-    private string $lastname;
+    private ?string $lastname = null;
 
     /**
      * @ORM\Column(name="username", type="string", length="55", unique=true)
@@ -76,41 +76,43 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private string $username;
 
     /**
-     * @ORM\Column(name="is_verify", type="string", length="180")
+     * @ORM\Column(name="is_verify", type="string", length="10")
      */
     private bool $isVerify;
 
     /**
-     * @ORM\OneToMany(targetEntity="Travel", mappedBy="user_id")
+     * @ORM\OneToMany(targetEntity="Travel", mappedBy="userId")
      */
     private Collection $travels;
 
     /**
-     * @ORM\OneToMany(targetEntity="Login", mappedBy="user_id")
+     * @ORM\OneToMany(targetEntity="Login", mappedBy="userId")
      */
     private Collection $logins;
 
     /**
-     * @ORM\OneToMany(targetEntity="Following", mappedBy="main_user_id")
+     * @ORM\OneToMany(targetEntity="Following", mappedBy="mainUserId")
      */
     private Collection $followings;
 
     /**
-     * @ORM\OneToMany(targetEntity="Following", mappedBy="follower_id")
+     * @ORM\OneToMany(targetEntity="Following", mappedBy="followerId")
      */
     private Collection $followers;
 
     /**
-     * @ORM\OneToMany(targetEntity="File",mappedBy="user_id")
+     * @ORM\OneToMany(targetEntity="File",mappedBy="userId")
      */
     private Collection $files;
 
-    public function getId(): ?int
+    // ------------------------- >
+
+    public function getId(): int
     {
         return $this->id;
     }
 
-    public function getUuid(): ?string
+    public function getUuid(): string
     {
         return $this->uuid;
     }
@@ -175,7 +177,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         // $this->plainPassword = null;
     }
 
-    public function getEmail(): ?string
+    public function getEmail(): string
     {
         return $this->email;
     }
@@ -223,7 +225,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    public function getUsername(): ?string
+    public function getUsername(): string
     {
         return $this->username;
     }
@@ -247,154 +249,28 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    //FIXME move followers into new file Service
-    /**
-     * @return Collection|Travel[]
-     */
     public function getTravels(): Collection
     {
         return $this->travels;
     }
 
-    public function addTravel(Travel $travel): User
-    {
-        if (!$this->travels->contains($travel)) {
-            $this->travels[] = $travel;
-            $travel->setUserId($this);
-        }
-
-        return $this;
-    }
-
-    public function removeTravel(Travel $travel): User
-    {
-        if ($this->travels->removeElement($travel)) {
-            // set the owning side to null (unless already changed)
-            if ($travel->getUserId() === $this) {
-                $travel->setUserId(null);
-            }
-        }
-
-        return $this;
-    }
-
-    /**
-     * @return Collection|Login[]
-     */
     public function getLogins(): Collection
     {
         return $this->logins;
     }
 
-    public function addLogin(Login $login): User
-    {
-        if (!$this->logins->contains($login)) {
-            $this->logins[] = $login;
-            $login->setUserId($this);
-        }
-
-        return $this;
-    }
-
-    public function removeLogin(Login $login): User
-    {
-        if ($this->logins->removeElement($login)) {
-            // set the owning side to null (unless already changed)
-            if ($login->getUserId() === $this) {
-                $login->setUserId(null);
-            }
-        }
-
-        return $this;
-    }
-
-    /**
-     * @return Collection|Following[]
-     */
     public function getFollowings(): Collection
     {
         return $this->followings;
     }
 
-    public function addFollowing(Following $following): User
-    {
-        if (!$this->followings->contains($following)) {
-            $this->followings[] = $following;
-            $following->setMainUserId($this);
-        }
-
-        return $this;
-    }
-
-    public function removeFollowing(Following $following): User
-    {
-        if ($this->followings->removeElement($following)) {
-            // set the owning side to null (unless already changed)
-            if ($following->getMainUserId() === $this) {
-                $following->setMainUserId(null);
-            }
-        }
-
-        return $this;
-    }
-
-    /**
-     * @return Collection|Follower[]
-     */
     public function getFollowers(): Collection
     {
         return $this->followers;
     }
 
-    public function addFollower(User $follower): User
-    {
-        if (!$this->followers->contains($follower)) {
-            $this->followers[] = $follower;
-            $follower->setFollowerId($this);
-        }
-
-        return $this;
-    }
-
-    public function removeFollower(User $follower): User
-    {
-        if ($this->followers->removeElement($follower)) {
-            // set the owning side to null (unless already changed)
-            if ($follower->getFollowerId() === $this) {
-                $follower->setFollowerId(null);
-            }
-        }
-
-        return $this;
-    }
-
-    /**
-     * @return Collection|File[]
-     */
     public function getFiles(): Collection
     {
         return $this->files;
-    }
-
-    public function addFile(File $file): User
-    {
-        if (!$this->files->contains($file)) {
-            $this->files[] = $file;
-            $file->setUserId($this);
-        }
-
-        return $this;
-    }
-
-    public function removeFile(File $file): User
-    {
-        if ($this->files->removeElement($file)) {
-            // set the owning side to null (unless already changed)
-            if ($file->getUserId() === $this) {
-                $file->setUserId(null);
-            }
-        }
-
-        return $this;
     }
 }

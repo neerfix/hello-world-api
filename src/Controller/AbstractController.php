@@ -3,9 +3,12 @@
 namespace App\Controller;
 
 use App\Entity\User;
+use App\Services\RequestService;
 use App\Services\ResponseService;
+use DateTime;
 use Exception;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Serializer\Exception\ExceptionInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 use Symfony\Component\Validator\Constraints\Collection;
@@ -18,7 +21,8 @@ abstract class AbstractController extends \Symfony\Bundle\FrameworkBundle\Contro
     public function __construct(
         protected ValidatorInterface $validator,
         protected NormalizerInterface $serializer,
-        private ResponseService $responseService
+        private ResponseService $responseService,
+        private RequestService $requestService
     ) {
     }
 
@@ -76,5 +80,23 @@ abstract class AbstractController extends \Symfony\Bundle\FrameworkBundle\Contro
         ]);
 
         return $this->serializer->normalize($data, 'json', $normalizationContext);
+    }
+
+    /**
+     * Get a datetime and set the timezone if one was
+     * given in the request.
+     *
+     * @throws Exception
+     */
+    public function getDate(Request $request, ?string $isoTime): ?DateTime
+    {
+        if (empty($isoTime)) {
+            return null;
+        }
+
+        $timezone = $this->requestService->getTimezone($request);
+
+        return (new DateTime($isoTime))
+            ->setTimezone($timezone);
     }
 }
