@@ -45,6 +45,9 @@ class TravelController extends HelloworldController
      */
     public function addAction(Request $request): Response
     {
+        dump('$request');
+        dd($request);
+
         $loggedUser = $this->getLoggedUser();
 
         // No logged user
@@ -63,7 +66,7 @@ class TravelController extends HelloworldController
         ]);
 
         if (!empty($errors)) {
-            return $errors;
+//            return $errors;
         }
 
         $startedAt = $this->getDate($request, $request->request->get('startedAt'));
