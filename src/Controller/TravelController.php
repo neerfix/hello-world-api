@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Services\RequestService;
 use App\Services\ResponseService;
 use App\Services\SecurityService;
 use App\Services\TravelService;
@@ -12,6 +13,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Serializer\Exception\ExceptionInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
+use Symfony\Component\Validator\Constraints\DateTime;
 use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\Validator\Constraints\Optional;
 use Symfony\Component\Validator\Constraints\Type;
@@ -25,11 +27,12 @@ class TravelController extends HelloworldController
         SecurityService $securityService,
         UserService $userService,
         ResponseService $responseService,
+        RequestService $requestService,
         ValidatorInterface $validator,
         NormalizerInterface $normalizer,
         private TravelService $travelService
     ) {
-        parent::__construct($securityService, $userService, $responseService, $validator, $normalizer);
+        parent::__construct($securityService, $userService, $responseService, $requestService, $validator, $normalizer);
     }
 
     // ------------------------ >
@@ -42,27 +45,44 @@ class TravelController extends HelloworldController
      */
     public function addAction(Request $request): Response
     {
+        //TODO move it to AbstractController
+        $content = $request->getContent();
+        $parameters = json_decode($content, true);
+
         $loggedUser = $this->getLoggedUser();
 
         // No logged user
-        if (empty($loggedUser)) {
+        if (null === $loggedUser) {
             //FIXME remove // when front is ready
             // return $this->responseService->error403('auth.unauthorized', 'Vous n\'êtes pas autorisé à effectué cette action');
         }
 
-        $errors = $this->validate($request->request->all(), [
+        $errors = $this->validate($parameters, [
             'name' => [new Type(['type' => 'string']), new NotBlank()],
-            'password' => [new Type(['type' => 'string']), new NotBlank()],
-            'recaptchaResponse' => [new Optional([new Type(['type' => 'string']), new NotBlank()])],
+            'budget' => [new Type(['type' => 'float']), new NotBlank()],
+            'description' => [new Optional([new Type(['type' => 'string']), new NotBlank()])],
+            'startedAt' => [new Optional([new DateTime(['format' => 'Y-m-d']), new NotBlank()])],
+            'endedAt' => [new Optional([new DateTime(['format' => 'Y-m-d']), new NotBlank()])],
+            'isSharable' => [new Type(['type' => 'bool']), new NotBlank()],
         ]);
 
         if (!empty($errors)) {
             return $errors;
         }
 
+        $startedAt = $this->getDate($request, $request->request->get('startedAt'));
+        $endedAt = $this->getDate($request, $request->request->get('endedAt'));
+
         $travel = $this->travelService->create(
+            $loggedUser,
+            $request->request->get('name'),
+            $request->request->get('budget'),
+            $startedAt,
+            $endedAt,
+            $request->request->get('description'),
+            $request->request->get('isSharable')
         );
 
-        $this->buildSuccessResponse(Response::HTTP_CREATED, '$travel', $loggedUser);
+        return $this->buildSuccessResponse(Response::HTTP_CREATED, $travel, $loggedUser);
     }
 }

@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Repository\PlaceRepository;
+use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -12,10 +13,22 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class Place
 {
+    // -------------------------- >
+
+    public function __construct()
+    {
+        $this->steps = new ArrayCollection();
+
+        $this->setUpdatedAt(new DateTime());
+        $this->setCreatedAt(new DateTime());
+    }
+
+    // -------------------------- >
+
     /**
-     * @ORM\Id()
-     * @ORM\GeneratedValue()
-     * @ORM\Column(name="id", type="integer", length="180", unique=true)
+     * @ORM\Id
+     * @ORM\GeneratedValue
+     * @ORM\Column(name="id", type="integer", unique=true)
      */
     private int $id;
 
@@ -65,38 +78,35 @@ class Place
     private DateTime $updatedAt;
 
     /**
-     * @ORM\OneToMany(targetEntity="Step", mappedBy="step_id")
+     * @ORM\OneToMany(targetEntity="Step", mappedBy="id")
      */
     private Collection $steps;
 
-    public function __construct()
-    {
-        $this->steps = new ArrayCollection();
-    }
+    // -------------------------- >
 
-    public function getId(): ?int
+    public function getId(): int
     {
         return $this->id;
     }
 
-    public function getAddress(): ?string
+    public function getAddress(): string
     {
         return $this->address;
     }
 
-    public function setAddress(?string $address): Place
+    public function setAddress(string $address): Place
     {
         $this->address = $address;
 
         return $this;
     }
 
-    public function getCity(): ?string
+    public function getCity(): string
     {
         return $this->city;
     }
 
-    public function setCity(?string $city): Place
+    public function setCity(string $city): Place
     {
         $this->city = $city;
 
@@ -108,38 +118,38 @@ class Place
         return $this->zipcode;
     }
 
-    public function setZipcode(?string $zipcode): Place
+    public function setZipcode(string $zipcode): Place
     {
         $this->zipcode = $zipcode;
 
         return $this;
     }
 
-    public function getCountry(): ?string
+    public function getCountry(): string
     {
         return $this->country;
     }
 
-    public function setCountry(?string $country): Place
+    public function setCountry(string $country): Place
     {
         $this->country = $country;
 
         return $this;
     }
 
-    public function getName(): ?string
+    public function getName(): string
     {
         return $this->name;
     }
 
-    public function setName(?string $name): Place
+    public function setName(string $name): Place
     {
         $this->name = $name;
 
         return $this;
     }
 
-    public function getLatitude(): ?float
+    public function getLatitude(): float
     {
         return $this->latitude;
     }
@@ -151,7 +161,7 @@ class Place
         return $this;
     }
 
-    public function getLongitude(): ?float
+    public function getLongitude(): float
     {
         return $this->longitude;
     }
@@ -163,57 +173,32 @@ class Place
         return $this;
     }
 
-    public function getCreatedAt(): ?\DateTime
+    public function getCreatedAt(): DateTime
     {
         return $this->createdAt;
     }
 
-    public function setCreatedAt(\DateTime $createdAt): Place
+    public function setCreatedAt(DateTime $createdAt): Place
     {
         $this->createdAt = $createdAt;
 
         return $this;
     }
 
-    public function getUpdatedAt(): ?\DateTime
+    public function getUpdatedAt(): DateTime
     {
         return $this->updatedAt;
     }
 
-    public function setUpdatedAt(\DateTime $updatedAt): Place
+    public function setUpdatedAt(DateTime $updatedAt): Place
     {
         $this->updatedAt = $updatedAt;
 
         return $this;
     }
 
-    /**
-     * @return Collection|Step[]
-     */
     public function getSteps(): Collection
     {
         return $this->steps;
-    }
-
-    public function addStep(Step $step): Place
-    {
-        if (!$this->steps->contains($step)) {
-            $this->steps[] = $step;
-            $step->setPlaceId($this);
-        }
-
-        return $this;
-    }
-
-    public function removeStep(Step $step): Place
-    {
-        if ($this->steps->removeElement($step)) {
-            // set the owning side to null (unless already changed)
-            if ($step->getPlaceId() === $this) {
-                $step->setPlaceId(null);
-            }
-        }
-
-        return $this;
     }
 }

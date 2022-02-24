@@ -6,31 +6,48 @@ use App\Entity\Travel;
 use App\Entity\User;
 use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
+use Exception;
 
 class TravelService
 {
     // ------------------------ >
 
+    private const DESCRIPTION_MINIMAL_WORD = 5;
+
+    // ------------------------ >
+
     public function __construct(
-        private EntityManagerInterface $em
+        private EntityManagerInterface $em,
     ) {
     }
 
     // ------------------------ >
 
+    /**
+     * @throws Exception
+     */
     public function create(
+        User $user,
         string $name,
         float $budget,
-        DateTime $startedAt,
-        DateTime $endedAt,
-        User $user,
+        ?DateTime $startedAt = null,
+        ?DateTime $endedAt = null,
         ?string $description = null,
-        ?bool $isShared = false
+        ?bool $isShared = true
     ): Travel {
-        //TODO add check and verif data
+        if (null !== $description) {
+            preg_match_all('/([a-zA-Z][-\'0-9a-zÀ-ÿ]+)/m', $description, $words, PREG_SET_ORDER, 0);
+
+            // Explanation is too short
+            if (count($words) <= static::DESCRIPTION_MINIMAL_WORD) {
+                // TODO Replace with error code
+                throw new Exception(sprintf('La description ne peut pas être inférieur à %s mots', [static::DESCRIPTION_MINIMAL_WORD]));
+            }
+        }
+
+        $name = trim($name);
+
         $travel = (new Travel())
-            ->setCreatedAt(new DateTime())
-            ->setUpdatedAt(new DateTime())
             ->setName($name)
             ->setBudget($budget)
             ->setStartedAt($startedAt)

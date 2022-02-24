@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Repository\AlbumFileRepository;
+use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -11,6 +12,16 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class AlbumFile
 {
+    // -------------------------- >
+
+    public function __construct()
+    {
+        $this->albumId = new ArrayCollection();
+        $this->fileId = new ArrayCollection();
+    }
+
+    // -------------------------- >
+
     /**
      * @ORM\Id()
      * @ORM\ManyToOne(targetEntity="File")
@@ -40,30 +51,26 @@ class AlbumFile
      */
     private int $sequence;
 
-    public function __construct()
-    {
-        $this->albumId = new ArrayCollection();
-        $this->fileId = new ArrayCollection();
-    }
+    // -------------------------- >
 
-    public function getCreatedAt(): ?\DateTime
+    public function getCreatedAt(): ?DateTime
     {
         return $this->createdAt;
     }
 
-    public function setCreatedAt(\DateTime $createdAt): AlbumFile
+    public function setCreatedAt(DateTime $createdAt): AlbumFile
     {
         $this->createdAt = $createdAt;
 
         return $this;
     }
 
-    public function getUpdatedAt(): ?\DateTime
+    public function getUpdatedAt(): ?DateTime
     {
         return $this->updatedAt;
     }
 
-    public function setUpdatedAt(\DateTime $updatedAt): AlbumFile
+    public function setUpdatedAt(DateTime $updatedAt): AlbumFile
     {
         $this->updatedAt = $updatedAt;
 

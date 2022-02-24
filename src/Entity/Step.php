@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Repository\StepRepository;
+use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -13,9 +14,9 @@ use Doctrine\ORM\Mapping as ORM;
 class Step
 {
     /**
-     * @ORM\Id()
-     * @ORM\GeneratedValue()
-     * @ORM\Column(name="id", type="integer", length="180", unique=true)
+     * @ORM\Id
+     * @ORM\GeneratedValue
+     * @ORM\Column(name="id", type="integer", unique=true)
      */
     private int $id;
 
@@ -117,48 +118,48 @@ class Step
         return $this;
     }
 
-    public function getStartedAt(): ?\DateTime
+    public function getStartedAt(): ?DateTime
     {
         return $this->startedAt;
     }
 
-    public function setStartedAt(\DateTime $startedAt): Step
+    public function setStartedAt(DateTime $startedAt): Step
     {
         $this->startedAt = $startedAt;
 
         return $this;
     }
 
-    public function getEndedAt(): ?\DateTime
+    public function getEndedAt(): ?DateTime
     {
         return $this->endedAt;
     }
 
-    public function setEndedAt(\DateTime $endedAt): Step
+    public function setEndedAt(DateTime $endedAt): Step
     {
         $this->endedAt = $endedAt;
 
         return $this;
     }
 
-    public function getCreatedAt(): ?\DateTime
+    public function getCreatedAt(): ?DateTime
     {
         return $this->createdAt;
     }
 
-    public function setCreatedAt(\DateTime $createdAt): Step
+    public function setCreatedAt(DateTime $createdAt): Step
     {
         $this->createdAt = $createdAt;
 
         return $this;
     }
 
-    public function getUpdatedAt(): ?\DateTime
+    public function getUpdatedAt(): ?DateTime
     {
         return $this->updatedAt;
     }
 
-    public function setUpdatedAt(\DateTime $updatedAt): Step
+    public function setUpdatedAt(DateTime $updatedAt): Step
     {
         $this->updatedAt = $updatedAt;
 
