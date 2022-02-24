@@ -21,8 +21,8 @@ abstract class AbstractController extends \Symfony\Bundle\FrameworkBundle\Contro
     public function __construct(
         protected ValidatorInterface $validator,
         protected NormalizerInterface $serializer,
-        private ResponseService $responseService,
-        private RequestService $requestService
+        protected ResponseService $responseService,
+        protected RequestService $requestService
     ) {
     }
 

@@ -45,8 +45,9 @@ class TravelController extends HelloworldController
      */
     public function addAction(Request $request): Response
     {
-        dump('$request');
-        dd($request);
+        //TODO move it to AbstractController
+        $content = $request->getContent();
+        $parameters = json_decode($content, true);
 
         $loggedUser = $this->getLoggedUser();
 
@@ -56,7 +57,7 @@ class TravelController extends HelloworldController
             // return $this->responseService->error403('auth.unauthorized', 'Vous n\'êtes pas autorisé à effectué cette action');
         }
 
-        $errors = $this->validate($request->request->all(), [
+        $errors = $this->validate($parameters, [
             'name' => [new Type(['type' => 'string']), new NotBlank()],
             'budget' => [new Type(['type' => 'float']), new NotBlank()],
             'description' => [new Optional([new Type(['type' => 'string']), new NotBlank()])],
@@ -66,7 +67,7 @@ class TravelController extends HelloworldController
         ]);
 
         if (!empty($errors)) {
-//            return $errors;
+            return $errors;
         }
 
         $startedAt = $this->getDate($request, $request->request->get('startedAt'));
@@ -82,6 +83,6 @@ class TravelController extends HelloworldController
             $request->request->get('isSharable')
         );
 
-        $this->buildSuccessResponse(Response::HTTP_CREATED, $travel, $loggedUser);
+        return $this->buildSuccessResponse(Response::HTTP_CREATED, $travel, $loggedUser);
     }
 }
