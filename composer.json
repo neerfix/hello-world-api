@@ -13,6 +13,7 @@
         "friendsofphp/php-cs-fixer": "^3.6",
         "nelmio/cors-bundle": "^2.1",
         "ramsey/uuid": "^4.1",
+        "sentry/sentry-symfony": "^4.2",
         "symfony/console": "6.0.*",
         "symfony/dotenv": "6.0.*",
         "symfony/flex": "^2",
