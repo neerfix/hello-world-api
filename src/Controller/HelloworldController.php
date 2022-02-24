@@ -5,8 +5,6 @@ namespace App\Controller;
 use App\Entity\User;
 use App\Services\RequestService;
 use App\Services\ResponseService;
-use App\Services\SecurityService;
-use App\Services\UserService;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
@@ -15,8 +13,6 @@ abstract class HelloworldController extends AbstractController
     // ------------------------------ >
 
     public function __construct(
-        protected SecurityService $securityService,
-        protected UserService $userService,
         protected ResponseService $responseService,
         protected RequestService $requestService,
         ValidatorInterface $validator,

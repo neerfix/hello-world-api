@@ -2,10 +2,13 @@
 
 namespace App\Services;
 
+use App\Entity\Token;
 use App\Entity\User;
+use App\Repository\TokenRepository;
 use App\Repository\UserRepository;
 use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\ORM\NonUniqueResultException;
 use Exception;
 
 class UserService
@@ -18,6 +21,7 @@ class UserService
         private EntityManagerInterface $em,
         private UserRepository $userRepository,
         private TextService $textService,
+        private TokenRepository $tokenRepository,
     ) {
     }
 
@@ -87,5 +91,24 @@ class UserService
         $this->em->flush();
 
         return $user;
+    }
+
+    /**
+     * @throws NonUniqueResultException
+     * @throws Exception
+     */
+    public function getUserByToken(Token $token): User
+    {
+        $token = $this->tokenRepository->findOneByValue($token->getValue());
+
+        if (null === $token) {
+            throw new Exception('Le Token est invalide ou non trouvé');
+        }
+
+        if ($token->getExpirationDate() < new DateTime()) {
+            throw new Exception('Le Token est invalide ou a expiré');
+        }
+
+        return $token->getUser();
     }
 }

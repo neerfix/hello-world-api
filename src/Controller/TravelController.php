@@ -4,9 +4,7 @@ namespace App\Controller;
 
 use App\Services\RequestService;
 use App\Services\ResponseService;
-use App\Services\SecurityService;
 use App\Services\TravelService;
-use App\Services\UserService;
 use Exception;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -24,15 +22,13 @@ class TravelController extends HelloworldController
     // ------------------------ >
 
     public function __construct(
-        SecurityService $securityService,
-        UserService $userService,
         ResponseService $responseService,
         RequestService $requestService,
         ValidatorInterface $validator,
         NormalizerInterface $normalizer,
         private TravelService $travelService
     ) {
-        parent::__construct($securityService, $userService, $responseService, $requestService, $validator, $normalizer);
+        parent::__construct($responseService, $requestService, $validator, $normalizer);
     }
 
     // ------------------------ >
