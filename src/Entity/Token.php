@@ -13,6 +13,7 @@ use Doctrine\ORM\Mapping as ORM;
 class Token
 {
     public const TARGET_EMAIL_CONFIRMATION = 'TARGET_EMAIL_CONFIRMATION';
+    public const TARGET_FORGET_PASSWORD = 'TARGET_FORGET_PASSWORD';
 
     /**
      * @ORM\Id
@@ -38,7 +39,7 @@ class Token
 
     /**
      * @ORM\ManyToOne(targetEntity=User::class)
-     * @ORM\JoinColumn(nullable=false)
+     * @ORM\JoinColumn(name="user_id", nullable=false)
      */
     private User $user;
 

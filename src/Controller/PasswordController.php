@@ -51,14 +51,6 @@ class PasswordController extends HelloworldController
         $content = $request->getContent();
         $parameters = json_decode($content, true);
 
-        $loggedUser = $this->getLoggedUser();
-
-        // No logged user
-        if (null === $loggedUser) {
-            //FIXME remove // when front is ready
-            // return $this->responseService->error403('auth.unauthorized', 'Vous n\'êtes pas autorisé à effectué cette action');
-        }
-
         $errors = $this->validate($parameters, [
             'password' => [new Type(['type' => 'string']), new NotBlank()],
         ]);
@@ -78,11 +70,11 @@ class PasswordController extends HelloworldController
         $this->userService->updatePassword($user, $parameters['password']);
         $this->tokenService->deleteToken($validToken);
 
-        return $this->buildSuccessResponse(Response::HTTP_OK, 'Votre mot de passe a bien été modifié. Vous pouvez vous connecter de nouveau avec ce nouveau mot de passe.', $loggedUser);
+        return $this->buildSuccessResponse(Response::HTTP_OK, ['message' => 'Votre mot de passe a bien été modifié. Vous pouvez vous connecter de nouveau avec ce nouveau mot de passe.']);
     }
 
     /**
-     * @Route("/passowrd/reset", name="reset_password", methods={ "POST" })
+     * @Route("/password/reset", name="reset_password", methods={ "POST" })
      *
      * @throws Exception
      * @throws ExceptionInterface
@@ -92,14 +84,6 @@ class PasswordController extends HelloworldController
         //TODO move it to AbstractController
         $content = $request->getContent();
         $parameters = json_decode($content, true);
-
-        $loggedUser = $this->getLoggedUser();
-
-        // No logged user
-        if (null === $loggedUser) {
-            //FIXME remove // when front is ready
-            // return $this->responseService->error403('auth.unauthorized', 'Vous n\'êtes pas autorisé à effectué cette action');
-        }
 
         $errors = $this->validate($parameters, [
             'email' => [new Type(['type' => 'string']), new NotBlank()],
@@ -113,11 +97,11 @@ class PasswordController extends HelloworldController
         $user = $this->userRepository->findOneByEmail($email);
 
         if (null === $user) {
-            throw new Exception('Un email à été envoyé à l\'adresse email indiqué si elle existe');
+            return $this->buildSuccessResponse(Response::HTTP_OK, ['message' => 'Un email à été envoyé à l\'adresse email indiqué si elle existe']);
         }
 
         $this->mailerService->forgetPasswordEmail($email, $user);
 
-        return $this->buildSuccessResponse(Response::HTTP_OK, 'Un email à été envoyé à l\'adresse email indiqué si elle existe', $loggedUser);
+        return $this->buildSuccessResponse(Response::HTTP_OK, ['message' => 'Un email à été envoyé à l\'adresse email indiqué si elle existe']);
     }
 }

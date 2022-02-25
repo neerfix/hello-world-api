@@ -1,0 +1,25 @@
+<body style="background-color: #212121">
+<img src="" alt="">
+<div style="display: block; width: 90%; margin: auto; background-color: white; color: #333333; padding: 15px; border-radius: 6px 6px 0 0">
+    {#  TODO Change template with design system and change route to webapp. #}
+    <h1>HelloWorld</h1> <br>
+    Hello {{ username }}!<br>
+    <p>Vous venez de vous inscrire sur <a href="https://www.hello-world.ovh" target="_blank">Hello world</a>, pour
+        confirmer votre compte, veuillez cliquer sur le bouton suivants : </p>
+    <div style="display: flex; justify-content: center; align-content: center; width: 100%">
+        <a href="http://dev.hello-world.ovh:3000/verify/{{ token }}" target="_blank">
+            <button style="
+                background-color: #f8d270;
+                color: #243134;
+                height: 28px;
+                line-height: 1;
+                font-weight: 600;
+                padding: 1px 1rem;
+                border-radius: 0.25rem;
+                border: 1px solid #f8d270;
+                ">Confirmer votre email
+            </button>
+        </a>
+    </div>
+</div>
+</body>

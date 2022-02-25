@@ -76,7 +76,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private string $username;
 
     /**
-     * @ORM\Column(name="is_verify", type="string", length="10")
+     * @ORM\Column(name="is_verify", type="boolean")
      */
     private bool $isVerify;
 

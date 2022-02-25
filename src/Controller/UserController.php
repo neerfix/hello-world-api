@@ -5,8 +5,6 @@ namespace App\Controller;
 use App\Repository\UserRepository;
 use App\Services\RequestService;
 use App\Services\ResponseService;
-use App\Services\SecurityService;
-use App\Services\UserService;
 use Exception;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
@@ -20,15 +18,13 @@ class UserController extends HelloworldController
     // ------------------------------ >
 
     public function __construct(
-        SecurityService $securityService,
-        UserService $userService,
         ResponseService $responseService,
         RequestService $requestService,
         ValidatorInterface $validator,
         NormalizerInterface $normalizer,
         private UserRepository $userRepository
     ) {
-        parent::__construct($securityService, $userService, $responseService, $requestService, $validator, $normalizer);
+        parent::__construct($responseService, $requestService, $validator, $normalizer);
     }
 
     // ------------------------------ >
@@ -62,9 +58,9 @@ class UserController extends HelloworldController
         $loggedUser = $this->getLoggedUser();
 
         // No logged used
-        if (empty($loggedUser)) {
-            return $this->responseService->error403('auth.unauthorized', 'Vous n\'êtes pas autorisé à effectué cette action');
-        }
+//        if (empty($loggedUser)) {
+//            return $this->responseService->error403('auth.unauthorized', 'Vous n\'êtes pas autorisé à effectué cette action');
+//        }
 
         $users = $this->userRepository->findAll();
 

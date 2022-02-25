@@ -10,6 +10,7 @@ use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\NonUniqueResultException;
 use Exception;
+use Ramsey\Uuid\Uuid;
 
 class UserService
 {
@@ -52,13 +53,13 @@ class UserService
             $birthdate = (clone $birthdate)
                 ->setTime(0, 0, 0);
 
-            if ($birthdate < new DateTime()) {
+            if ($birthdate > new DateTime()) {
                 throw new Exception('La date de naissance n\'est pas valide', 'users.create.birthdate.invalid', 'birthdate');
             }
         }
 
         // Invalid password
-        if (!empty($password) || $password < static::MIN_PASSWORD_LENGTH) {
+        if (empty($password) || $password < static::MIN_PASSWORD_LENGTH) {
             throw new Exception('le mot de passe est trop court. Il doit faire au minimum '.static::MIN_PASSWORD_LENGTH.' caractère', '', 'password');
         }
 
@@ -70,9 +71,12 @@ class UserService
         $user = (new User())
             ->setEmail($email)
             ->setUsername($username)
+            ->setPassword('tmp-pwd')
             ->setFirstname($firstname)
             ->setLastname($lastname)
-            ->setDateOfBirth($birthdate);
+            ->setDateOfBirth($birthdate)
+            ->setUuid(Uuid::uuid4())
+            ->setIsVerify(false);
 
         $this->em->persist($user);
         $this->em->flush();
