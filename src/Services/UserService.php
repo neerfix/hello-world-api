@@ -115,4 +115,21 @@ class UserService
 
         return $token->getUser();
     }
+
+    public function login(string $email, string $password): ?User
+    {
+        $user = $this->userRepository->findOneByEmail($email);
+        if (empty($existingUser)) {
+            throw new Exception('Cet email n\'est pas présent dans notre base', 'users.login.email.existing', 'email');
+        }
+        if ($this->checkPassword($user, $password)) {
+            throw new Exception('Le mot de passe est incorrect', 'users.login.password.incorrect', 'password');
+        }
+        return $user;
+    }
+
+    public function checkPassword(User $user, string $password): bool
+    {
+        return $user->getPassword() === $password;
+    }
 }
