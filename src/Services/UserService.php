@@ -2,11 +2,15 @@
 
 namespace App\Services;
 
+use App\Entity\Token;
 use App\Entity\User;
+use App\Repository\TokenRepository;
 use App\Repository\UserRepository;
 use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\ORM\NonUniqueResultException;
 use Exception;
+use Ramsey\Uuid\Uuid;
 
 class UserService
 {
@@ -18,6 +22,7 @@ class UserService
         private EntityManagerInterface $em,
         private UserRepository $userRepository,
         private TextService $textService,
+        private TokenRepository $tokenRepository,
     ) {
     }
 
@@ -48,13 +53,13 @@ class UserService
             $birthdate = (clone $birthdate)
                 ->setTime(0, 0, 0);
 
-            if ($birthdate < new DateTime()) {
+            if ($birthdate > new DateTime()) {
                 throw new Exception('La date de naissance n\'est pas valide', 'users.create.birthdate.invalid', 'birthdate');
             }
         }
 
         // Invalid password
-        if (!empty($password) || $password < static::MIN_PASSWORD_LENGTH) {
+        if (empty($password) || $password < static::MIN_PASSWORD_LENGTH) {
             throw new Exception('le mot de passe est trop court. Il doit faire au minimum '.static::MIN_PASSWORD_LENGTH.' caractère', '', 'password');
         }
 
@@ -66,9 +71,12 @@ class UserService
         $user = (new User())
             ->setEmail($email)
             ->setUsername($username)
+            ->setPassword('tmp-pwd')
             ->setFirstname($firstname)
             ->setLastname($lastname)
-            ->setDateOfBirth($birthdate);
+            ->setDateOfBirth($birthdate)
+            ->setUuid(Uuid::uuid4())
+            ->setIsVerify(false);
 
         $this->em->persist($user);
         $this->em->flush();
@@ -87,5 +95,24 @@ class UserService
         $this->em->flush();
 
         return $user;
+    }
+
+    /**
+     * @throws NonUniqueResultException
+     * @throws Exception
+     */
+    public function getUserByToken(Token $token): User
+    {
+        $token = $this->tokenRepository->findOneByValue($token->getValue());
+
+        if (null === $token) {
+            throw new Exception('Le Token est invalide ou non trouvé');
+        }
+
+        if ($token->getExpirationDate() < new DateTime()) {
+            throw new Exception('Le Token est invalide ou a expiré');
+        }
+
+        return $token->getUser();
     }
 }

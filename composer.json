@@ -25,7 +25,10 @@
         "symfony/serializer": "6.0.*",
         "symfony/translation": "6.0.*",
         "symfony/validator": "6.0.*",
-        "symfony/yaml": "6.0.*"
+        "symfony/yaml": "6.0.*",
+        "symfony/twig-bundle": "6.*",
+        "twig/extra-bundle": "^v3.3.8",
+        "twig/twig": "^2.12|^3.0"
     },
     "require-dev": {
         "doctrine/doctrine-fixtures-bundle": "^3.4",
