@@ -118,12 +118,15 @@ class UserService
 
     public function login(string $email, string $password): ?User
     {
+        if(empty($email) || empty($password)) {
+            throw new Exception( 'Les identifiants sont incomplets', 422);
+        }
         $user = $this->userRepository->findOneByEmail($email);
         if (empty($existingUser)) {
-            throw new Exception('Cet email n\'est pas présent dans notre base', 'users.login.email.existing', 'email');
+            throw new Exception('Cet email n\'est pas présent dans notre base', 401);
         }
         if ($this->checkPassword($user, $password)) {
-            throw new Exception('Le mot de passe est incorrect', 'users.login.password.incorrect', 'password');
+            throw new Exception('Le mot de passe est incorrect', 401);
         }
         return $user;
     }

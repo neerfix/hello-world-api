@@ -58,9 +58,9 @@ class LoginController extends HelloworldController
             return $errors;
         }
         $user = $this->userService->login($parameters["email"],$parameters["password"]);
+//
+//        $this->loginService->create($user, "V1", "127.0.0.1");
 
-        $this->loginService->create($user, "V1", "127.0.0.1");
-
-        return $this->buildSuccessResponse(Response::HTTP_CREATED, [$parameters]);
+        return $this->buildSuccessResponse(Response::HTTP_CREATED, [$user]);
     }
 }
