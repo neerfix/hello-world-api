@@ -2,9 +2,7 @@
 
 namespace App\Services;
 
-use App\Entity\Token;
 use App\Entity\User;
-use App\Repository\TokenRepository;
 use App\Repository\UserRepository;
 use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
@@ -53,13 +51,13 @@ class UserService
             $birthdate = (clone $birthdate)
                 ->setTime(0, 0, 0);
 
-            if ($birthdate > new DateTime()) {
+            if ($birthdate < new DateTime()) {
                 throw new Exception('La date de naissance n\'est pas valide', 'users.create.birthdate.invalid', 'birthdate');
             }
         }
 
         // Invalid password
-        if (empty($password) || $password < static::MIN_PASSWORD_LENGTH) {
+        if (!empty($password) || $password < static::MIN_PASSWORD_LENGTH) {
             throw new Exception('le mot de passe est trop court. Il doit faire au minimum '.static::MIN_PASSWORD_LENGTH.' caractère', '', 'password');
         }
 
@@ -71,12 +69,9 @@ class UserService
         $user = (new User())
             ->setEmail($email)
             ->setUsername($username)
-            ->setPassword('tmp-pwd')
             ->setFirstname($firstname)
             ->setLastname($lastname)
-            ->setDateOfBirth($birthdate)
-            ->setUuid(Uuid::uuid4())
-            ->setIsVerify(false);
+            ->setDateOfBirth($birthdate);
 
         $this->em->persist($user);
         $this->em->flush();
@@ -97,42 +92,20 @@ class UserService
         return $user;
     }
 
-    /**
-     * @throws NonUniqueResultException
-     * @throws Exception
-     */
-    public function getUserByToken(Token $token): User
-    {
-        $token = $this->tokenRepository->findOneByValue($token->getValue());
-
-        if (null === $token) {
-            throw new Exception('Le Token est invalide ou non trouvé');
-        }
-
-        if ($token->getExpirationDate() < new DateTime()) {
-            throw new Exception('Le Token est invalide ou a expiré');
-        }
-
-        return $token->getUser();
-    }
-
     public function login(string $email, string $password): ?User
     {
-        if(empty($email) || empty($password)) {
-            throw new Exception( 'Les identifiants sont incomplets', 422);
-        }
         $user = $this->userRepository->findOneByEmail($email);
-        if (empty($user)) {
-            throw new Exception('Cet email n\'est pas présent dans notre base', 401);
+        if (empty($existingUser)) {
+            throw new Exception('Cet email n\'est pas présent dans notre base', 'users.login.email.existing', 'email');
         }
         if ($this->checkPassword($user, $password)) {
-            throw new Exception('Le mot de passe est incorrect', 401);
+            throw new Exception('Le mot de passe est incorrect', 'users.login.password.incorrect', 'password');
         }
         return $user;
     }
 
     public function checkPassword(User $user, string $password): bool
     {
-        return $user->getPassword() === password_hash($password,PASSWORD_BCRYPT);
+        return $user->getPassword() === $password;
     }
 }
