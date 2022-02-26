@@ -16,12 +16,14 @@ class LoginService
     /**
      * @throws Exception
      */
-    public function create(User $user, string $applicationVersion, string $ipAddress ) : Login
+    public function create(User $user, string $applicationVersion, string $ipAddress, string $userAgent, bool $isSuccessful) : Login
     {
         $login = (new Login())
             ->setUserId($user)
             ->setApplicationVersion($applicationVersion)
-            ->setIpAddress($ipAddress);
+            ->setIpAddress($ipAddress)
+            ->setUserAgent($userAgent)
+            ->setIsSuccessful($isSuccessful);
         $this->em->persist($login);
         $this->em->flush();
 

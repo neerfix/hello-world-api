@@ -122,7 +122,7 @@ class UserService
             throw new Exception( 'Les identifiants sont incomplets', 422);
         }
         $user = $this->userRepository->findOneByEmail($email);
-        if (empty($existingUser)) {
+        if (empty($user)) {
             throw new Exception('Cet email n\'est pas présent dans notre base', 401);
         }
         if ($this->checkPassword($user, $password)) {
@@ -133,6 +133,6 @@ class UserService
 
     public function checkPassword(User $user, string $password): bool
     {
-        return $user->getPassword() === $password;
+        return $user->getPassword() === password_hash($password,PASSWORD_BCRYPT);
     }
 }
