@@ -25,15 +25,14 @@ class LoginController extends HelloworldController
     // ------------------------ >
 
     public function __construct(
-        SecurityService $securityService,
-        UserService $userService,
         ResponseService $responseService,
         RequestService $requestService,
         ValidatorInterface $validator,
         NormalizerInterface $normalizer,
-        private LoginService $loginService
+        private LoginService $loginService,
+        private UserService $userService
     ) {
-        parent::__construct($securityService, $userService, $responseService, $requestService, $validator, $normalizer);
+        parent::__construct($responseService, $requestService, $validator, $normalizer);
     }
 
     // ------------------------ >
@@ -59,8 +58,8 @@ class LoginController extends HelloworldController
         }
         $user = $this->userService->login($parameters["email"],$parameters["password"]);
 //
-//        $this->loginService->create($user, "V1", "127.0.0.1");
+        $login = $this->loginService->create($user, "V1", $request->getClientIp(), $request->headers->get('User-Agent'), true);
 
-        return $this->buildSuccessResponse(Response::HTTP_CREATED, [$user]);
+        return $this->buildSuccessResponse(Response::HTTP_CREATED, ['message' => 'Connecté avec succès'], $user);
     }
 }
