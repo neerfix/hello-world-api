@@ -55,7 +55,7 @@ class Login
     private bool $isSuccessful;
 
     /**
-     * @ORM\Column(name="failure_reason", type="string", length="255")
+     * @ORM\Column(name="failure_reason", type="string", length="255", nullable=true)
      */
     private string $failureReason;
 
