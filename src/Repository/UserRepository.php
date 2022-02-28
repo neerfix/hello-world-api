@@ -45,4 +45,17 @@ class UserRepository extends ServiceEntityRepository
 
             ->getQuery()->getOneOrNullResult();
     }
+
+    /**
+     * @throws NonUniqueResultException
+     */
+    public function findOneByUsername(string $username): ?User
+    {
+        return $this->createQueryBuilder('U')
+
+            ->where('U.username = :username')
+            ->setParameter('username', $username)
+
+            ->getQuery()->getOneOrNullResult();
+    }
 }

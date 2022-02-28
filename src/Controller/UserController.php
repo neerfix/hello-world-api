@@ -6,7 +6,6 @@ use App\Repository\UserRepository;
 use App\Services\RequestService;
 use App\Services\ResponseService;
 use App\Services\UserService;
-use Doctrine\ORM\EntityManagerInterface;
 use Exception;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -103,8 +102,8 @@ class UserController extends HelloworldController
 
         $user = $this->userService->create(
             $request->request->get('email'),
-            $request->request->get('password'),
             $request->request->get('username'),
+            $request->request->get('password'),
             $birthDate,
             $request->request->get('firstName'),
             $request->request->get('lastName'),
@@ -114,33 +113,28 @@ class UserController extends HelloworldController
     }
 
     /**
-     * @Route("/users/{id}/delete", name="delete_user",methods={"DELETE"})
+     * @Route("/users/{uuid}", name="delete_user",methods={"DELETE"})
      *
      * @throws Exception
      * @throws ExceptionInterface
      */
-    public function deleteUsers($id, UserRepository $repo, EntityManagerInterface $manager)
+    public function deleteUsers(Request $request, string $uuid)
     {
         $loggedUser = $this->getLoggedUser();
         $roles = $loggedUser->getRoles();
 
-        // No logged used
-        if (empty($loggedUser) || in_array('ADMIN', $roles, true)) {
-            return $this->responseService->error403('auth.unauthorized', 'Vous n\'êtes pas autorisé à effectué cette action');
-        }
+        $user = $this->userRepository->findOneByUuid($uuid);
 
-        // TODO create delete service and just change status of user from active to deleted
-        if ($user = $repo->find($id)) {
-            $exist = 'yes';
-            $manager->remove($user);
-            $manager->flush();
+        // No logged used
+        if (empty($loggedUser) || (!in_array('ROLE_ADMIN', $roles, true) && $loggedUser->getUuid() !== $uuid)) {
+            return $this->responseService->error403('auth.unauthorized', 'Vous n\'êtes pas autorisé à effectué cette action');
         }
 
         return $this->buildSuccessResponse(Response::HTTP_ACCEPTED, $user, $loggedUser);
     }
 
     /**
-     * @Route("/users/{{uuid}}/update", name="user_update", methods={ "PUT" })
+     * @Route("/users/{{uuid}}", name="user_update", methods={ "PUT" })
      *
      * @throws Exception
      * @throws ExceptionInterface
@@ -148,9 +142,10 @@ class UserController extends HelloworldController
     public function userUpdate(Request $request, string $uuid): JsonResponse
     {
         $loggedUser = $this->getLoggedUser();
+        $roles = $loggedUser->getRoles();
 
         // No logged used
-        if (empty($loggedUser)) {
+        if (empty($loggedUser) || (!in_array('ROLE_ADMIN', $roles, true) && $loggedUser->getUuid() !== $uuid)) {
             return $this->responseService->error403('auth.unauthorized', 'Vous n\'êtes pas autorisé à effectué cette action');
         }
 
@@ -178,6 +173,12 @@ class UserController extends HelloworldController
         $birthDate = $this->getDate($request, $request->request->get('birthDate'));
 
         $user = $this->userService->update(
+            $user,
+            $request->request->get('email'),
+            $request->request->get('username'),
+            $birthDate,
+            $request->request->get('firstName'),
+            $request->request->get('lastName'),
         );
 
         return $this->buildSuccessResponse(Response::HTTP_ACCEPTED, $user, $loggedUser);
