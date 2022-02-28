@@ -5,10 +5,13 @@ namespace App\Controller;
 use App\Repository\UserRepository;
 use App\Services\RequestService;
 use App\Services\ResponseService;
+use App\Services\UserService;
+use Doctrine\ORM\EntityManagerInterface;
 use Exception;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Mime\Email;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Serializer\Exception\ExceptionInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
@@ -27,6 +30,7 @@ class UserController extends HelloworldController
         RequestService $requestService,
         ValidatorInterface $validator,
         NormalizerInterface $normalizer,
+        private UserService $userService,
         private UserRepository $userRepository
     ) {
         parent::__construct($responseService, $requestService, $validator, $normalizer);
@@ -62,8 +66,9 @@ class UserController extends HelloworldController
     {
         $loggedUser = $this->getLoggedUser();
         $roles = $loggedUser->getRoles();
+
         // No logged used
-        if (empty($loggedUser) && in_array("ADMIN",$roles)) {
+        if (empty($loggedUser) && in_array('ADMIN', $roles, true)) {
             return $this->responseService->error403('auth.unauthorized', 'Vous n\'êtes pas autorisé à effectué cette action');
         }
 
@@ -73,11 +78,8 @@ class UserController extends HelloworldController
     }
 
     /**
-     * @Route("/users/signup", name="auth_signup_email", methods={ "POST" })
+     * @Route("/users", name="auth_signup_email", methods={ "POST" })
      *
-     * @throws NonUniqueResultException
-     * @throws ORMException
-     * @throws OptimisticLockException
      * @throws ExceptionInterface
      * @throws Exception
      */
@@ -87,7 +89,7 @@ class UserController extends HelloworldController
             'email' => [new Email(), new NotBlank()],
             'password' => [new Type(['type' => 'string']), new NotBlank()],
             'birthDate' => [new DateTime(['format' => 'Y-m-d']), new NotBlank()],
-            'userName' => [new Type(['type' => 'string'])],
+            'username' => [new Type(['type' => 'string'])],
             'firstName' => [new Optional([new Type(['type' => 'string'])])],
             'lastName' => [new Optional([new Type(['type' => 'string'])])],
         ]);
@@ -102,7 +104,7 @@ class UserController extends HelloworldController
         $user = $this->userService->create(
             $request->request->get('email'),
             $request->request->get('password'),
-            $request->request->get('userName'),
+            $request->request->get('username'),
             $birthDate,
             $request->request->get('firstName'),
             $request->request->get('lastName'),
@@ -113,44 +115,49 @@ class UserController extends HelloworldController
 
     /**
      * @Route("/users/{id}/delete", name="delete_user",methods={"DELETE"})
+     *
+     * @throws Exception
+     * @throws ExceptionInterface
      */
-    public function deleteUsers($id,UserRepository $repo,  EntityManagerInterface $manager){
+    public function deleteUsers($id, UserRepository $repo, EntityManagerInterface $manager)
+    {
         $loggedUser = $this->getLoggedUser();
         $roles = $loggedUser->getRoles();
+
         // No logged used
-        if (empty($loggedUser) || in_array("ADMIN",$roles)) {
+        if (empty($loggedUser) || in_array('ADMIN', $roles, true)) {
             return $this->responseService->error403('auth.unauthorized', 'Vous n\'êtes pas autorisé à effectué cette action');
         }
 
-        $exists = 'no';
-        if($user = $repo->find($id)) {
+        // TODO create delete service and just change status of user from active to deleted
+        if ($user = $repo->find($id)) {
             $exist = 'yes';
             $manager->remove($user);
             $manager->flush();
         }
-        $response = new Response('{ "id" : '. $id .' '. $exist.'  }');
-        $response->headers->set('Content-Type', 'application/json');
-        $response->headers->set('Access-Control-Allow-Origin', '*');
-        return $response;
+
+        return $this->buildSuccessResponse(Response::HTTP_ACCEPTED, $user, $loggedUser);
     }
 
     /**
-     * @Route("/users/update", name="user_update", methods={ "PUT" })
+     * @Route("/users/{{uuid}}/update", name="user_update", methods={ "PUT" })
      *
-     * @throws ORMException
-     * @throws OptimisticLockException
-     * @throws ExceptionInterface
      * @throws Exception
+     * @throws ExceptionInterface
      */
-    public function userUpdate(Request $request,UserRepository $repo,  EntityManagerInterface $manager): JsonResponse
+    public function userUpdate(Request $request, string $uuid): JsonResponse
     {
         $loggedUser = $this->getLoggedUser();
 
-        $roles = $loggedUser->getRoles();
-
         // No logged used
-        if (empty($loggedUser) || in_array("ADMIN",$roles)) {
+        if (empty($loggedUser)) {
             return $this->responseService->error403('auth.unauthorized', 'Vous n\'êtes pas autorisé à effectué cette action');
+        }
+
+        $user = $this->userRepository->findOneBy($uuid);
+
+        if (empty($user)) {
+            throw new Exception('L\'utilisateur n\'a pas été trouvé');
         }
 
         $errors = $this->validate($request->request->all(), [
@@ -160,7 +167,7 @@ class UserController extends HelloworldController
             'userName' => [new Type(['type' => 'string'])],
             'firstName' => [new Optional([new Type(['type' => 'string'])])],
             'lastName' => [new Optional([new Type(['type' => 'string'])])],
-            'isVerify' => [new Type(['type' => 'bool'])]],
+            'isVerify' => [new Type(['type' => 'bool'])],
         ]);
 
         // Validation errors
@@ -168,24 +175,11 @@ class UserController extends HelloworldController
             return $errors;
         }
 
-        $exists = 'no';
         $birthDate = $this->getDate($request, $request->request->get('birthDate'));
 
-        $email =$request->request->get('email');
-        $user =  $repo->findOneByEmail($email);
+        $user = $this->userService->update(
+        );
 
-        if($user) {
-            $exist = 'yes';
-            $user->setEmail($request->request->get('email'));
-            $user->setPassword($request->request->get('password'));
-            $user->setUsername($request->request->get('userName'));
-            $user->setDateOfBirth($birthDate);
-            $user->setFirstname($request->request->get('firstName'));
-            $user->setLastname($request->request->get('lastName'));
-            $user->setIsVerify($request->request->get('isVerify'));
-        }
-
-        return $this->buildSuccessResponse(Response::HTTP_ACCEPTED, $user, $user);
+        return $this->buildSuccessResponse(Response::HTTP_ACCEPTED, $user, $loggedUser);
     }
-
 }

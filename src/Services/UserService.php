@@ -115,4 +115,12 @@ class UserService
 
         return $token->getUser();
     }
+
+    public function update()
+    {
+    }
+
+    public function delete(User $user): User
+    {
+    }
 }
