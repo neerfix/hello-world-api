@@ -23,12 +23,38 @@ class UserRepository extends ServiceEntityRepository
     /**
      * @throws NonUniqueResultException
      */
+    public function findOneByUuid(string $uuid): ?User
+    {
+        return $this->createQueryBuilder('U')
+
+            ->where('U.uuid = :uuid')
+            ->setParameter('uuid', $uuid)
+
+            ->getQuery()->getOneOrNullResult();
+    }
+
+    /**
+     * @throws NonUniqueResultException
+     */
     public function findOneByEmail(string $email): ?User
     {
         return $this->createQueryBuilder('U')
 
             ->where('U.email = :email')
             ->setParameter('email', $email)
+
+            ->getQuery()->getOneOrNullResult();
+    }
+
+    /**
+     * @throws NonUniqueResultException
+     */
+    public function findOneByUsername(string $username): ?User
+    {
+        return $this->createQueryBuilder('U')
+
+            ->where('U.username = :username')
+            ->setParameter('username', $username)
 
             ->getQuery()->getOneOrNullResult();
     }

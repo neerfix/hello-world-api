@@ -2,16 +2,22 @@
 
 namespace App\Entity;
 
+use App\Entity\Interfaces\Statuable;
+use App\Entity\Traits\StatuableTrait;
 use App\Repository\AlbumFileRepository;
 use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
+ * @ORM\Table(name="user", indexes={
+ *     @Index(name="status_idx", columns={ "status" })
+ * })
  * @ORM\Entity(repositoryClass="AlbumFileRepository")
  */
-class AlbumFile
+class AlbumFile implements Statuable
 {
+    use StatuableTrait;
     // -------------------------- >
 
     public function __construct()

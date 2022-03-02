@@ -2,6 +2,8 @@
 
 namespace App\Entity;
 
+use App\Entity\Interfaces\Statuable;
+use App\Entity\Traits\StatuableTrait;
 use App\Repository\StepRepository;
 use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -9,10 +11,14 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
+ * @ORM\Table(name="user", indexes={
+ *     @Index(name="status_idx", columns={ "status" })
+ * })
  * @ORM\Entity(repositoryClass="StepRepository")
  */
-class Step
+class Step implements Statuable
 {
+    use StatuableTrait;
     /**
      * @ORM\Id
      * @ORM\GeneratedValue
