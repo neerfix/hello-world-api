@@ -2,9 +2,11 @@
 
 namespace App\Controller;
 
+use App\Entity\User;
 use App\Repository\UserRepository;
 use App\Services\RequestService;
 use App\Services\ResponseService;
+use App\Services\SecurityService;
 use App\Services\UserService;
 use Exception;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -24,13 +26,15 @@ class UserController extends HelloworldController
 {
     // ------------------------------ >
 
+
     public function __construct(
         ResponseService $responseService,
         RequestService $requestService,
         ValidatorInterface $validator,
         NormalizerInterface $normalizer,
         private UserService $userService,
-        private UserRepository $userRepository
+        private UserRepository $userRepository,
+        private SecurityService $securityService,
     ) {
         parent::__construct($responseService, $requestService, $validator, $normalizer);
     }
@@ -67,7 +71,7 @@ class UserController extends HelloworldController
         $roles = $loggedUser->getRoles();
 
         // No logged used
-        if (empty($loggedUser) && in_array('ADMIN', $roles, true)) {
+        if (empty($loggedUser) || in_array(User::ROLE_ADMIN, $roles, true)) {
             return $this->responseService->error403('auth.unauthorized', 'Vous n\'êtes pas autorisé à effectué cette action');
         }
 
@@ -109,28 +113,33 @@ class UserController extends HelloworldController
             $request->request->get('lastName'),
         );
 
-        return $this->buildSuccessResponse(Response::HTTP_CREATED, $user, $user);
+        return $this->buildSuccessResponse(Response::HTTP_CREATED, $user);
     }
 
     /**
-     * @Route("/users/{uuid}", name="delete_user",methods={"DELETE"})
+     * @Route("/users/{uuid}", name="delete_user", methods={ "DELETE" })
      *
      * @throws Exception
      * @throws ExceptionInterface
      */
-    public function deleteUsers(Request $request, string $uuid)
+    public function deleteUser(Request $request, string $uuid): JsonResponse
     {
         $loggedUser = $this->getLoggedUser();
-        $roles = $loggedUser->getRoles();
 
         $user = $this->userRepository->findOneByUuid($uuid);
 
+        if (empty($user)) {
+            throw new Exception('L\'utilisateur est introuvable');
+        }
+
         // No logged used
-        if (empty($loggedUser) || (!in_array('ROLE_ADMIN', $roles, true) && $loggedUser->getUuid() !== $uuid)) {
+        if (empty($loggedUser) || ($this->securityService->isSameUser($loggedUser, $uuid) && !$this->securityService->isAdmin($loggedUser))) {
             return $this->responseService->error403('auth.unauthorized', 'Vous n\'êtes pas autorisé à effectué cette action');
         }
 
-        return $this->buildSuccessResponse(Response::HTTP_ACCEPTED, $user, $loggedUser);
+        $userDeleted = $this->userService->delete($user, $loggedUser);
+
+        return $this->buildSuccessResponse(Response::HTTP_ACCEPTED, $userDeleted, $loggedUser);
     }
 
     /**
@@ -145,7 +154,7 @@ class UserController extends HelloworldController
         $roles = $loggedUser->getRoles();
 
         // No logged used
-        if (empty($loggedUser) || (!in_array('ROLE_ADMIN', $roles, true) && $loggedUser->getUuid() !== $uuid)) {
+        if (empty($loggedUser) || ($this->securityService->isSameUser($loggedUser, $uuid) && !$this->securityService->isAdmin($loggedUser))) {
             return $this->responseService->error403('auth.unauthorized', 'Vous n\'êtes pas autorisé à effectué cette action');
         }
 

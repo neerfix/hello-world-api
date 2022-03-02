@@ -163,11 +163,11 @@ class UserService
             throw new RuntimeException('l\'email n\'est pas valide', 'users.create.email.invalid', 'email');
         }
 
-        $existingUser = $this->userRepository->findOneByEmail($email);
+        $existingEmail = $this->userRepository->findOneByEmail($email);
 
         // Existing email
-        if (null !== $existingUser) {
-            return;
+        if (null !== $existingEmail) {
+            throw new RuntimeException('cet email est déjà utilisé', 'users.create.email.already_exist', 'email');
         }
 
         if (null === $user) {
