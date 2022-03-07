@@ -2,15 +2,22 @@
 
 namespace App\Entity;
 
+use App\Entity\Interfaces\Statuable;
+use App\Entity\Traits\StatuableTrait;
 use App\Repository\LoginRepository;
 use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
+ * @ORM\Table(name="user", indexes={
+ *     @ORM\Index(name="status_idx", columns={ "status" })
+ * })
  * @ORM\Entity(repositoryClass="LoginRepository")
  */
-class Login
+class Login implements Statuable
 {
+    use StatuableTrait;
+
     // -------------------------- >
 
     public function __construct()
