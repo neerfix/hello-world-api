@@ -3,6 +3,7 @@
 namespace App\Controller\Auth;
 
 use App\Controller\HelloworldController;
+use App\Entity\User;
 use App\Security\ApiKeyAuthenticator;
 use App\Services\LoginService;
 use App\Services\RequestService;
@@ -44,25 +45,38 @@ class LoginController extends HelloworldController
      * @throws Exception
      * @throws ExceptionInterface
      */
-    public function loginAction(Request $request): Response
+    public function loginAction(?User $user): Response
     {
-        $content = $request->getContent();
-        $parameters = json_decode($content, true);
-        $apiAuthenticator = new ApiKeyAuthenticator();
-        $errors = $this->validate($parameters, [
-            'email' => [new Type(['type' => 'string']), new NotBlank()],
-            'password' => [new Type(['type' => 'string']), new NotBlank()],
-        ]);
-
-        if (!empty($errors)) {
-            return $errors;
-        }
-        $testPassport = $apiAuthenticator->authenticate($request);
+//        $content = $request->getContent();
+//        $parameters = json_decode($content, true);
+//        $apiAuthenticator = new ApiKeyAuthenticator();
+//        $errors = $this->validate($parameters, [
+//            'email' => [new Type(['type' => 'string']), new NotBlank()],
+//            'password' => [new Type(['type' => 'string']), new NotBlank()],
+//        ]);
+//
+//        if (!empty($errors)) {
+//            return $errors;
+//        }
+//        $testPassport = $apiAuthenticator->authenticate($request);
 //        dump($testPassport);
 //        $user = $this->userService->login($parameters["email"],$parameters["password"]);
 //
 //        $login = $this->loginService->create($user, "V1", $request->getClientIp(), $request->headers->get('User-Agent'), true);
 
-        return $this->buildSuccessResponse(Response::HTTP_CREATED, $testPassport);
+        if (null === $user) {
+            return $this->json([
+                   'message' => 'missing credentials',
+            ], Response::HTTP_UNAUTHORIZED);
+         }
+
+        $token = "Token-test";
+
+        return $this->json([
+            'user' => $user->getUserIdentifier(),
+            'token' => $token
+        ]);
+
+//        return $this->buildSuccessResponse(Response::HTTP_CREATED, );
     }
 }
