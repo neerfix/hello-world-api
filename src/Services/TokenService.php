@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Entity\Token;
 use App\Entity\User;
+use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use Exception;
 
@@ -44,14 +45,16 @@ class TokenService
     /**
      * @throws Exception
      */
-    public function create(User $user, string $target): Token
+    public function create(User $user, string $target, ?DateTime $datetime = null): Token
     {
         $tokenStr = $this->RandomToken();
+        $expirationDate = ($datetime) ?? new DateTime('+1 hour');
 
         $token = (new Token())
             ->setUser($user)
             ->setValue($tokenStr)
-            ->setTarget($target);
+            ->setTarget($target)
+            ->setExpirationDate($expirationDate);
 
         $this->em->persist($token);
         $this->em->flush();

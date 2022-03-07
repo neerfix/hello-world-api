@@ -34,7 +34,7 @@ class TravelController extends HelloworldController
     // ------------------------ >
 
     /**
-     * @Route("/travel", name="create_travel", methods={ "POST" })
+     * @Route("/travels", name="create_travel", methods={ "POST" })
      *
      * @throws Exception
      * @throws ExceptionInterface

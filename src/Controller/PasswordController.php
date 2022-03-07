@@ -40,7 +40,7 @@ class PasswordController extends HelloworldController
     // ------------------------------ >
 
     /**
-     * @Route("/passowrd/{token}/renew", name="renew_password", methods={ "POST" })
+     * @Route("/password/{token}/renew", name="renew_password", methods={ "POST" })
      *
      * @throws Exception
      * @throws ExceptionInterface

@@ -11,7 +11,6 @@
         "doctrine/doctrine-migrations-bundle": "^3.0",
         "doctrine/orm": "^2.7",
         "friendsofphp/php-cs-fixer": "^3.6",
-        "lexik/jwt-authentication-bundle": "^2.14",
         "nelmio/cors-bundle": "^2.1",
         "ramsey/uuid": "^4.1",
         "sentry/sentry-symfony": "^4.2",
