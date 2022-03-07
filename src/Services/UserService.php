@@ -9,7 +9,6 @@ use App\Repository\UserRepository;
 use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\NonUniqueResultException;
-use Doctrine\ORM\TransactionRequiredException;
 use Exception;
 use Ramsey\Uuid\Uuid;
 use RuntimeException;

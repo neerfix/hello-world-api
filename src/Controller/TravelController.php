@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Repository\TravelRepository;
 use App\Services\RequestService;
 use App\Services\ResponseService;
 use App\Services\TravelService;
@@ -26,12 +27,27 @@ class TravelController extends HelloworldController
         RequestService $requestService,
         ValidatorInterface $validator,
         NormalizerInterface $normalizer,
-        private TravelService $travelService
+        private TravelService $travelService,
+        private TravelRepository $travelRepository,
     ) {
         parent::__construct($responseService, $requestService, $validator, $normalizer);
     }
 
     // ------------------------ >
+
+    /**
+     * @Route("/travels", name="get_travel", methods={ "GET" })
+     *
+     * @throws Exception
+     * @throws ExceptionInterface
+     */
+    public function index(Request $request): Response
+    {
+        $loggedUser = $this->getLoggedUser();
+        $travel = $this->travelRepository->findAll();
+
+        return $this->buildSuccessResponse(Response::HTTP_OK, $travel, $loggedUser);
+    }
 
     /**
      * @Route("/travels", name="create_travel", methods={ "POST" })

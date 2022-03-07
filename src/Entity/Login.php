@@ -9,10 +9,10 @@ use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @ORM\Table(name="user", indexes={
+ * @ORM\Table(name="login", indexes={
  *     @ORM\Index(name="status_idx", columns={ "status" })
  * })
- * @ORM\Entity(repositoryClass="LoginRepository")
+ * @ORM\Entity(repositoryClass=LoginRepository::class)
  */
 class Login implements Statuable
 {

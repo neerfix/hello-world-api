@@ -47,7 +47,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, Statuab
     /**
      * @ORM\Id
      * @ORM\GeneratedValue
-     * @ORM\Column(name="id", type="string", unique=true)
+     * @ORM\Column(name="id", type="integer", unique=true)
      */
     private int $id;
 

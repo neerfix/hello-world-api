@@ -10,10 +10,10 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @ORM\Table(name="user", indexes={
+ * @ORM\Table(name="album_file", indexes={
  *     @ORM\Index(name="status_idx", columns={ "status" })
  * })
- * @ORM\Entity(repositoryClass="AlbumFileRepository")
+ * @ORM\Entity(repositoryClass=AlbumFileRepository::class)
  */
 class AlbumFile implements Statuable
 {
