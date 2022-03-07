@@ -25,7 +25,7 @@ final class Version20220228152642 extends AbstractMigration
     public function up(Schema $schema): void
     {
         // this up() migration is auto-generated, please modify it to your needs
-        $this->addSql('ALTER TABLE user ADD status VARCHAR(255) NOT NULL');
+        $this->addSql('ALTER TABLE user ADD status VARCHAR(255)');
     }
 
     public function down(Schema $schema): void

@@ -7,7 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 trait StatuableTrait
 {
     /**
-     * @ORM\Column(name="status", type="string")
+     * @ORM\Column(name="status", type="string", nullable="true")
      */
     protected ?string $status = null;
 

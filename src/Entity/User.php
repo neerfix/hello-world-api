@@ -15,7 +15,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * @ORM\Table(name="user", indexes={
- *     @Index(name="status_idx", columns={ "status" })
+ *     @ORM\Index(name="status_idx", columns={ "status" })
  * })
  * @ORM\Entity(repositoryClass=UserRepository::class)
  */
