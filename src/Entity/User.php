@@ -2,6 +2,8 @@
 
 namespace App\Entity;
 
+use App\Entity\Interfaces\Statuable;
+use App\Entity\Traits\StatuableTrait;
 use App\Repository\UserRepository;
 use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -9,12 +11,18 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
+ * @ORM\Table(name="user", indexes={
+ *     @ORM\Index(name="status_idx", columns={ "status" })
+ * })
  * @ORM\Entity(repositoryClass=UserRepository::class)
  */
-class User implements UserInterface, PasswordAuthenticatedUserInterface
+class User implements UserInterface, PasswordAuthenticatedUserInterface, Statuable
 {
+    use StatuableTrait;
+
     // ------------------------- >
 
     public function __construct()
@@ -25,6 +33,14 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->followers = new ArrayCollection();
         $this->files = new ArrayCollection();
     }
+
+    public const STATUS_ACTIVE = 'active'; // Active account
+    public const STATUS_BANNED = 'banned'; // Banned account (by admin)
+    public const STATUS_DELETED = 'deleted'; // Deleted account (by user)
+
+    public const ROLE_USER = 'ROLE_USER';
+    public const ROLE_PARTNER = 'ROLE_PARTNER';
+    public const ROLE_ADMIN = 'ROLE_ADMIN';
 
     // ------------------------- >
 
@@ -107,6 +123,14 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     // ------------------------- >
 
+    /**
+     * @Groups({ "users.by.current", "users.by.admin" })
+     */
+    public function getStatus(): string
+    {
+        return $this->status;
+    }
+
     public function getId(): int
     {
         return $this->id;
@@ -141,7 +165,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     {
         $roles = $this->roles;
         // guarantee every user at least has ROLE_USER
-        $roles[] = 'ROLE_USER';
+        $roles[] = static::ROLE_USER;
 
         return array_unique($roles);
     }
