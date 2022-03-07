@@ -26,7 +26,6 @@ class UserController extends HelloworldController
 {
     // ------------------------------ >
 
-
     public function __construct(
         ResponseService $responseService,
         RequestService $requestService,
