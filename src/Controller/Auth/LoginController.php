@@ -3,6 +3,7 @@
 namespace App\Controller\Auth;
 
 use App\Controller\HelloworldController;
+use App\Security\ApiKeyAuthenticator;
 use App\Services\LoginService;
 use App\Services\RequestService;
 use App\Services\ResponseService;
@@ -47,7 +48,7 @@ class LoginController extends HelloworldController
     {
         $content = $request->getContent();
         $parameters = json_decode($content, true);
-
+        $apiAuthenticator = new ApiKeyAuthenticator();
         $errors = $this->validate($parameters, [
             'email' => [new Type(['type' => 'string']), new NotBlank()],
             'password' => [new Type(['type' => 'string']), new NotBlank()],
@@ -56,10 +57,12 @@ class LoginController extends HelloworldController
         if (!empty($errors)) {
             return $errors;
         }
-        $user = $this->userService->login($parameters["email"],$parameters["password"]);
+        $testPassport = $apiAuthenticator->authenticate($request);
+//        dump($testPassport);
+//        $user = $this->userService->login($parameters["email"],$parameters["password"]);
 //
-        $login = $this->loginService->create($user, "V1", $request->getClientIp(), $request->headers->get('User-Agent'), true);
+//        $login = $this->loginService->create($user, "V1", $request->getClientIp(), $request->headers->get('User-Agent'), true);
 
-        return $this->buildSuccessResponse(Response::HTTP_CREATED, ['message' => 'Connecté avec succès'], $user);
+        return $this->buildSuccessResponse(Response::HTTP_CREATED, $testPassport);
     }
 }
