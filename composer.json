@@ -11,6 +11,7 @@
         "doctrine/doctrine-migrations-bundle": "^3.0",
         "doctrine/orm": "^2.7",
         "friendsofphp/php-cs-fixer": "^3.6",
+        "lexik/jwt-authentication-bundle": "^2.14",
         "nelmio/cors-bundle": "^2.1",
         "ramsey/uuid": "^4.1",
         "sentry/sentry-symfony": "^4.2",
@@ -24,9 +25,9 @@
         "symfony/security-bundle": "6.0.*",
         "symfony/serializer": "6.0.*",
         "symfony/translation": "6.0.*",
+        "symfony/twig-bundle": "6.*",
         "symfony/validator": "6.0.*",
         "symfony/yaml": "6.0.*",
-        "symfony/twig-bundle": "6.*",
         "twig/extra-bundle": "^v3.3.8",
         "twig/twig": "^2.12|^3.0"
     },
