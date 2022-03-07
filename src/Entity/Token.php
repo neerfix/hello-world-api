@@ -12,8 +12,10 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class Token
 {
-    public const TARGET_EMAIL_CONFIRMATION = 'TARGET_EMAIL_CONFIRMATION';
-    public const TARGET_FORGET_PASSWORD = 'TARGET_FORGET_PASSWORD';
+    public const TARGET_REFRESH_TOKEN = 'refresh_token';
+    public const TARGET_ACCESS_TOKEN = 'access_token';
+    public const TARGET_EMAIL_CONFIRMATION = 'email_confirmation';
+    public const TARGET_FORGET_PASSWORD = 'forget_password';
 
     /**
      * @ORM\Id

@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Repository\TravelRepository;
 use App\Services\RequestService;
 use App\Services\ResponseService;
 use App\Services\TravelService;
@@ -26,7 +27,8 @@ class TravelController extends HelloworldController
         RequestService $requestService,
         ValidatorInterface $validator,
         NormalizerInterface $normalizer,
-        private TravelService $travelService
+        private TravelService $travelService,
+        private TravelRepository $travelRepository,
     ) {
         parent::__construct($responseService, $requestService, $validator, $normalizer);
     }
@@ -34,7 +36,21 @@ class TravelController extends HelloworldController
     // ------------------------ >
 
     /**
-     * @Route("/travel", name="create_travel", methods={ "POST" })
+     * @Route("/travels", name="get_travel", methods={ "GET" })
+     *
+     * @throws Exception
+     * @throws ExceptionInterface
+     */
+    public function index(Request $request): Response
+    {
+        $loggedUser = $this->getLoggedUser();
+        $travel = $this->travelRepository->findAll();
+
+        return $this->buildSuccessResponse(Response::HTTP_OK, $travel, $loggedUser);
+    }
+
+    /**
+     * @Route("/travels", name="create_travel", methods={ "POST" })
      *
      * @throws Exception
      * @throws ExceptionInterface
@@ -71,12 +87,12 @@ class TravelController extends HelloworldController
 
         $travel = $this->travelService->create(
             $loggedUser,
-            $request->request->get('name'),
-            $request->request->get('budget'),
+            $parameters['name'],
+            $parameters['budget'],
             $startedAt,
             $endedAt,
-            $request->request->get('description'),
-            $request->request->get('isSharable')
+            $parameters['description'],
+            $parameters['isSharable']
         );
 
         return $this->buildSuccessResponse(Response::HTTP_CREATED, $travel, $loggedUser);

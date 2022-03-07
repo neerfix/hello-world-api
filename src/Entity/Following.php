@@ -7,7 +7,7 @@ use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @ORM\Entity(repositoryClass="FollowingRepository")
+ * @ORM\Entity(repositoryClass=FollowingRepository::class)
  */
 class Following
 {

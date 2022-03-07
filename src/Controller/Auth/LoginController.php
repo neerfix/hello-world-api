@@ -3,13 +3,17 @@
 namespace App\Controller\Auth;
 
 use App\Controller\HelloworldController;
+use App\Entity\Token;
 use App\Entity\User;
 use App\Services\RequestService;
 use App\Services\ResponseService;
+use App\Services\TokenService;
+use DateTime;
 use Exception;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Http\Attribute\CurrentUser;
+use Symfony\Component\Serializer\Exception\ExceptionInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
@@ -22,6 +26,7 @@ class LoginController extends HelloworldController
         RequestService $requestService,
         ValidatorInterface $validator,
         NormalizerInterface $normalizer,
+        private TokenService $tokenService,
     ) {
         parent::__construct($responseService, $requestService, $validator, $normalizer);
     }
@@ -29,11 +34,12 @@ class LoginController extends HelloworldController
     // ------------------------ >
 
     /**
-     * @Route("/auth/login", name="login", methods={ "POST" })
+     * @Route("/auth/login", name="app_login", methods={ "POST" })
      *
      * @throws Exception
+     * @throws ExceptionInterface
      */
-    public function index(#[CurrentUser] ?User $user): Response
+    public function index(#[CurrentUser] ?User $user)
     {
         if (null === $user) {
             return $this->json([
@@ -41,11 +47,13 @@ class LoginController extends HelloworldController
             ], Response::HTTP_UNAUTHORIZED);
         }
 
-        $token = 'Token-test';
+        $accessToken = $this->tokenService->create($user, Token::TARGET_ACCESS_TOKEN);
+        $refreshToken = $this->tokenService->create($user, Token::TARGET_REFRESH_TOKEN, new DateTime('+1 year'));
 
-        return $this->json([
+        return $this->buildSuccessResponse(Response::HTTP_ACCEPTED, [
             'user' => $user->getUserIdentifier(),
-            'token' => $token,
-        ]);
+            'accessToken' => $accessToken->getValue(),
+            'refreshToken' => $refreshToken->getValue(),
+        ], $user);
     }
 }

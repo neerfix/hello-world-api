@@ -11,10 +11,10 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @ORM\Table(name="user", indexes={
+ * @ORM\Table(name="place", indexes={
  *     @ORM\Index(name="status_idx", columns={ "status" })
  * })
- * @ORM\Entity(repositoryClass="PlaceRepository")
+ * @ORM\Entity(repositoryClass=PlaceRepository::class)
  */
 class Place implements Statuable
 {
