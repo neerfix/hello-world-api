@@ -139,8 +139,7 @@ class UserController extends HelloworldController
         $user = $this->userRepository->findOneByUuid($uuid);
 
         if (null === $user) {
-            //Fixme Replace by 404
-            throw new RuntimeException('L\'utilisateur est introuvable');
+            return $this->buildErrorResponse(Response::HTTP_NOT_FOUND, 'user.notFound', 'L\'utilisateur est introuvable');
         }
 
         // No logged used
@@ -173,8 +172,7 @@ class UserController extends HelloworldController
         $user = $this->userRepository->findOneBy($uuid);
 
         if (null === $user) {
-            //Fixme Replace by 404
-            throw new Exception('L\'utilisateur n\'a pas été trouvé');
+            return $this->buildErrorResponse(Response::HTTP_NOT_FOUND, 'user.notFound', 'L\'utilisateur est introuvable');
         }
 
         $errors = $this->validate($parameters, [
