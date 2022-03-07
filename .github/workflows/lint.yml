@@ -3,6 +3,7 @@ on:
     branches:
       - 'feat/**'
       - 'fix/**'
+      - 'hotfix/**'
       - 'ci/**'
 name: lint
 jobs:
@@ -15,3 +16,12 @@ jobs:
         uses: docker://oskarstark/php-cs-fixer-ga
         with:
           args: --config=.php-cs-fixer.dist.php --diff --dry-run
+  Doctrine:
+    name: Doctrine migration
+    runs-on: ubuntu-latest
+#    needs: php-cs-fixer
+    steps:
+      - uses: actions/checkout@v2
+      - name: PHP-CS-Fixer
+      - run: |
+          php bin/console doctrine:schema:validate --skip-sync
