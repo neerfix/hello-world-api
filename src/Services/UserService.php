@@ -133,7 +133,7 @@ class UserService
             throw new RuntimeException('L\'utilisateur est déjà supprimé');
         }
 
-        if (in_array(User::ROLE_USER, $loggedUser->getRoles(), true)) {
+        if (in_array(User::ROLE_ADMIN, $loggedUser->getRoles(), true)) {
             $user->setStatus(User::STATUS_BANNED);
         } else {
             $user->setStatus(User::STATUS_DELETED);
