@@ -69,6 +69,20 @@ abstract class AbstractController extends \Symfony\Bundle\FrameworkBundle\Contro
     // ------------------------------ >
 
     /**
+     * @throws Exception
+     */
+    protected function buildErrorResponse(
+        int $status,
+        string $code,
+        ?string $message,
+        ?string $field,
+        ?array $data
+    ): JsonResponse {
+        return $this->responseService->error($status, $code, $message, $field, $data);
+    }
+    // ------------------------------->
+
+    /**
      * @throws ExceptionInterface
      */
     private function normalizeData(mixed $data, ?User $loggedUser = null, ?array $normalizationContext = null): array
