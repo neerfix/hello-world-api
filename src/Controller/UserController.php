@@ -87,7 +87,11 @@ class UserController extends HelloworldController
      */
     public function userSignup(Request $request): JsonResponse
     {
-        $errors = $this->validate($request->request->all(), [
+        //TODO move it to AbstractController
+        $content = $request->getContent();
+        $parameters = json_decode($content, true);
+
+        $errors = $this->validate($parameters, [
             'email' => [new Email(), new NotBlank()],
             'password' => [new Type(['type' => 'string']), new NotBlank()],
             'birthDate' => [new DateTime(['format' => 'Y-m-d']), new NotBlank()],
@@ -101,15 +105,15 @@ class UserController extends HelloworldController
             return $errors;
         }
 
-        $birthDate = $this->getDate($request, $request->request->get('birthDate'));
+        $birthDate = $this->getDate($request, $parameters['birthDate']);
 
         $user = $this->userService->create(
-            $request->request->get('email'),
-            $request->request->get('username'),
-            $request->request->get('password'),
+            $parameters['email'],
+            $parameters['username'],
+            $parameters['password'],
             $birthDate,
-            $request->request->get('firstName'),
-            $request->request->get('lastName'),
+            $parameters['firstName'],
+            $parameters['lastName'],
         );
 
         return $this->buildSuccessResponse(Response::HTTP_CREATED, $user);
@@ -152,6 +156,10 @@ class UserController extends HelloworldController
         $loggedUser = $this->getLoggedUser();
         $roles = $loggedUser->getRoles();
 
+        //TODO move it to AbstractController
+        $content = $request->getContent();
+        $parameters = json_decode($content, true);
+
         // No logged used
         if (empty($loggedUser) || ($this->securityService->isSameUser($loggedUser, $uuid) && !$this->securityService->isAdmin($loggedUser))) {
             return $this->responseService->error403('auth.unauthorized', 'Vous n\'êtes pas autorisé à effectué cette action');
@@ -163,7 +171,7 @@ class UserController extends HelloworldController
             throw new Exception('L\'utilisateur n\'a pas été trouvé');
         }
 
-        $errors = $this->validate($request->request->all(), [
+        $errors = $this->validate($parameters, [
             'email' => [new Email(), new NotBlank()],
             'password' => [new Type(['type' => 'string']), new NotBlank()],
             'birthDate' => [new DateTime(['format' => 'Y-m-d']), new NotBlank()],
@@ -178,15 +186,15 @@ class UserController extends HelloworldController
             return $errors;
         }
 
-        $birthDate = $this->getDate($request, $request->request->get('birthDate'));
+        $birthDate = $this->getDate($request, $parameters['birthDate']);
 
         $user = $this->userService->update(
             $user,
-            $request->request->get('email'),
-            $request->request->get('username'),
+            $parameters['email'],
+            $parameters['username'],
             $birthDate,
-            $request->request->get('firstName'),
-            $request->request->get('lastName'),
+            $parameters['firstName'],
+            $parameters['lastName'],
         );
 
         return $this->buildSuccessResponse(Response::HTTP_ACCEPTED, $user, $loggedUser);

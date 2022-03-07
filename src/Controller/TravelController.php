@@ -71,12 +71,12 @@ class TravelController extends HelloworldController
 
         $travel = $this->travelService->create(
             $loggedUser,
-            $request->request->get('name'),
-            $request->request->get('budget'),
+            $parameters['name'],
+            $parameters['budget'],
             $startedAt,
             $endedAt,
-            $request->request->get('description'),
-            $request->request->get('isSharable')
+            $parameters['description'],
+            $parameters['isSharable']
         );
 
         return $this->buildSuccessResponse(Response::HTTP_CREATED, $travel, $loggedUser);
