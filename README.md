@@ -98,8 +98,8 @@ Use ```make db.dev``` to re-install dev data.
 
 
 ## [Sprint 2](https://github.com/helloworld-ynovlyon/api/milestone/2) (07/03/2022 - 11/03/2022)
-- Nombre d'issues pour ce sprint: 7
-- Poids total du sprint: 33
+- Nombre d'issues pour ce sprint: 9
+- Poids total du sprint: 28
 
 --- ---
 
