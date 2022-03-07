@@ -52,7 +52,7 @@ class UserController extends HelloworldController
 
         // No logged user
         if (empty($loggedUser)) {
-            return $this->responseService->error403('auth.unauthorized', 'Vous n\'êtes pas autorisé à effectué cette action');
+            return $this->responseService->error403('auth.unauthorized', 'Vous n\'êtes pas autorisé à effectuer cette action');
         }
 
         return $this->buildSuccessResponse(Response::HTTP_OK, $loggedUser, $loggedUser);
@@ -71,7 +71,7 @@ class UserController extends HelloworldController
 
         // No logged used
         if (empty($loggedUser) || in_array(User::ROLE_ADMIN, $roles, true)) {
-            return $this->responseService->error403('auth.unauthorized', 'Vous n\'êtes pas autorisé à effectué cette action');
+            return $this->responseService->error403('auth.unauthorized', 'Vous n\'êtes pas autorisé à effectuer cette action');
         }
 
         $users = $this->userRepository->findAll();
@@ -132,12 +132,12 @@ class UserController extends HelloworldController
         $user = $this->userRepository->findOneByUuid($uuid);
 
         if (empty($user)) {
-            throw new Exception('L\'utilisateur est introuvable');
+            return $this->buildErrorResponse(Response::HTTP_NOT_FOUND, 'user.notFound', 'L\'utilisateur est introuvable');
         }
 
         // No logged used
         if (empty($loggedUser) || ($this->securityService->isSameUser($loggedUser, $uuid) && !$this->securityService->isAdmin($loggedUser))) {
-            return $this->responseService->error403('auth.unauthorized', 'Vous n\'êtes pas autorisé à effectué cette action');
+            return $this->responseService->error403('auth.unauthorized', 'Vous n\'êtes pas autorisé à effectuer cette action');
         }
 
         $userDeleted = $this->userService->delete($user, $loggedUser);
@@ -162,13 +162,13 @@ class UserController extends HelloworldController
 
         // No logged used
         if (empty($loggedUser) || ($this->securityService->isSameUser($loggedUser, $uuid) && !$this->securityService->isAdmin($loggedUser))) {
-            return $this->responseService->error403('auth.unauthorized', 'Vous n\'êtes pas autorisé à effectué cette action');
+            return $this->responseService->error403('auth.unauthorized', 'Vous n\'êtes pas autorisé à effectuer cette action');
         }
 
         $user = $this->userRepository->findOneBy($uuid);
 
         if (empty($user)) {
-            throw new Exception('L\'utilisateur n\'a pas été trouvé');
+            return $this->buildErrorResponse(Response::HTTP_NOT_FOUND, 'user.notFound', 'L\'utilisateur est introuvable');
         }
 
         $errors = $this->validate($parameters, [
