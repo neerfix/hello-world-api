@@ -107,18 +107,18 @@ Use ```make db.dev``` to re-install dev data.
 
 **Ce qu'il faut commencer à faire :**
 - Matisse :
-- Emeline :
+- Emeline : Album + features
 - Nicolas :
 - Romain :
 
 **Ce qu'il faut continuer à faire**
 - Matisse :
-- Emeline :
+- Emeline : / (nouvelle sur le back)
 - Nicolas :
 - Romain :
 
 **Ce qu'il faut arrêter de faire**
 - Matisse :
-- Emeline :
+- Emeline : le front
 - Nicolas :
 - Romain :
