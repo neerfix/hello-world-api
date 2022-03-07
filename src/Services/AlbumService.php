@@ -3,7 +3,6 @@
 namespace App\Services;
 
 use App\Entity\Album;
-use App\Entity\User;
 use App\Repository\TravelRepository;
 use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
@@ -32,17 +31,14 @@ class AlbumService
         $title = trim($title);
         $description = trim($description);
 
-        var_dump("pouet");
-        var_dump($travelId);
-        $travel = $this->travelRepository->findOneBy(['id' => $travelId]);
-        var_dump("pouet2");
+        $travel = $this->travelRepository->find($travelId);
 
         $album = (new Album())
             ->setTitle($title)
             ->setDescription($description)
             ->setTravelId($travel)
-            ->setCreatedAt($createdAt)
-            ->setUpdatedAt($updatedAt);
+            ->setCreatedAt(new DateTime())
+            ->setUpdatedAt(new DateTime());
 
         $this->em->persist($album);
         $this->em->flush();
