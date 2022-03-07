@@ -6,9 +6,7 @@ use App\Entity\User;
 use App\Repository\UserRepository;
 use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
-use Doctrine\ORM\NonUniqueResultException;
 use Exception;
-use Ramsey\Uuid\Uuid;
 
 class UserService
 {
@@ -94,8 +92,8 @@ class UserService
 
     public function login(string $email, string $password): ?User
     {
-        if(empty($email) || empty($password)) {
-            throw new Exception( 'Les identifiants sont incomplets', 422);
+        if (empty($email) || empty($password)) {
+            throw new Exception('Les identifiants sont incomplets', 422);
         }
         $user = $this->userRepository->findOneByEmail($email);
         if (empty($existingUser)) {
@@ -104,6 +102,7 @@ class UserService
         if ($this->checkPassword($user, $password)) {
             throw new Exception('Le mot de passe est incorrect', 401);
         }
+
         return $user;
     }
 

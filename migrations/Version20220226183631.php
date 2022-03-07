@@ -27,5 +27,5 @@ final class Version20220226183631 extends AbstractMigration
     {
         // this down() migration is auto-generated, please modify it to your needs
         $this->addSql('ALTER TABLE login CHANGE failure_reason failure_reason VARCHAR(255) CHARACTER SET utf8mb4 NOT NULL COLLATE `utf8mb4_unicode_ci`');
-       }
+    }
 }

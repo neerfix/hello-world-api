@@ -18,12 +18,11 @@ class LoginController extends HelloworldController
     // ------------------------ >
 
     public function __construct(
-        ResponseService      $responseService,
-        RequestService       $requestService,
-        ValidatorInterface   $validator,
-        NormalizerInterface  $normalizer,
-    )
-    {
+        ResponseService $responseService,
+        RequestService $requestService,
+        ValidatorInterface $validator,
+        NormalizerInterface $normalizer,
+    ) {
         parent::__construct($responseService, $requestService, $validator, $normalizer);
     }
 
@@ -42,11 +41,11 @@ class LoginController extends HelloworldController
             ], Response::HTTP_UNAUTHORIZED);
         }
 
-        $token = "Token-test";
+        $token = 'Token-test';
 
         return $this->json([
             'user' => $user->getUserIdentifier(),
-            'token' => $token
+            'token' => $token,
         ]);
     }
 }

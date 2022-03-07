@@ -16,7 +16,7 @@ class LoginService
     /**
      * @throws Exception
      */
-    public function create(User $user, string $applicationVersion, string $ipAddress ) : Login
+    public function create(User $user, string $applicationVersion, string $ipAddress): Login
     {
         $login = (new Login())
             ->setUserId($user)
