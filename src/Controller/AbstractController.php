@@ -74,9 +74,9 @@ abstract class AbstractController extends \Symfony\Bundle\FrameworkBundle\Contro
     protected function buildErrorResponse(
         int $status,
         string $code,
-        ?string $message,
-        ?string $field,
-        ?array $data
+        ?string $message = null,
+        ?string $field = null,
+        ?array $data = null
     ): JsonResponse {
         return $this->responseService->error($status, $code, $message, $field, $data);
     }
