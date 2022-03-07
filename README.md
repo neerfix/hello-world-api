@@ -3,9 +3,11 @@
 Le carnet de voyage en ligne
 
 ## Stack
-_Client_: React JS, Tailwind CSS
+_**Client**_: React JS, Tailwind CSS
 
-_Server_: PHP avec le framework Symfony
+_**Server**_: PHP avec le framework Symfony
+
+_**Documentation API**_: https://helloworldtravel.stoplight.io/
 
 ## Dream Team
 
@@ -96,3 +98,27 @@ Use ```make db.dev``` to re-install dev data.
 
 
 ## [Sprint 2](https://github.com/helloworld-ynovlyon/api/milestone/2) (07/03/2022 - 11/03/2022)
+- Nombre d'issues pour ce sprint: 7
+- Poids total du sprint: 33
+
+--- ---
+
+## Rétrospective du premier sprint
+
+**Ce qu'il faut commencer à faire :**
+- Matisse :
+- Emeline :
+- Nicolas :
+- Romain :
+
+**Ce qu'il faut continuer à faire**
+- Matisse :
+- Emeline :
+- Nicolas :
+- Romain :
+
+**Ce qu'il faut arrêter de faire**
+- Matisse :
+- Emeline :
+- Nicolas :
+- Romain :
