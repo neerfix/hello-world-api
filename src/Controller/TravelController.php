@@ -77,7 +77,7 @@ class TravelController extends HelloworldController
         $roles = $loggedUser->getRoles();
 
         // No logged used
-        if (in_array(User::ROLE_ADMIN, $roles, true) || $travel->getUserId() !== $loggedUser->getId()) {
+        if (!in_array(User::ROLE_ADMIN, $roles, true) || $travel->getUserId() !== $loggedUser->getId()) {
             return $this->buildErrorResponse(Response::HTTP_FORBIDDEN, 'auth.unauthorized', 'Vous n\'êtes pas autorisé à effectuer cette action');
         }
 
