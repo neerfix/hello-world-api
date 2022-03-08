@@ -87,7 +87,7 @@ class TravelController extends HelloworldController
     }
 
     /**
-     * @Route("/travel/{uuid}", name="delete_travel", methods={ "DELETE" })
+     * @Route("/travels/{uuid}", name="delete_travel", methods={ "DELETE" })
      *
      * @throws Exception
      * @throws ExceptionInterface
