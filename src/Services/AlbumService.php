@@ -2,11 +2,12 @@
 
 namespace App\Services;
 
-use App\Entity\Album;
-use App\Repository\TravelRepository;
 use DateTime;
-use Doctrine\ORM\EntityManagerInterface;
 use Exception;
+use App\Entity\Album;
+use App\Repository\AlbumRepository;
+use App\Repository\TravelRepository;
+use Doctrine\ORM\EntityManagerInterface;
 
 class AlbumService
 {
@@ -14,7 +15,8 @@ class AlbumService
 
     public function __construct(
         private EntityManagerInterface $em,
-        private TravelRepository $travelRepository
+        private TravelRepository $travelRepository,
+        private AlbumRepository $albumRepository
     ) {
     }
 
@@ -44,5 +46,9 @@ class AlbumService
         $this->em->flush();
 
         return $album;
+    }
+
+    public function getAll(): array {
+        return $this->albumRepository->findAll();
     }
 }

@@ -72,4 +72,30 @@ class AlbumController extends HelloworldController
 
         return $this->buildSuccessResponse(Response::HTTP_CREATED, $albumNormalized, $loggedUser);
     }
+
+    /**
+     * @Route("/albums", name="get_all_album", methods={ "GET" })
+     *
+     * @throws Exception
+     * @throws ExceptionInterface
+     */
+    public function getAllAction(Request $request): Response
+    {
+        //TODO move it to AbstractController
+        $content = $request->getContent();
+        $parameters = json_decode($content, true);
+
+        $loggedUser = $this->getLoggedUser();
+
+        // No logged user
+        if (null === $loggedUser) {
+            //FIXME remove // when front is ready
+            // return $this->responseService->error403('auth.unauthorized', 'Vous n\'êtes pas autorisé à effectué cette action');
+        }
+
+        $albums = $this->albumService->getAll();
+        $albumsNormalized = $this->normalizer->normalize($albums, null, ['groups' => 'album:read']);
+
+        return $this->buildSuccessResponse(Response::HTTP_CREATED, $albumsNormalized, $loggedUser);
+    }
 }
