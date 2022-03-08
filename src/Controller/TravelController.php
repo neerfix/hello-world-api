@@ -53,7 +53,7 @@ class TravelController extends HelloworldController
     }
 
     /**
-     * @Route("/travel/{uuid}", name="get_travel", methods={ "GET" })
+     * @Route("/travels/{uuid}", name="get_travel", methods={ "GET" })
      *
      * @throws Exception
      * @throws ExceptionInterface
