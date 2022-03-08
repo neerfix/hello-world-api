@@ -246,4 +246,16 @@ class Travel implements Statuable
     {
         return $this->steps;
     }
+
+    public function getUuid(): string
+    {
+        return $this->uuid;
+    }
+
+    public function setUuid(string $uuid): Travel
+    {
+        $this->uuid = $uuid;
+
+        return $this;
+    }
 }

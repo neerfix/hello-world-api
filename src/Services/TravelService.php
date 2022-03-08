@@ -7,6 +7,7 @@ use App\Entity\User;
 use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use Exception;
+use Ramsey\Uuid\Uuid;
 use RuntimeException;
 
 class TravelService
@@ -91,6 +92,7 @@ class TravelService
             ->setEndedAt($endedAt)
             ->setDescription($description)
             ->setUserId($user)
+            ->setUuid(Uuid::uuid4())
             ->setIsShared($isSharable);
 
         $this->em->persist($travel);
