@@ -27,14 +27,15 @@ class UserController extends HelloworldController
     // ------------------------------ >
 
     public function __construct(
-        ResponseService $responseService,
-        RequestService $requestService,
-        ValidatorInterface $validator,
+        ResponseService             $responseService,
+        RequestService              $requestService,
+        ValidatorInterface          $validator,
         private NormalizerInterface $normalizer,
-        private UserService $userService,
-        private UserRepository $userRepository,
-        private SecurityService $securityService,
-    ) {
+        private UserService         $userService,
+        private UserRepository      $userRepository,
+        private SecurityService     $securityService,
+    )
+    {
         parent::__construct($responseService, $requestService, $validator, $normalizer);
     }
 
@@ -207,7 +208,6 @@ class UserController extends HelloworldController
 
     /**
      * @Route("/users/checkEmail", name="check_email", methods={ "POST" })
-     *
      * @throws ExceptionInterface
      * @throws Exception
      */
@@ -231,5 +231,23 @@ class UserController extends HelloworldController
         }
 
         return $this->buildSuccessResponse(Response::HTTP_CREATED, []);
+    }
+
+    /**
+     * @Route("/users/search", name="search_me", methods={ "GET" })
+     * }
+     **/
+    public function searchAction(Request $request): JsonResponse
+    {
+        $loggedUser = $this->getLoggedUser($this->userRepository);
+
+        // No logged user
+        if (null === $loggedUser || !$this->securityService->isAdmin($loggedUser)) {
+            return $this->buildErrorResponse(Response::HTTP_FORBIDDEN, 'auth.unauthorized', 'Vous n\'êtes pas autorisé à effectuer cette action');
+        }
+
+        //TODO
+
+        return $this->buildSuccessResponse(Response::HTTP_OK, $loggedUser, $loggedUser);
     }
 }
