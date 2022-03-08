@@ -112,7 +112,7 @@ class TravelService
             throw new RuntimeException('Le voyage est déjà supprimé');
         }
 
-        if (in_array(User::ROLE_ADMIN, $user->getRoles(), true) || $travel->getUserId() !== $user->getId()) {
+        if (!in_array(User::ROLE_ADMIN, $user->getRoles(), true) || $travel->getUserId() !== $user->getId()) {
             throw new RuntimeException('Vous n\'avez pas l\'autorisation de supprimer ce voyage');
         }
 
