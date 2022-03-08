@@ -9,9 +9,14 @@ use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use Exception;
 use Ramsey\Uuid\Uuid;
+use RuntimeException;
 
 class AlbumService
 {
+    // ------------------------ >
+
+    private const DESCRIPTION_MINIMAL_WORD = 5;
+
     // ------------------------ >
 
     public function __construct(
@@ -27,11 +32,19 @@ class AlbumService
      */
     public function create(
         string $title,
-        string $description,
+        ?string $description = null,
         Travel $travel
     ): Album {
+        if (null !== $description) {
+            preg_match_all('/([a-zA-Z][-\'0-9a-zÀ-ÿ]+)/m', $description, $words, PREG_SET_ORDER, 0);
+
+            // Explanation is too short
+            if (count($words) < static::DESCRIPTION_MINIMAL_WORD) {
+                throw new RuntimeException(sprintf('La description ne peut pas être inférieure à %s mots', static::DESCRIPTION_MINIMAL_WORD));
+            }
+        }
+
         $title = trim($title);
-        $description = trim($description);
 
         $album = (new Album())
             ->setTitle($title)
@@ -82,6 +95,17 @@ class AlbumService
         string $title,
         string $description,
     ): Album {
+        if (null !== $description) {
+            preg_match_all('/([a-zA-Z][-\'0-9a-zÀ-ÿ]+)/m', $description, $words, PREG_SET_ORDER, 0);
+
+            // Explanation is too short
+            if (count($words) < static::DESCRIPTION_MINIMAL_WORD) {
+                throw new RuntimeException(sprintf('La description ne peut pas être inférieure à %s mots', static::DESCRIPTION_MINIMAL_WORD));
+            }
+        }
+
+        $title = trim($title);
+
         $album
             ->setTitle($title)
             ->setDescription($description);
