@@ -140,4 +140,46 @@ class AlbumController extends HelloworldController
 
         return $this->buildSuccessResponse(Response::HTTP_OK, $albumNormalized, $loggedUser);
     }
+
+    /**
+     * @Route("/albums/{uuid}", name="album_update", methods={ "PUT" })
+     *
+     * @throws Exception
+     * @throws ExceptionInterface
+     */
+    public function updateAction(Request $request, string $uuid): Response
+    {
+        $parameters = $this->getContent($request);
+        $loggedUser = $this->getLoggedUser($this->userRepository);
+
+        // No logged used
+        if (null === $loggedUser) {
+            return $this->buildErrorResponse(Response::HTTP_FORBIDDEN, 'auth.unauthorized', 'Vous n\'êtes pas autorisé à effectuer cette action');
+        }
+
+        $album = $this->albumService->getByUuid($uuid);
+        if (null === $album) {
+            return $this->buildErrorResponse(Response::HTTP_NOT_FOUND, 'album.notFound', 'L\'album est introuvable');
+        }
+
+        $errors = $this->validate($parameters, [
+            'title' => [new Type(['type' => 'string']), new NotBlank()],
+            'description' => [new Optional([new Type(['type' => 'string']), new NotBlank()])],
+        ]);
+
+        // Validation errors
+        if (!empty($errors)) {
+            return $errors;
+        }
+
+        $albumUpdated = $this->albumService->update(
+            $album,
+            $parameters['title'],
+            $parameters['description']
+        );
+
+        $albumNormalized = $this->normalizer->normalize($albumUpdated, null, ['groups' => 'album.by.current']);
+
+        return $this->buildSuccessResponse(Response::HTTP_ACCEPTED, $albumNormalized, $loggedUser);
+    }
 }

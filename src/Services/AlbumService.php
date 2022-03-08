@@ -73,4 +73,22 @@ class AlbumService
 
         return $album;
     }
+
+    /**
+     * @throws NonUniqueResultException
+     */
+    public function update(
+        Album $album,
+        string $title,
+        string $description,
+    ): Album {
+        $album
+            ->setTitle($title)
+            ->setDescription($description);
+
+        $this->em->persist($album);
+        $this->em->flush();
+
+        return $album;
+    }
 }
