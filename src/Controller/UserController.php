@@ -9,6 +9,7 @@ use App\Services\ResponseService;
 use App\Services\SecurityService;
 use App\Services\UserService;
 use Exception;
+use RuntimeException;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -30,7 +31,7 @@ class UserController extends HelloworldController
         ResponseService $responseService,
         RequestService $requestService,
         ValidatorInterface $validator,
-        NormalizerInterface $normalizer,
+        private NormalizerInterface $normalizer,
         private UserService $userService,
         private UserRepository $userRepository,
         private SecurityService $securityService,
@@ -48,10 +49,10 @@ class UserController extends HelloworldController
      */
     public function getMeAction(): JsonResponse
     {
-        $loggedUser = $this->getLoggedUser();
+        $loggedUser = $this->getLoggedUser($this->userRepository);
 
         // No logged user
-        if (empty($loggedUser)) {
+        if (null === $loggedUser) {
             return $this->responseService->error403('auth.unauthorized', 'Vous n\'êtes pas autorisé à effectué cette action');
         }
 
@@ -66,17 +67,24 @@ class UserController extends HelloworldController
      */
     public function getAllAction(): JsonResponse
     {
-        $loggedUser = $this->getLoggedUser();
+        $loggedUser = $this->getLoggedUser($this->userRepository);
+
+        // No logged user
+        if (null === $loggedUser) {
+            return $this->responseService->error403('auth.unauthorized', 'Vous n\'êtes pas autorisé à effectué cette action');
+        }
+
         $roles = $loggedUser->getRoles();
 
         // No logged used
-        if (empty($loggedUser) || in_array(User::ROLE_ADMIN, $roles, true)) {
+        if (null === $loggedUser || in_array(User::ROLE_ADMIN, $roles, true)) {
             return $this->responseService->error403('auth.unauthorized', 'Vous n\'êtes pas autorisé à effectué cette action');
         }
 
         $users = $this->userRepository->findAll();
+        $usersNormalizer = $this->normalizer->normalize($users, null, ['groups' => 'user.nested']);
 
-        return $this->buildSuccessResponse(Response::HTTP_OK, $users, $loggedUser);
+        return $this->buildSuccessResponse(Response::HTTP_OK, $usersNormalizer, $loggedUser);
     }
 
     /**
@@ -87,9 +95,7 @@ class UserController extends HelloworldController
      */
     public function userSignup(Request $request): JsonResponse
     {
-        //TODO move it to AbstractController
-        $content = $request->getContent();
-        $parameters = json_decode($content, true);
+        $parameters = $this->getContent($request);
 
         $errors = $this->validate($parameters, [
             'email' => [new Email(), new NotBlank()],
@@ -116,7 +122,9 @@ class UserController extends HelloworldController
             $parameters['lastName'],
         );
 
-        return $this->buildSuccessResponse(Response::HTTP_CREATED, $user);
+        $usersNormalizer = $this->normalizer->normalize($user, null, ['groups' => 'user.nested']);
+
+        return $this->buildSuccessResponse(Response::HTTP_CREATED, $usersNormalizer);
     }
 
     /**
@@ -125,24 +133,25 @@ class UserController extends HelloworldController
      * @throws Exception
      * @throws ExceptionInterface
      */
-    public function deleteUser(Request $request, string $uuid): JsonResponse
+    public function deleteUser(string $uuid): JsonResponse
     {
-        $loggedUser = $this->getLoggedUser();
-
+        $loggedUser = $this->getLoggedUser($this->userRepository);
         $user = $this->userRepository->findOneByUuid($uuid);
 
-        if (empty($user)) {
-            throw new Exception('L\'utilisateur est introuvable');
+        if (null === $user) {
+            //Fixme Replace by 404
+            throw new RuntimeException('L\'utilisateur est introuvable');
         }
 
         // No logged used
-        if (empty($loggedUser) || ($this->securityService->isSameUser($loggedUser, $uuid) && !$this->securityService->isAdmin($loggedUser))) {
+        if (null === $loggedUser || ($this->securityService->isSameUser($loggedUser, $uuid) && !$this->securityService->isAdmin($loggedUser))) {
             return $this->responseService->error403('auth.unauthorized', 'Vous n\'êtes pas autorisé à effectué cette action');
         }
 
         $userDeleted = $this->userService->delete($user, $loggedUser);
+        $usersNormalizer = $this->normalizer->normalize($userDeleted, null, ['groups' => 'user.nested']);
 
-        return $this->buildSuccessResponse(Response::HTTP_ACCEPTED, $userDeleted, $loggedUser);
+        return $this->buildSuccessResponse(Response::HTTP_ACCEPTED, $usersNormalizer, $loggedUser);
     }
 
     /**
@@ -153,21 +162,18 @@ class UserController extends HelloworldController
      */
     public function userUpdate(Request $request, string $uuid): JsonResponse
     {
-        $loggedUser = $this->getLoggedUser();
-        $roles = $loggedUser->getRoles();
-
-        //TODO move it to AbstractController
-        $content = $request->getContent();
-        $parameters = json_decode($content, true);
+        $parameters = $this->getContent($request);
+        $loggedUser = $this->getLoggedUser($this->userRepository);
 
         // No logged used
-        if (empty($loggedUser) || ($this->securityService->isSameUser($loggedUser, $uuid) && !$this->securityService->isAdmin($loggedUser))) {
+        if (null === $loggedUser || ($this->securityService->isSameUser($loggedUser, $uuid) || !$this->securityService->isAdmin($loggedUser))) {
             return $this->responseService->error403('auth.unauthorized', 'Vous n\'êtes pas autorisé à effectué cette action');
         }
 
         $user = $this->userRepository->findOneBy($uuid);
 
-        if (empty($user)) {
+        if (null === $user) {
+            //Fixme Replace by 404
             throw new Exception('L\'utilisateur n\'a pas été trouvé');
         }
 
@@ -197,6 +203,8 @@ class UserController extends HelloworldController
             $parameters['lastName'],
         );
 
-        return $this->buildSuccessResponse(Response::HTTP_ACCEPTED, $user, $loggedUser);
+        $usersNormalizer = $this->normalizer->normalize($user, null, ['groups' => 'user.nested']);
+
+        return $this->buildSuccessResponse(Response::HTTP_ACCEPTED, $usersNormalizer, $loggedUser);
     }
 }

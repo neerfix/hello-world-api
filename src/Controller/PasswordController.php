@@ -47,9 +47,7 @@ class PasswordController extends HelloworldController
      */
     public function newPasswordAction(Request $request, string $token): Response
     {
-        //TODO move it to AbstractController
-        $content = $request->getContent();
-        $parameters = json_decode($content, true);
+        $parameters = $this->getContent($request);
 
         $errors = $this->validate($parameters, [
             'password' => [new Type(['type' => 'string']), new NotBlank()],
@@ -81,9 +79,7 @@ class PasswordController extends HelloworldController
      */
     public function sendResetPasswordEmail(Request $request): Response
     {
-        //TODO move it to AbstractController
-        $content = $request->getContent();
-        $parameters = json_decode($content, true);
+        $parameters = $this->getContent($request);
 
         $errors = $this->validate($parameters, [
             'email' => [new Type(['type' => 'string']), new NotBlank()],

@@ -9,6 +9,7 @@ use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * @ORM\Table(name="travel", indexes={
@@ -42,47 +43,56 @@ class Travel implements Statuable
     private int $id;
 
     /**
+     * @Groups("travel:read")
      * @ORM\Column(name="name", type="string", length="255")
      */
     private string $name;
 
     /**
+     * @Groups("travel:read")
      * @ORM\Column(name="budget", type="string", length="255")
      */
     private string $budget;
 
     /**
+     * @Groups("travel:read")
      * @ORM\Column(name="is_shared", type="boolean")
      */
-    private bool $isShared;
+    private bool $isShared = false;
 
     /**
+     * @Groups("travel:read")
      * @ORM\Column(name="description", type="text")
      */
     private string $description;
 
     /**
-     * @ORM\Column(name="started_at", type="date")
+     * @Groups("travel:read")
+     * @ORM\Column(name="started_at", type="date", nullable="true")
      */
     private ?DateTime $startedAt = null;
 
     /**
-     * @ORM\Column(name="ended_at", type="date")
+     * @Groups("travel:read")
+     * @ORM\Column(name="ended_at", type="date", nullable="true")
      */
     private ?DateTime $endedAt = null;
 
     /**
+     * @Groups("travel:read")
      * @ORM\ManyToOne(targetEntity="User", inversedBy="travels")
      * @ORM\JoinColumn(name="user_id", nullable="false", referencedColumnName="id")
      */
     private User $userId;
 
     /**
+     * @Groups("travel:read")
      * @ORM\Column(name="created_at", type="date")
      */
     private DateTime $createdAt;
 
     /**
+     * @Groups("travel:read")
      * @ORM\Column(name="updated_at", type="date")
      */
     private DateTime $updatedAt;
