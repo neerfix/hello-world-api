@@ -8,6 +8,7 @@ use App\Services\RequestService;
 use App\Services\ResponseService;
 use App\Services\SecurityService;
 use App\Services\UserService;
+use Doctrine\ORM\NonUniqueResultException;
 use Exception;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -236,18 +237,27 @@ class UserController extends HelloworldController
     /**
      * @Route("/users/search", name="search_me", methods={ "GET" })
      * }
-     **/
+     *
+     * @throws ExceptionInterface
+     * @throws NonUniqueResultException
+     * @throws Exception
+     */
     public function searchAction(Request $request): JsonResponse
     {
         $loggedUser = $this->getLoggedUser($this->userRepository);
 
         // No logged user
         if (null === $loggedUser || !$this->securityService->isAdmin($loggedUser)) {
-            return $this->buildErrorResponse(Response::HTTP_FORBIDDEN, 'auth.unauthorized', 'Vous n\'êtes pas autorisé à effectuer cette action');
+//            return $this->buildErrorResponse(Response::HTTP_FORBIDDEN, 'auth.unauthorized', 'Vous n\'êtes pas autorisé à effectuer cette action');
         }
 
-        //TODO
+        $users = $this->userRepository->search(
+            $request->query->get('q'),
+            $request->query->get('status')
+        );
 
-        return $this->buildSuccessResponse(Response::HTTP_OK, $loggedUser, $loggedUser);
+        $usersNormalizer = $this->normalizer->normalize($users, null, ['groups' => 'user.read']);
+
+        return $this->buildSuccessResponse(Response::HTTP_OK, $usersNormalizer, $loggedUser);
     }
 }
