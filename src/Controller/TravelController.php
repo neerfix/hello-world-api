@@ -93,8 +93,8 @@ class TravelController extends HelloworldController
             $parameters['isSharable']
         );
 
-        $this->normalizer->normalize($travel, null, ['groups' => 'travel:read']);
+        $travelNormalizer = $this->normalizer->normalize($travel, null, ['groups' => ['travel:read', 'travel:nested']]);
 
-        return $this->buildSuccessResponse(Response::HTTP_CREATED, $travel, $loggedUser);
+        return $this->buildSuccessResponse(Response::HTTP_CREATED, $travelNormalizer, $loggedUser);
     }
 }
