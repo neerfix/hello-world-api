@@ -56,7 +56,7 @@ class File implements Statuable
 
     /**
      * @ORM\ManyToOne(targetEntity="User", inversedBy="files")
-     * @ORM\Column(name="user_id", nullable="false")
+     * @ORM\JoinColumn(name="user_id", nullable="false", referencedColumnName="id")
      */
     private User $userId;
 

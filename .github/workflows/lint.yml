@@ -3,6 +3,7 @@ on:
     branches:
       - 'feat/**'
       - 'fix/**'
+      - 'hotfix/**'
       - 'ci/**'
 name: lint
 jobs:

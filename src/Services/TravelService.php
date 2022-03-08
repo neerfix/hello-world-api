@@ -7,6 +7,7 @@ use App\Entity\User;
 use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use Exception;
+use RuntimeException;
 
 class TravelService
 {
@@ -18,6 +19,7 @@ class TravelService
 
     public function __construct(
         private EntityManagerInterface $em,
+        private UserService $userService,
     ) {
     }
 
@@ -39,9 +41,8 @@ class TravelService
             preg_match_all('/([a-zA-Z][-\'0-9a-zÀ-ÿ]+)/m', $description, $words, PREG_SET_ORDER, 0);
 
             // Explanation is too short
-            if (count($words) <= static::DESCRIPTION_MINIMAL_WORD) {
-                // TODO Replace with error code
-                throw new Exception(sprintf('La description ne peut pas être inférieur à %s mots', [static::DESCRIPTION_MINIMAL_WORD]));
+            if (count($words) < static::DESCRIPTION_MINIMAL_WORD) {
+                throw new RuntimeException(sprintf('La description ne peut pas être inférieur à %s mots', [static::DESCRIPTION_MINIMAL_WORD]));
             }
         }
 

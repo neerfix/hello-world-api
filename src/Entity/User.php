@@ -52,11 +52,13 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, Statuab
     private int $id;
 
     /**
+     * @Groups("user:nested")
      * @ORM\Column(name="uuid", type="string", length="180", unique=true)
      */
     private string $uuid;
 
     /**
+     * @Groups("user:nested")
      * @ORM\Column(name="roles", type="json")
      */
     private array $roles = [];
@@ -67,31 +69,37 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, Statuab
     private string $password;
 
     /**
+     * @Groups("user:nested")
      * @ORM\Column(name="email", type="string", length="255", unique=true)
      */
     private string $email;
 
     /**
+     * @Groups("user:nested")
      * @ORM\Column(name="date_of_birth", type="date")
      */
     private DateTime $dateOfBirth;
 
     /**
+     * @Groups("user:nested")
      * @ORM\Column(name="firstname", type="string", length="50", nullable=true)
      */
     private ?string $firstname = null;
 
     /**
+     * @Groups("user:nested")
      * @ORM\Column(name="lastname", type="string", length="70", nullable=true)
      */
     private ?string $lastname = null;
 
     /**
+     * @Groups("user:nested")
      * @ORM\Column(name="username", type="string", length="55", unique=true)
      */
     private string $username;
 
     /**
+     * @Groups("user:nested")
      * @ORM\Column(name="is_verify", type="boolean")
      */
     private bool $isVerify;
@@ -123,9 +131,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, Statuab
 
     // ------------------------- >
 
-    /**
-     * @Groups({ "users.by.current", "users.by.admin" })
-     */
     public function getStatus(): string
     {
         return $this->status;

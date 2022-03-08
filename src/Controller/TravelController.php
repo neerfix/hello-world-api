@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Repository\TravelRepository;
+use App\Repository\UserRepository;
 use App\Services\RequestService;
 use App\Services\ResponseService;
 use App\Services\TravelService;
@@ -26,9 +27,10 @@ class TravelController extends HelloworldController
         ResponseService $responseService,
         RequestService $requestService,
         ValidatorInterface $validator,
-        NormalizerInterface $normalizer,
+        private NormalizerInterface $normalizer,
         private TravelService $travelService,
         private TravelRepository $travelRepository,
+        private UserRepository $userRepository,
     ) {
         parent::__construct($responseService, $requestService, $validator, $normalizer);
     }
@@ -41,9 +43,9 @@ class TravelController extends HelloworldController
      * @throws Exception
      * @throws ExceptionInterface
      */
-    public function index(Request $request): Response
+    public function index(): Response
     {
-        $loggedUser = $this->getLoggedUser();
+        $loggedUser = $this->getLoggedUser($this->userRepository);
         $travel = $this->travelRepository->findAll();
 
         return $this->buildSuccessResponse(Response::HTTP_OK, $travel, $loggedUser);
@@ -57,16 +59,12 @@ class TravelController extends HelloworldController
      */
     public function addAction(Request $request): Response
     {
-        //TODO move it to AbstractController
-        $content = $request->getContent();
-        $parameters = json_decode($content, true);
-
-        $loggedUser = $this->getLoggedUser();
+        $parameters = $this->getContent($request);
+        $loggedUser = $this->getLoggedUser($this->userRepository);
 
         // No logged user
         if (null === $loggedUser) {
-            //FIXME remove // when front is ready
-            // return $this->buildErrorResponse(Response::HTTP_FORBIDDEN,'auth.unauthorized', 'Vous n\'êtes pas autorisé à effectuer cette action');
+            return $this->buildErrorResponse(Response::HTTP_FORBIDDEN, 'auth.unauthorized', 'Vous n\'êtes pas autorisé à effectuer cette action');
         }
 
         $errors = $this->validate($parameters, [
@@ -94,6 +92,8 @@ class TravelController extends HelloworldController
             $parameters['description'],
             $parameters['isSharable']
         );
+
+        $this->normalizer->normalize($travel, null, ['groups' => 'travel:read']);
 
         return $this->buildSuccessResponse(Response::HTTP_CREATED, $travel, $loggedUser);
     }
