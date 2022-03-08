@@ -3,10 +3,12 @@
 namespace App\Services;
 
 use App\Entity\Album;
+use App\Entity\Travel;
 use App\Repository\AlbumRepository;
 use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use Exception;
+use Ramsey\Uuid\Uuid;
 
 class AlbumService
 {
@@ -36,7 +38,8 @@ class AlbumService
             ->setDescription($description)
             ->setTravelId($travel)
             ->setCreatedAt(new DateTime())
-            ->setUpdatedAt(new DateTime());
+            ->setUpdatedAt(new DateTime())
+            ->setUuid(Uuid::uuid4());
 
         $this->em->persist($album);
         $this->em->flush();

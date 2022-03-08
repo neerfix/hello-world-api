@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Repository\TravelRepository;
+use App\Repository\UserRepository;
 use App\Services\AlbumService;
 use App\Services\RequestService;
 use App\Services\ResponseService;
@@ -27,7 +28,8 @@ class AlbumController extends HelloworldController
         ValidatorInterface $validator,
         private NormalizerInterface $normalizer,
         private AlbumService $albumService,
-        private TravelRepository $travelRepository
+        private TravelRepository $travelRepository,
+        private UserRepository $userRepository
     ) {
         parent::__construct($responseService, $requestService, $validator, $normalizer);
     }
@@ -42,16 +44,12 @@ class AlbumController extends HelloworldController
      */
     public function addAction(Request $request): Response
     {
-        //TODO move it to AbstractController
-        $content = $request->getContent();
-        $parameters = json_decode($content, true);
-
-        $loggedUser = $this->getLoggedUser();
+        $parameters = $this->getContent($request);
+        $loggedUser = $this->getLoggedUser($this->userRepository);
 
         // No logged user
         if (null === $loggedUser) {
-            //FIXME remove // when front is ready
-            // return $this->responseService->error403('auth.unauthorized', 'Vous n\'êtes pas autorisé à effectué cette action');
+            return $this->responseService->error403('auth.unauthorized', 'Vous n\'êtes pas autorisé à effectué cette action');
         }
 
         $errors = $this->validate($parameters, [
@@ -64,7 +62,7 @@ class AlbumController extends HelloworldController
             return $errors;
         }
 
-        $travel = $this->travelRepository->find($travelId);
+        $travel = $this->travelRepository->find($parameters['travelId']);
 
         $album = $this->albumService->create(
             $parameters['title'],
@@ -85,7 +83,6 @@ class AlbumController extends HelloworldController
      */
     public function getAllAction(Request $request): Response
     {
-        $parameters = $this->getContent($request);
         $loggedUser = $this->getLoggedUser($this->userRepository);
 
         // No logged user

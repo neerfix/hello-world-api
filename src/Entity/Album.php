@@ -92,7 +92,7 @@ class Album implements Statuable
         return $this->uuid;
     }
 
-    public function setUuid(string $uuid): User
+    public function setUuid(string $uuid): Album
     {
         $this->uuid = $uuid;
 
