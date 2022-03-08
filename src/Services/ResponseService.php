@@ -44,16 +44,6 @@ class ResponseService
     }
 
     /**
-     * Return an HTTP 403 error.
-     *
-     * @throws Exception
-     */
-    public function error403(string $code = 'auth.forbidden', ?string $message = null): JsonResponse
-    {
-        return $this->error(Response::HTTP_FORBIDDEN, $code, $message);
-    }
-
-    /**
      * Return an error to the client.
      *
      * @throws Exception
