@@ -51,4 +51,9 @@ class AlbumService
     {
         return $this->albumRepository->findAll();
     }
+
+    public function getById(int $id): Album
+    {
+        return $this->albumRepository->find($id);
+    }
 }

@@ -81,7 +81,7 @@ class AlbumController extends HelloworldController
      * @throws Exception
      * @throws ExceptionInterface
      */
-    public function getAllAction(Request $request): Response
+    public function getAllAction(): Response
     {
         $loggedUser = $this->getLoggedUser($this->userRepository);
 
@@ -94,5 +94,26 @@ class AlbumController extends HelloworldController
         $albumsNormalized = $this->normalizer->normalize($albums, null, ['groups' => 'album.by.current']);
 
         return $this->buildSuccessResponse(Response::HTTP_OK, $albumsNormalized, $loggedUser);
+    }
+
+    /**
+     * @Route("/albums/{id}", name="get_album_by_id", methods={ "GET" })
+     *
+     * @throws Exception
+     * @throws ExceptionInterface
+     */
+    public function getByIdAction(int $id): Response
+    {
+        $loggedUser = $this->getLoggedUser($this->userRepository);
+
+        // No logged user
+        if (null === $loggedUser) {
+            return $this->responseService->error403('auth.unauthorized', 'Vous n\'êtes pas autorisé à effectué cette action');
+        }
+
+        $album = $this->albumService->getById($id);
+        $albumNormalized = $this->normalizer->normalize($album, null, ['groups' => 'album.by.current']);
+
+        return $this->buildSuccessResponse(Response::HTTP_OK, $albumNormalized, $loggedUser);
     }
 }
