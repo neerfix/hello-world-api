@@ -9,7 +9,6 @@ use App\Services\ResponseService;
 use App\Services\SecurityService;
 use App\Services\UserService;
 use Exception;
-use RuntimeException;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -71,13 +70,13 @@ class UserController extends HelloworldController
 
         // No logged user
         if (null === $loggedUser) {
-            return $this->responseService->error403('auth.unauthorized', 'Vous n\'êtes pas autorisé à effectué cette action');
+            return $this->buildErrorResponse(Response::HTTP_FORBIDDEN, 'auth.unauthorized', 'Vous n\'êtes pas autorisé à effectuer cette action');
         }
 
         $roles = $loggedUser->getRoles();
 
         // No logged used
-        if (null === $loggedUser || in_array(User::ROLE_ADMIN, $roles, true)) {
+        if (in_array(User::ROLE_ADMIN, $roles, true)) {
             return $this->buildErrorResponse(Response::HTTP_FORBIDDEN, 'auth.unauthorized', 'Vous n\'êtes pas autorisé à effectuer cette action');
         }
 

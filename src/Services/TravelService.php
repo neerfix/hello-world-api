@@ -42,7 +42,6 @@ class TravelService
 
             // Explanation is too short
             if (count($words) < static::DESCRIPTION_MINIMAL_WORD) {
-                // TODO Replace with error code
                 throw new RuntimeException(sprintf('La description ne peut pas être inférieur à %s mots', [static::DESCRIPTION_MINIMAL_WORD]));
             }
         }
@@ -58,8 +57,8 @@ class TravelService
             ->setUserId($user)
             ->setIsShared($isShared);
 
-//        $this->em->persist($travel);
-//        $this->em->flush();
+        $this->em->persist($travel);
+        $this->em->flush();
 
         return $travel;
     }
