@@ -204,4 +204,32 @@ class UserController extends HelloworldController
 
         return $this->buildSuccessResponse(Response::HTTP_ACCEPTED, $usersNormalizer, $loggedUser);
     }
+
+    /**
+     * @Route("/users/checkEmail", name="check_email", methods={ "POST" })
+     *
+     * @throws ExceptionInterface
+     * @throws Exception
+     */
+    public function checkEmailAction(Request $request): JsonResponse
+    {
+        $parameters = $this->getContent($request);
+
+        $errors = $this->validate($parameters, [
+            'email' => [new Type(['type' => 'string']), new NotBlank()],
+        ]);
+
+        // Validation errors
+        if (!empty($errors)) {
+            return $errors;
+        }
+
+        $user = $this->userRepository->findOneByEmail($parameters['email']);
+
+        if (null !== $user) {
+            return $this->buildErrorResponse(Response::HTTP_CONFLICT, 'email.already.exists', 'L\'email existe déjà', 'email');
+        }
+
+        return $this->buildSuccessResponse(Response::HTTP_CREATED, []);
+    }
 }
