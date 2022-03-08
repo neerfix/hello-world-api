@@ -19,6 +19,17 @@ class AlbumRepository extends ServiceEntityRepository
         parent::__construct($registry, Album::class);
     }
 
+    /**
+     * @throws NonUniqueResultException
+     */
+    public function findOneByUuid(string $uuid): ?Album
+    {
+        return $this->createQueryBuilder('A')
+            ->where('A.uuid = :uuid')
+            ->setParameter('uuid', $uuid)
+            ->getQuery()->getOneOrNullResult();
+    }
+
     // /**
     //  * @return Album[] Returns an array of Album objects
     //  */

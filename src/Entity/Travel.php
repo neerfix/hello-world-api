@@ -96,7 +96,7 @@ class Travel implements Statuable
     /**
      * @Groups("travel:read")
      * @ORM\ManyToOne(targetEntity="User", inversedBy="travels")
-     * @ORM\JoinColumn(name="user_id", nullable="false", referencedColumnName="id")
+     * @ORM\JoinColumn(name="user_id", referencedColumnName="id", nullable="false")
      */
     private User $userId;
 
