@@ -53,7 +53,7 @@ class UserController extends HelloworldController
 
         // No logged user
         if (null === $loggedUser) {
-            return $this->responseService->error403('auth.unauthorized', 'Vous n\'êtes pas autorisé à effectué cette action');
+            return $this->buildErrorResponse(Response::HTTP_FORBIDDEN,'auth.unauthorized','Vous n\'êtes pas autorisé à effectuer cette action');
         }
 
         return $this->buildSuccessResponse(Response::HTTP_OK, $loggedUser, $loggedUser);
@@ -78,7 +78,7 @@ class UserController extends HelloworldController
 
         // No logged used
         if (null === $loggedUser || in_array(User::ROLE_ADMIN, $roles, true)) {
-            return $this->responseService->error403('auth.unauthorized', 'Vous n\'êtes pas autorisé à effectué cette action');
+            return $this->buildErrorResponse(Response::HTTP_FORBIDDEN, 'auth.unauthorized','Vous n\'êtes pas autorisé à effectuer cette action');
         }
 
         $users = $this->userRepository->findAll();
@@ -144,7 +144,7 @@ class UserController extends HelloworldController
 
         // No logged used
         if (null === $loggedUser || ($this->securityService->isSameUser($loggedUser, $uuid) && !$this->securityService->isAdmin($loggedUser))) {
-            return $this->responseService->error403('auth.unauthorized', 'Vous n\'êtes pas autorisé à effectué cette action');
+            return $this->buildErrorResponse(Response::HTTP_FORBIDDEN,'auth.unauthorized', 'Vous n\'êtes pas autorisé à effectuer cette action');
         }
 
         $userDeleted = $this->userService->delete($user, $loggedUser);
@@ -165,8 +165,8 @@ class UserController extends HelloworldController
         $loggedUser = $this->getLoggedUser($this->userRepository);
 
         // No logged used
-        if (null === $loggedUser || ($this->securityService->isSameUser($loggedUser, $uuid) || !$this->securityService->isAdmin($loggedUser))) {
-            return $this->responseService->error403('auth.unauthorized', 'Vous n\'êtes pas autorisé à effectué cette action');
+        if (null === $loggedUser || ($this->securityService->isSameUser($loggedUser, $uuid) && !$this->securityService->isAdmin($loggedUser))) {
+            return $this->buildErrorResponse(Response::HTTP_FORBIDDEN,'auth.unauthorized', 'Vous n\'êtes pas autorisé à effectuer cette action');
         }
 
         $user = $this->userRepository->findOneBy($uuid);
