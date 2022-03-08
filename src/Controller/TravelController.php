@@ -126,7 +126,7 @@ class TravelController extends HelloworldController
     }
 
     /**
-     * @Route("/travel/{uuid}", name="update_travel", methods={ "PUT" })
+     * @Route("/travels/{uuid}", name="update_travel", methods={ "PUT" })
      *
      * @throws Exception
      * @throws ExceptionInterface
