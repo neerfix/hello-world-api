@@ -62,7 +62,7 @@ class PasswordController extends HelloworldController
         $validToken = $this->tokenRepository->findOneByValue($token);
 
         if (null === $validToken) {
-            throw new Exception('Invalid token');
+            return $this->buildErrorResponse(Response::HTTP_UNAUTHORIZED, 'auth.unauthorized', 'Le token est invalide');
         }
 
         $user = $this->userService->getUserByToken($validToken);

@@ -66,7 +66,7 @@ class TravelController extends HelloworldController
         // No logged user
         if (null === $loggedUser) {
             //FIXME remove // when front is ready
-            // return $this->responseService->error403('auth.unauthorized', 'Vous n\'êtes pas autorisé à effectué cette action');
+            // return $this->buildErrorResponse(Response::HTTP_FORBIDDEN,'auth.unauthorized', 'Vous n\'êtes pas autorisé à effectuer cette action');
         }
 
         $errors = $this->validate($parameters, [
