@@ -30,3 +30,10 @@ En cas de requête d'édition de donnée, vérifier que ces données exists bien
 ## Services
 Le service vérifie la valeur des entités et met à jour l'entité avant de faire un retour de celle-ci.
 Le `UserService` doit modifier un user avec les valeurs avant de le retourner là où il est appelé. La fonction retourne donc son entité. 
+
+
+## Normalize for circular reference
+Utiliser le NormalizerInterface et l'annotation @Groups
+```php
+$albumNormalized = $this->normalizer->normalize($album, null, ['groups' => 'album:read']);
+```
