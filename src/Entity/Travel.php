@@ -21,6 +21,13 @@ class Travel implements Statuable
 {
     use StatuableTrait;
 
+    public const STATUS_ACTIVE = 'active';
+    public const STATUS_PENDING = 'pending';
+    public const STATUS_INCOMING = 'incoming';
+    public const STATUS_STARTED = 'started';
+    public const STATUS_ENDED = 'ended';
+    public const STATUS_DELETED = 'deleted';
+
     // -------------------------- >
 
     public function __construct()
@@ -41,6 +48,14 @@ class Travel implements Statuable
      * @ORM\Column(name="id", type="integer", unique=true)
      */
     private int $id;
+
+    /**
+     * @Groups({
+     *     "travel:read",
+     * })
+     * @ORM\Column(name="uuid", type="string", length="180", unique=true)
+     */
+    private string $uuid;
 
     /**
      * @Groups("travel:read")
