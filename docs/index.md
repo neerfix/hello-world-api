@@ -35,5 +35,5 @@ Le `UserService` doit modifier un user avec les valeurs avant de le retourner lÃ
 ## Normalize for circular reference
 Utiliser le NormalizerInterface et l'annotation @Groups
 ```php
-$albumNormalized = $this->normalizer->normalize($album, null, ['groups' => 'album:read']);
+$albumNormalized = $this->normalizer->normalize($album, null, ['groups' => 'album.by.current']);
 ```

@@ -38,19 +38,24 @@ class Album implements Statuable
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(name="id", type="integer", unique=true)
-     * @Groups("album:read")
      */
     private int $id;
 
     /**
+     * @ORM\Column(name="uuid", type="string", length="180", unique=true)
+     * @Groups("album.by.current")
+     */
+    private string $uuid;
+
+    /**
      * @ORM\Column(name="title", type="string", length="255")
-     * @Groups("album:read")
+     * @Groups("album.by.current")
      */
     private string $title;
 
     /**
      * @ORM\Column(name="description", type="string", length="255", nullable=true)
-     * @Groups("album:read")
+     * @Groups("album.by.current")
      */
     private string $description;
 
@@ -80,6 +85,18 @@ class Album implements Statuable
     public function getId(): int
     {
         return $this->id;
+    }
+
+    public function getUuid(): string
+    {
+        return $this->uuid;
+    }
+
+    public function setUuid(string $uuid): User
+    {
+        $this->uuid = $uuid;
+
+        return $this;
     }
 
     public function getTitle(): string

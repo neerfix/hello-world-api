@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Repository\TravelRepository;
 use App\Services\AlbumService;
 use App\Services\RequestService;
 use App\Services\ResponseService;
@@ -25,7 +26,8 @@ class AlbumController extends HelloworldController
         RequestService $requestService,
         ValidatorInterface $validator,
         private NormalizerInterface $normalizer,
-        private AlbumService $albumService
+        private AlbumService $albumService,
+        private TravelRepository $travelRepository
     ) {
         parent::__construct($responseService, $requestService, $validator, $normalizer);
     }
@@ -62,13 +64,15 @@ class AlbumController extends HelloworldController
             return $errors;
         }
 
+        $travel = $this->travelRepository->find($travelId);
+
         $album = $this->albumService->create(
             $parameters['title'],
             $parameters['description'],
-            $parameters['travelId']
+            $travel
         );
 
-        $albumNormalized = $this->normalizer->normalize($album, null, ['groups' => 'album:read']);
+        $albumNormalized = $this->normalizer->normalize($album, null, ['groups' => 'album.by.current']);
 
         return $this->buildSuccessResponse(Response::HTTP_CREATED, $albumNormalized, $loggedUser);
     }
@@ -81,21 +85,17 @@ class AlbumController extends HelloworldController
      */
     public function getAllAction(Request $request): Response
     {
-        //TODO move it to AbstractController
-        $content = $request->getContent();
-        $parameters = json_decode($content, true);
-
-        $loggedUser = $this->getLoggedUser();
+        $parameters = $this->getContent($request);
+        $loggedUser = $this->getLoggedUser($this->userRepository);
 
         // No logged user
         if (null === $loggedUser) {
-            //FIXME remove // when front is ready
-            // return $this->responseService->error403('auth.unauthorized', 'Vous n\'êtes pas autorisé à effectué cette action');
+            return $this->responseService->error403('auth.unauthorized', 'Vous n\'êtes pas autorisé à effectué cette action');
         }
 
         $albums = $this->albumService->getAll();
-        $albumsNormalized = $this->normalizer->normalize($albums, null, ['groups' => 'album:read']);
+        $albumsNormalized = $this->normalizer->normalize($albums, null, ['groups' => 'album.by.current']);
 
-        return $this->buildSuccessResponse(Response::HTTP_CREATED, $albumsNormalized, $loggedUser);
+        return $this->buildSuccessResponse(Response::HTTP_OK, $albumsNormalized, $loggedUser);
     }
 }
