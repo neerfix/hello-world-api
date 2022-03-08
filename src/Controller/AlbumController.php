@@ -49,7 +49,7 @@ class AlbumController extends HelloworldController
 
         // No logged user
         if (null === $loggedUser) {
-            return $this->responseService->error403('auth.unauthorized', 'Vous n\'êtes pas autorisé à effectué cette action');
+            return $this->buildErrorResponse(Response::HTTP_FORBIDDEN, 'auth.unauthorized', 'Vous n\'êtes pas autorisé à effectuer cette action');
         }
 
         $errors = $this->validate($parameters, [
@@ -87,7 +87,7 @@ class AlbumController extends HelloworldController
 
         // No logged user
         if (null === $loggedUser) {
-            return $this->responseService->error403('auth.unauthorized', 'Vous n\'êtes pas autorisé à effectué cette action');
+            return $this->buildErrorResponse(Response::HTTP_FORBIDDEN, 'auth.unauthorized', 'Vous n\'êtes pas autorisé à effectuer cette action');
         }
 
         $albums = $this->albumService->getAll();
@@ -97,22 +97,46 @@ class AlbumController extends HelloworldController
     }
 
     /**
-     * @Route("/albums/{id}", name="get_album_by_id", methods={ "GET" })
+     * @Route("/albums/{uuid}", name="get_album_by_uuid", methods={ "GET" })
      *
      * @throws Exception
      * @throws ExceptionInterface
      */
-    public function getByIdAction(int $id): Response
+    public function getByUUidAction(string $uuid): Response
     {
         $loggedUser = $this->getLoggedUser($this->userRepository);
 
         // No logged user
         if (null === $loggedUser) {
-            return $this->responseService->error403('auth.unauthorized', 'Vous n\'êtes pas autorisé à effectué cette action');
+            return $this->buildErrorResponse(Response::HTTP_FORBIDDEN, 'auth.unauthorized', 'Vous n\'êtes pas autorisé à effectuer cette action');
         }
 
-        $album = $this->albumService->getById($id);
+        $album = $this->albumService->getByUuid($uuid);
         $albumNormalized = $this->normalizer->normalize($album, null, ['groups' => 'album.by.current']);
+
+        return $this->buildSuccessResponse(Response::HTTP_OK, $albumNormalized, $loggedUser);
+    }
+
+    /**
+     * @Route("/albums/{uuid}", name="delete_album", methods={ "DELETE" })
+     *
+     * @throws Exception
+     * @throws ExceptionInterface
+     */
+    public function deleteAction(string $uuid): Response
+    {
+        $loggedUser = $this->getLoggedUser($this->userRepository);
+        // No logged used
+        if (null === $loggedUser) {
+            return $this->buildErrorResponse(Response::HTTP_FORBIDDEN, 'auth.unauthorized', 'Vous n\'êtes pas autorisé à effectuer cette action');
+        }
+
+        $album = $this->albumService->getByUuid($uuid);
+        if (null === $album) {
+            return $this->buildErrorResponse(Response::HTTP_NOT_FOUND, 'album.notFound', 'L\'album est introuvable');
+        }
+        $albumDeleted = $this->albumService->delete($album);
+        $albumNormalized = $this->normalizer->normalize($albumDeleted, null, ['groups' => 'album.by.current']);
 
         return $this->buildSuccessResponse(Response::HTTP_OK, $albumNormalized, $loggedUser);
     }

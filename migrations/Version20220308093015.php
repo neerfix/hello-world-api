@@ -17,14 +17,16 @@ final class Version20220308093015 extends AbstractMigration
         return '';
     }
 
+    public function isTransactional(): bool
+    {
+        return false;
+    }
+
     public function up(Schema $schema): void
     {
         // this up() migration is auto-generated, please modify it to your needs
         $this->addSql('ALTER TABLE album ADD uuid VARCHAR(180) NOT NULL');
         $this->addSql('CREATE UNIQUE INDEX UNIQ_39986E43D17F50A6 ON album (uuid)');
-        $this->addSql('ALTER TABLE file CHANGE user_id user_id VARCHAR(255) DEFAULT NULL');
-        $this->addSql('ALTER TABLE travel ADD CONSTRAINT FK_2D0B6BCEA76ED395 FOREIGN KEY (user_id) REFERENCES user (id)');
-        $this->addSql('CREATE INDEX IDX_2D0B6BCEA76ED395 ON travel (user_id)');
     }
 
     public function down(Schema $schema): void

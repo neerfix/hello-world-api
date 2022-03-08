@@ -47,13 +47,30 @@ class AlbumService
         return $album;
     }
 
+    /**
+     * @throws Exception
+     */
     public function getAll(): array
     {
         return $this->albumRepository->findAll();
     }
 
-    public function getById(int $id): Album
+    /**
+     * @throws Exception
+     */
+    public function getByUuid(string $uuid): ?Album
     {
-        return $this->albumRepository->find($id);
+        return $this->albumRepository->findOneByUuid($uuid);
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function delete(Album $album): Album
+    {
+        $this->em->remove($album);
+        $this->em->flush();
+
+        return $album;
     }
 }
