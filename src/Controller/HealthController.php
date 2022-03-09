@@ -2,13 +2,8 @@
 
 namespace App\Controller;
 
-use App\Repository\TokenRepository;
-use App\Repository\UserRepository;
-use App\Services\MailerService;
 use App\Services\RequestService;
 use App\Services\ResponseService;
-use App\Services\TokenService;
-use App\Services\UserService;
 use Exception;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -25,11 +20,6 @@ class HealthController extends HelloworldController
         RequestService $requestService,
         ValidatorInterface $validator,
         NormalizerInterface $normalizer,
-        private UserService $userService,
-        private TokenService $tokenService,
-        private MailerService $mailerService,
-        private TokenRepository $tokenRepository,
-        private UserRepository $userRepository,
     ) {
         parent::__construct($responseService, $requestService, $validator, $normalizer);
     }
