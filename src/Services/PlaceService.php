@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Entity\Place;
+use App\Entity\User;
 use App\Repository\PlaceRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Ramsey\Uuid\Uuid;
@@ -45,13 +46,51 @@ class PlaceService
         return $place;
     }
 
-    public function getAll(): array
-    {
-        return $this->placeRepository->findAll();
-    }
-
-    public function getByUuid(string $uuid): Place
+    public function getByUuid(string $uuid): ?Place
     {
         return $this->placeRepository->findOneBy(['uuid' => $uuid]);
+    }
+
+    public function update(
+        Place $place,
+        User $user,
+        string $address,
+        string $city,
+        string $zipcode,
+        string $country,
+        string $name,
+        float $latitude,
+        float $longitude
+    ) : Place
+    {
+        $address = trim($address);
+        $city = trim($city);
+        $zipcode = trim($zipcode);
+        $country = trim($country);
+        $name = trim($name);
+
+        $place
+            ->setAddress($address)
+            ->setZipcode($zipcode)
+            ->setCountry($country)
+            ->setCity($city)
+            ->setName($name)
+            ->setLatitude($latitude)
+            ->setLongitude($longitude);
+
+        $this->em->persist($place);
+        $this->em->flush();
+
+        return $place;
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function delete(
+        Place $place,
+        User $user
+    ): Place{
+        return $place;
     }
 }
