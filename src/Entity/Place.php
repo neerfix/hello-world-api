@@ -42,7 +42,7 @@ class Place implements Statuable
 
     /**
      * @Groups({
-     *     "place:read",
+     *     "place:read"
      * })
      * @ORM\Column(name="uuid", type="string", length="180", unique=true)
      */
@@ -50,7 +50,7 @@ class Place implements Statuable
 
     /**
      * @Groups({
-     *     "place:read",
+     *     "place:read"
      * })
      * @ORM\Column(name="address", type="string", length="255")
      * @Groups({
@@ -62,7 +62,7 @@ class Place implements Statuable
 
     /**
      * @Groups({
-     *   "place:read",
+     *   "place:read"
      * })
      * @ORM\Column(name="city", type="string", length="255")
      * @Groups({
@@ -74,7 +74,7 @@ class Place implements Statuable
 
     /**
      * @Groups({
-     *   "place:read",
+     *   "place:read"
      * })
      * @ORM\Column(name="zipcode", type="string", length="255")
      * @Groups({
@@ -86,7 +86,7 @@ class Place implements Statuable
 
     /**
      * @Groups({
-     *   "place:read",
+     *   "place:read"
      * })
      * @ORM\Column(name="country", type="string", length="255")
      * @Groups({
@@ -98,7 +98,7 @@ class Place implements Statuable
 
     /**
      * @Groups({
-     *   "place:read",
+     *   "place:read"
      * })
      * @ORM\Column(name="name", type="string", length="255")
      * @Groups({
@@ -110,7 +110,7 @@ class Place implements Statuable
 
     /**
      * @Groups({
-     *   "place:read",
+     *   "place:read"
      * })
      * @ORM\Column(name="latitude", type="string", length="255")
      * @Groups({
@@ -122,7 +122,7 @@ class Place implements Statuable
 
     /**
      * @Groups({
-     *   "place:read",
+     *   "place:read"
      * })
      * @ORM\Column(name="longitude", type="string", length="255")
      * @Groups({
@@ -134,7 +134,7 @@ class Place implements Statuable
 
     /**
      * @Groups({
-     *   "place:read",
+     *   "place:read"
      * })
      * @ORM\Column(name="created_at", type="date")
      */
@@ -142,7 +142,7 @@ class Place implements Statuable
 
     /**
      * @Groups({
-     *   "place:read",
+     *   "place:read"
      * })
      * @ORM\Column(name="updated_at", type="date")
      */
