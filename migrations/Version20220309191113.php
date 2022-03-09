@@ -29,6 +29,5 @@ final class Version20220309191113 extends AbstractMigration
         // this down() migration is auto-generated, please modify it to your needs
         $this->addSql('DROP INDEX UNIQ_39956E49D17F70A6 ON album');
         $this->addSql('ALTER TABLE place DROP uuid');
-
     }
 }

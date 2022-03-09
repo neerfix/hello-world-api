@@ -45,7 +45,7 @@ class PlaceService
         return $place;
     }
 
-    public function getAll() : array
+    public function getAll(): array
     {
         return $this->placeRepository->findAll();
     }
