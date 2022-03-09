@@ -45,7 +45,7 @@ class AlbumController extends HelloworldController
     public function addAction(Request $request): Response
     {
         $parameters = $this->getContent($request);
-        $loggedUser = $this->getLoggedUser($this->userRepository);
+        $loggedUser = $this->getLoggedUser();
 
         // No logged user
         if (null === $loggedUser) {
@@ -83,7 +83,7 @@ class AlbumController extends HelloworldController
      */
     public function getAllAction(): Response
     {
-        $loggedUser = $this->getLoggedUser($this->userRepository);
+        $loggedUser = $this->getLoggedUser();
 
         // No logged user
         if (null === $loggedUser) {
@@ -104,7 +104,7 @@ class AlbumController extends HelloworldController
      */
     public function getByUUidAction(string $uuid): Response
     {
-        $loggedUser = $this->getLoggedUser($this->userRepository);
+        $loggedUser = $this->getLoggedUser();
 
         // No logged user
         if (null === $loggedUser) {
@@ -125,7 +125,7 @@ class AlbumController extends HelloworldController
      */
     public function deleteAction(string $uuid): Response
     {
-        $loggedUser = $this->getLoggedUser($this->userRepository);
+        $loggedUser = $this->getLoggedUser();
         // No logged used
         if (null === $loggedUser) {
             return $this->buildErrorResponse(Response::HTTP_FORBIDDEN, 'auth.unauthorized', 'Vous n\'êtes pas autorisé à effectuer cette action');
@@ -150,7 +150,7 @@ class AlbumController extends HelloworldController
     public function updateAction(Request $request, string $uuid): Response
     {
         $parameters = $this->getContent($request);
-        $loggedUser = $this->getLoggedUser($this->userRepository);
+        $loggedUser = $this->getLoggedUser();
 
         // No logged used
         if (null === $loggedUser) {

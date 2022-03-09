@@ -49,7 +49,7 @@ class UserController extends HelloworldController
      */
     public function getMeAction(): JsonResponse
     {
-        $loggedUser = $this->getLoggedUser($this->userRepository);
+        $loggedUser = $this->getLoggedUser();
 
         // No logged user
         if (null === $loggedUser) {
@@ -67,7 +67,7 @@ class UserController extends HelloworldController
      */
     public function getAllAction(): JsonResponse
     {
-        $loggedUser = $this->getLoggedUser($this->userRepository);
+        $loggedUser = $this->getLoggedUser();
 
         // No logged user
         if (null === $loggedUser) {
@@ -135,7 +135,7 @@ class UserController extends HelloworldController
      */
     public function deleteUser(string $uuid): JsonResponse
     {
-        $loggedUser = $this->getLoggedUser($this->userRepository);
+        $loggedUser = $this->getLoggedUser();
         $user = $this->userRepository->findOneByUuid($uuid);
 
         if (null === $user) {
@@ -162,7 +162,7 @@ class UserController extends HelloworldController
     public function userUpdate(Request $request, string $uuid): JsonResponse
     {
         $parameters = $this->getContent($request);
-        $loggedUser = $this->getLoggedUser($this->userRepository);
+        $loggedUser = $this->getLoggedUser();
 
         // No logged used
         if (null === $loggedUser || ($this->securityService->isSameUser($loggedUser, $uuid) && !$this->securityService->isAdmin($loggedUser))) {
@@ -244,7 +244,7 @@ class UserController extends HelloworldController
      */
     public function searchAction(Request $request): JsonResponse
     {
-        $loggedUser = $this->getLoggedUser($this->userRepository);
+        $loggedUser = $this->getLoggedUser();
 
         // No logged user
         if (null === $loggedUser || !$this->securityService->isAdmin($loggedUser)) {
