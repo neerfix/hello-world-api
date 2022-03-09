@@ -40,7 +40,7 @@ class PlaceController extends HelloworldController
     public function addAction(Request $request): Response
     {
         $parameters = $this->getContent($request);
-        $loggedUser = $this->getLoggedUser($this->userRepository);
+        $loggedUser = $this->getLoggedUser();
 
         // No logged user
         if (null === $loggedUser) {
@@ -71,7 +71,9 @@ class PlaceController extends HelloworldController
             $parameters['longitude']
         );
 
-        return $this->buildSuccessResponse(Response::HTTP_CREATED, $place, $loggedUser);
+        $placeNormalizer = $this->normalizer->normalize($place, null, ['groups' => ['place:read']]);
+
+        return $this->buildSuccessResponse(Response::HTTP_CREATED, $placeNormalizer, $loggedUser);
     }
 
     /**
@@ -82,10 +84,10 @@ class PlaceController extends HelloworldController
      */
     public function getAllAction()
     {
-//        $loggedUser = $this->getLoggedUser($this->userRepository);
+        $loggedUser = $this->getLoggedUser();
         $places = $this->placeRepository->findAll();
 
-        return $this->buildSuccessResponse(Response::HTTP_OK, $places);
+        return $this->buildSuccessResponse(Response::HTTP_OK, $places, $loggedUser);
     }
 
     /**
@@ -96,18 +98,20 @@ class PlaceController extends HelloworldController
      */
     public function getAction(Request $request, string $uuid): Response
     {
-        $user = $this->getLoggedUser($this->userRepository);
+        $user = $this->getLoggedUser();
 
         if (null === $user) {
             return $this->buildErrorResponse(Response::HTTP_FORBIDDEN, 'auth.unauthorized', 'Vous n\'êtes pas autorisé à effectuer cette action');
         }
 
-        $travel = $this->placeService->getByUuid($uuid);
+        $place = $this->placeService->getByUuid($uuid);
 
-        if (null === $travel) {
+        if (null === $place) {
             return $this->buildErrorResponse(Response::HTTP_NOT_FOUND, 'not.found', 'La localisation n\'a pas été trouvée');
         }
 
-        return $this->buildSuccessResponse(Response::HTTP_OK, $travel, $user);
+        $placeNormalizer = $this->normalizer->normalize($place, null, ['groups' => ['place:read']]);
+
+        return $this->buildSuccessResponse(Response::HTTP_OK, $placeNormalizer, $user);
     }
 }
