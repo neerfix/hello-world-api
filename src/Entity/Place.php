@@ -41,11 +41,17 @@ class Place implements Statuable
     private int $id;
 
     /**
+     * @Groups({
+     *     "place:read",
+     * })
      * @ORM\Column(name="uuid", type="string", length="180", unique=true)
      */
     private string $uuid;
 
     /**
+     * @Groups({
+     *     "place:read",
+     * })
      * @ORM\Column(name="address", type="string", length="255")
      * @Groups({
      *     "place:read",
@@ -55,6 +61,9 @@ class Place implements Statuable
     private string $address;
 
     /**
+     * @Groups({
+     *   "place:read",
+     * })
      * @ORM\Column(name="city", type="string", length="255")
      * @Groups({
      *     "place:read",
@@ -64,6 +73,9 @@ class Place implements Statuable
     private string $city;
 
     /**
+     * @Groups({
+     *   "place:read",
+     * })
      * @ORM\Column(name="zipcode", type="string", length="255")
      * @Groups({
      *     "place:read",
@@ -73,6 +85,9 @@ class Place implements Statuable
     private string $zipcode;
 
     /**
+     * @Groups({
+     *   "place:read",
+     * })
      * @ORM\Column(name="country", type="string", length="255")
      * @Groups({
      *     "place:read",
@@ -82,6 +97,9 @@ class Place implements Statuable
     private string $country;
 
     /**
+     * @Groups({
+     *   "place:read",
+     * })
      * @ORM\Column(name="name", type="string", length="255")
      * @Groups({
      *     "place:read",
@@ -91,6 +109,9 @@ class Place implements Statuable
     private string $name;
 
     /**
+     * @Groups({
+     *   "place:read",
+     * })
      * @ORM\Column(name="latitude", type="string", length="255")
      * @Groups({
      *     "place:read",
@@ -100,6 +121,9 @@ class Place implements Statuable
     private string $latitude;
 
     /**
+     * @Groups({
+     *   "place:read",
+     * })
      * @ORM\Column(name="longitude", type="string", length="255")
      * @Groups({
      *     "place:read",
@@ -109,11 +133,17 @@ class Place implements Statuable
     private string $longitude;
 
     /**
+     * @Groups({
+     *   "place:read",
+     * })
      * @ORM\Column(name="created_at", type="date")
      */
     private DateTime $createdAt;
 
     /**
+     * @Groups({
+     *   "place:read",
+     * })
      * @ORM\Column(name="updated_at", type="date")
      */
     private DateTime $updatedAt;
