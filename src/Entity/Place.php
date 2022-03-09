@@ -41,6 +41,11 @@ class Place implements Statuable
     private int $id;
 
     /**
+     * @ORM\Column(name="uuid", type="string", length="180", unique=true)
+     */
+    private string $uuid;
+
+    /**
      * @ORM\Column(name="address", type="string", length="255")
      * @Groups({
      *     "place:read",
@@ -238,8 +243,21 @@ class Place implements Statuable
         return $this->steps;
     }
 
-    public function __toString()
+    /**
+     * @return string
+     */
+    public function getUuid(): string
     {
-        return $this->id;
+        return $this->uuid;
+    }
+
+    /**
+     * @param string $uuid
+     */
+    public function setUuid(string $uuid): Place
+    {
+        $this->uuid = $uuid;
+
+        return $this;
     }
 }
