@@ -46,7 +46,7 @@ class TravelController extends HelloworldController
      */
     public function index(): Response
     {
-        $loggedUser = $this->getLoggedUser($this->userRepository);
+        $loggedUser = $this->getLoggedUser();
         $travel = $this->travelRepository->findAll();
 
         return $this->buildSuccessResponse(Response::HTTP_OK, $travel, $loggedUser);
@@ -60,7 +60,7 @@ class TravelController extends HelloworldController
      */
     public function getAction(Request $request, string $uuid): Response
     {
-        $loggedUser = $this->getLoggedUser($this->userRepository);
+        $loggedUser = $this->getLoggedUser();
 
         // No logged user
         if (null === $loggedUser) {
@@ -94,7 +94,7 @@ class TravelController extends HelloworldController
      */
     public function deleteAction(Request $request, string $uuid): Response
     {
-        $loggedUser = $this->getLoggedUser($this->userRepository);
+        $loggedUser = $this->getLoggedUser();
 
         // No logged user
         if (null === $loggedUser) {
@@ -133,7 +133,7 @@ class TravelController extends HelloworldController
      */
     public function updateAction(Request $request, string $uuid): Response
     {
-        $loggedUser = $this->getLoggedUser($this->userRepository);
+        $loggedUser = $this->getLoggedUser();
         $parameters = $this->getContent($request);
 
         // No logged user
@@ -196,7 +196,7 @@ class TravelController extends HelloworldController
     public function addAction(Request $request): Response
     {
         $parameters = $this->getContent($request);
-        $loggedUser = $this->getLoggedUser($this->userRepository);
+        $loggedUser = $this->getLoggedUser();
 
         // No logged user
         if (null === $loggedUser) {

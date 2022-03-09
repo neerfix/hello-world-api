@@ -8,6 +8,7 @@ use App\Services\RequestService;
 use App\Services\ResponseService;
 use App\Services\SecurityService;
 use App\Services\UserService;
+use Doctrine\ORM\NonUniqueResultException;
 use Exception;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -48,7 +49,7 @@ class UserController extends HelloworldController
      */
     public function getMeAction(): JsonResponse
     {
-        $loggedUser = $this->getLoggedUser($this->userRepository);
+        $loggedUser = $this->getLoggedUser();
 
         // No logged user
         if (null === $loggedUser) {
@@ -66,7 +67,7 @@ class UserController extends HelloworldController
      */
     public function getAllAction(): JsonResponse
     {
-        $loggedUser = $this->getLoggedUser($this->userRepository);
+        $loggedUser = $this->getLoggedUser();
 
         // No logged user
         if (null === $loggedUser) {
@@ -134,7 +135,7 @@ class UserController extends HelloworldController
      */
     public function deleteUser(string $uuid): JsonResponse
     {
-        $loggedUser = $this->getLoggedUser($this->userRepository);
+        $loggedUser = $this->getLoggedUser();
         $user = $this->userRepository->findOneByUuid($uuid);
 
         if (null === $user) {
@@ -161,7 +162,7 @@ class UserController extends HelloworldController
     public function userUpdate(Request $request, string $uuid): JsonResponse
     {
         $parameters = $this->getContent($request);
-        $loggedUser = $this->getLoggedUser($this->userRepository);
+        $loggedUser = $this->getLoggedUser();
 
         // No logged used
         if (null === $loggedUser || ($this->securityService->isSameUser($loggedUser, $uuid) && !$this->securityService->isAdmin($loggedUser))) {
@@ -231,5 +232,32 @@ class UserController extends HelloworldController
         }
 
         return $this->buildSuccessResponse(Response::HTTP_CREATED, []);
+    }
+
+    /**
+     * @Route("/users/search", name="search_me", methods={ "GET" })
+     * }
+     *
+     * @throws ExceptionInterface
+     * @throws NonUniqueResultException
+     * @throws Exception
+     */
+    public function searchAction(Request $request): JsonResponse
+    {
+        $loggedUser = $this->getLoggedUser();
+
+        // No logged user
+        if (null === $loggedUser || !$this->securityService->isAdmin($loggedUser)) {
+//            return $this->buildErrorResponse(Response::HTTP_FORBIDDEN, 'auth.unauthorized', 'Vous n\'êtes pas autorisé à effectuer cette action');
+        }
+
+        $users = $this->userRepository->search(
+            $request->query->get('q'),
+            $request->query->get('status')
+        );
+
+        $usersNormalizer = $this->normalizer->normalize($users, null, ['groups' => 'user:search']);
+
+        return $this->buildSuccessResponse(Response::HTTP_OK, $usersNormalizer, $loggedUser);
     }
 }

@@ -25,6 +25,7 @@ _**Documentation API**_: https://helloworldtravel.stoplight.io/
 ### MacOS
 
 - Clone this repo
+- copy / paste the `.env.exemple` in `.env`
 - Go to project directory
 - launch this command : 
  ```make```
@@ -108,17 +109,17 @@ Use ```make db.dev``` to re-install dev data.
 **Ce qu'il faut commencer à faire :**
 - Matisse :
 - Emeline : Album + features
-- Nicolas :
+- Nicolas : Faire plus de review
 - Romain :
 
 **Ce qu'il faut continuer à faire**
 - Matisse :
 - Emeline : / (nouvelle sur le back)
-- Nicolas :
+- Nicolas : Alimenter le docs des bonnes pratiques et assister mes camarades.
 - Romain :
 
 **Ce qu'il faut arrêter de faire**
 - Matisse :
 - Emeline : le front
-- Nicolas :
+- Nicolas : de merge force avec les privilèges admin ou d'approved en fermant les yeux 🙈
 - Romain :

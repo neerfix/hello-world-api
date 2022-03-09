@@ -3,7 +3,6 @@
 namespace App\Controller;
 
 use App\Entity\User;
-use App\Repository\UserRepository;
 use App\Services\RequestService;
 use App\Services\ResponseService;
 use JsonException;
@@ -36,14 +35,9 @@ abstract class HelloworldController extends AbstractController
      *
      * @throws \Doctrine\ORM\NonUniqueResultException
      */
-    public function getLoggedUser(UserRepository $userRepository): ?User
+    public function getLoggedUser(): ?User
     {
         $user = parent::getUser();
-
-        //Fixme It's tmp for development, remove it.
-        $neerfix = $userRepository->findOneByEmail('nicolas.notararigo@gmail.com');
-
-        return $neerfix;
 
         // No user
         if (empty($user) || !($user instanceof User)) {

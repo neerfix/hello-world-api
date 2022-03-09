@@ -59,4 +59,17 @@ class UserRepository extends ServiceEntityRepository
 
             ->getQuery()->getOneOrNullResult();
     }
+
+    public function search(string $q, ?string $status = User::STATUS_ACTIVE): array
+    {
+        $query = $this->createQueryBuilder('U')
+
+            ->where('U.username LIKE :query or U.firstname LIKE :query OR U.lastname LIKE :query')
+            ->andWhere('U.status = :status')
+
+            ->setParameter('query', '%'.$q.'%')
+            ->setParameter('status', $status);
+
+        return $query->getQuery()->getResult();
+    }
 }
