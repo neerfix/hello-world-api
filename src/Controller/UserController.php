@@ -28,15 +28,14 @@ class UserController extends HelloworldController
     // ------------------------------ >
 
     public function __construct(
-        ResponseService             $responseService,
-        RequestService              $requestService,
-        ValidatorInterface          $validator,
+        ResponseService $responseService,
+        RequestService $requestService,
+        ValidatorInterface $validator,
         private NormalizerInterface $normalizer,
-        private UserService         $userService,
-        private UserRepository      $userRepository,
-        private SecurityService     $securityService,
-    )
-    {
+        private UserService $userService,
+        private UserRepository $userRepository,
+        private SecurityService $securityService,
+    ) {
         parent::__construct($responseService, $requestService, $validator, $normalizer);
     }
 
@@ -209,6 +208,7 @@ class UserController extends HelloworldController
 
     /**
      * @Route("/users/checkEmail", name="check_email", methods={ "POST" })
+     *
      * @throws ExceptionInterface
      * @throws Exception
      */
@@ -256,7 +256,7 @@ class UserController extends HelloworldController
             $request->query->get('status')
         );
 
-        $usersNormalizer = $this->normalizer->normalize($users, null, ['groups' => 'user.read']);
+        $usersNormalizer = $this->normalizer->normalize($users, null, ['groups' => 'user:search']);
 
         return $this->buildSuccessResponse(Response::HTTP_OK, $usersNormalizer, $loggedUser);
     }

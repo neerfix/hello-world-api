@@ -4,7 +4,6 @@ namespace App\Repository;
 
 use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
-use Doctrine\DBAL\Exception;
 use Doctrine\ORM\NonUniqueResultException;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -63,10 +62,14 @@ class UserRepository extends ServiceEntityRepository
 
     public function search(string $q, ?string $status = User::STATUS_ACTIVE): array
     {
-        $query = $this->_em->createQuery('SELECT * FROM `users` WHERE `username` LIKE :q AND WHERE `status` = :status')
-            ->setParameter('q', '%'.$q.'%')
+        $query = $this->createQueryBuilder('U')
+
+            ->where('U.username LIKE :query or U.firstname LIKE :query OR U.lastname LIKE :query')
+            ->andWhere('U.status = :status')
+
+            ->setParameter('query', '%'.$q.'%')
             ->setParameter('status', $status);
 
-        return $query->getResult();
+        return $query->getQuery()->getResult();
     }
 }
