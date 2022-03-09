@@ -245,17 +245,11 @@ class Place implements Statuable
         return $this->steps;
     }
 
-    /**
-     * @return string
-     */
     public function getUuid(): string
     {
         return $this->uuid;
     }
 
-    /**
-     * @param string $uuid
-     */
     public function setUuid(string $uuid): Place
     {
         $this->uuid = $uuid;

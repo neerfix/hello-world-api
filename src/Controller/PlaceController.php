@@ -94,20 +94,20 @@ class PlaceController extends HelloworldController
      * @throws Exception
      * @throws ExceptionInterface
      */
-    public function getAction(Request $request, string $uuid) : Response {
+    public function getAction(Request $request, string $uuid): Response
+    {
         $user = $this->getLoggedUser($this->userRepository);
 
-        if(null === $user)
-        {
+        if (null === $user) {
             return $this->buildErrorResponse(Response::HTTP_FORBIDDEN, 'auth.unauthorized', 'Vous n\'êtes pas autorisé à effectuer cette action');
         }
 
         $travel = $this->placeService->getByUuid($uuid);
 
-        if(null === $travel){
+        if (null === $travel) {
             return $this->buildErrorResponse(Response::HTTP_NOT_FOUND, 'not.found', 'La localisation n\'a pas été trouvée');
         }
 
-        return $this->buildSuccessResponse(Response::HTTP_OK,$travel, $user);
+        return $this->buildSuccessResponse(Response::HTTP_OK, $travel, $user);
     }
 }
