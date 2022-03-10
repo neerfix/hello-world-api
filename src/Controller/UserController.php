@@ -56,7 +56,7 @@ class UserController extends HelloworldController
             return $this->buildErrorResponse(Response::HTTP_FORBIDDEN, 'auth.unauthorized', 'Vous n\'êtes pas autorisé à effectuer cette action');
         }
 
-        return $this->buildSuccessResponse(Response::HTTP_OK, $loggedUser, $loggedUser);
+        return $this->buildSuccessResponse(Response::HTTP_OK, $loggedUser, $loggedUser, ['groups' => 'user:read']);
     }
 
     /**
@@ -82,9 +82,8 @@ class UserController extends HelloworldController
         }
 
         $users = $this->userRepository->findAll();
-        $usersNormalizer = $this->normalizer->normalize($users, null, ['groups' => 'user.nested']);
 
-        return $this->buildSuccessResponse(Response::HTTP_OK, $usersNormalizer, $loggedUser);
+        return $this->buildSuccessResponse(Response::HTTP_OK, $users, $loggedUser, ['groups' => 'user:read']);
     }
 
     /**
@@ -124,9 +123,31 @@ class UserController extends HelloworldController
             $lastname,
         );
 
-        $usersNormalizer = $this->normalizer->normalize($user, null, ['groups' => 'user.nested']);
+        return $this->buildSuccessResponse(Response::HTTP_CREATED, $user, null, ['groups' => 'user.nested']);
+    }
 
-        return $this->buildSuccessResponse(Response::HTTP_CREATED, $usersNormalizer);
+    /**
+     * @Route("/users/{uuid}", name="get_user", methods={ "GET" })
+     *
+     * @throws ExceptionInterface
+     * @throws Exception
+     */
+    public function getUserAction(string $uuid): JsonResponse
+    {
+        $loggedUser = $this->getLoggedUser();
+
+        $user = $this->userRepository->findOneByUuid($uuid);
+
+        // No logged user
+        if (null === $loggedUser) {
+//            return $this->buildErrorResponse(Response::HTTP_FORBIDDEN, 'auth.unauthorized', 'Vous n\'êtes pas autorisé à effectuer cette action');
+        }
+
+        if (null === $user) {
+            return $this->buildErrorResponse(Response::HTTP_NOT_FOUND, 'user.not_found', 'L\'utilisateur n\'a pas été trouvé');
+        }
+
+        return $this->buildSuccessResponse(Response::HTTP_OK, $user, $loggedUser, ['groups' => 'user:read']);
     }
 
     /**
@@ -150,13 +171,12 @@ class UserController extends HelloworldController
         }
 
         $userDeleted = $this->userService->delete($user, $loggedUser);
-        $usersNormalizer = $this->normalizer->normalize($userDeleted, null, ['groups' => 'user.nested']);
 
-        return $this->buildSuccessResponse(Response::HTTP_ACCEPTED, $usersNormalizer, $loggedUser);
+        return $this->buildSuccessResponse(Response::HTTP_ACCEPTED, $userDeleted, $loggedUser, ['groups' => 'user:read']);
     }
 
     /**
-     * @Route("/users/{{uuid}}", name="user_update", methods={ "PUT" })
+     * @Route("/users/{uuid}", name="user_update", methods={ "PUT" })
      *
      * @throws Exception
      * @throws ExceptionInterface
@@ -205,9 +225,7 @@ class UserController extends HelloworldController
             $lastname,
         );
 
-        $usersNormalizer = $this->normalizer->normalize($user, null, ['groups' => 'user.nested']);
-
-        return $this->buildSuccessResponse(Response::HTTP_ACCEPTED, $usersNormalizer, $loggedUser);
+        return $this->buildSuccessResponse(Response::HTTP_ACCEPTED, $user, $loggedUser, ['groups' => 'user:read']);
     }
 
     /**
@@ -260,8 +278,6 @@ class UserController extends HelloworldController
             $request->query->get('status')
         );
 
-        $usersNormalizer = $this->normalizer->normalize($users, null, ['groups' => 'user:search']);
-
-        return $this->buildSuccessResponse(Response::HTTP_OK, $usersNormalizer, $loggedUser);
+        return $this->buildSuccessResponse(Response::HTTP_OK, $users, $loggedUser, ['groups' => 'user:search']);
     }
 }
