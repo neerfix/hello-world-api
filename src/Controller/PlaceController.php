@@ -9,14 +9,12 @@ use App\Services\PlaceService;
 use App\Services\RequestService;
 use App\Services\ResponseService;
 use Exception;
-use \Symfony\Component\Serializer\Exception\ExceptionInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Serializer\Exception\ExceptionInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
-use Symfony\Component\Validator\Constraints\DateTime;
 use Symfony\Component\Validator\Constraints\NotBlank;
-use Symfony\Component\Validator\Constraints\Optional;
 use Symfony\Component\Validator\Constraints\Type;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
@@ -74,9 +72,7 @@ class PlaceController extends HelloworldController
             $parameters['longitude']
         );
 
-        $placeNormalizer = $this->normalizer->normalize($place, null, ['groups' => ['place:read']]);
-
-        return $this->buildSuccessResponse(Response::HTTP_CREATED, $placeNormalizer, $loggedUser);
+        return $this->buildSuccessResponse(Response::HTTP_CREATED, $place, $loggedUser, ['groups' => ['place:read']]);
     }
 
     /**
@@ -85,12 +81,12 @@ class PlaceController extends HelloworldController
      * @throws Exception
      * @throws ExceptionInterface
      */
-    public function getAllAction() : Response
+    public function getAllAction(): Response
     {
         $loggedUser = $this->getLoggedUser();
         $places = $this->placeRepository->findAll();
-//        dd($places);
-        return $this->buildSuccessResponse(Response::HTTP_OK, $places, $loggedUser);
+
+        return $this->buildSuccessResponse(Response::HTTP_OK, $places, $loggedUser, ['groups' => ['place:read']]);
     }
 
     /**
@@ -117,7 +113,6 @@ class PlaceController extends HelloworldController
 
         return $this->buildSuccessResponse(Response::HTTP_OK, $placeNormalizer, $user);
     }
-
 
     /**
      * @Route("/places/{uuid}", name="update_travel", methods={ "PUT" })
@@ -186,7 +181,8 @@ class PlaceController extends HelloworldController
      * @throws Exception
      * @throws ExceptionInterface
      */
-    public function deleteAction(Request $request, string $uuid): Response{
+    public function deleteAction(Request $request, string $uuid): Response
+    {
         $loggedUser = $this->getLoggedUser();
 
         if (null === $loggedUser) {
@@ -212,6 +208,6 @@ class PlaceController extends HelloworldController
 
         $placeNormalizer = $this->normalizer->normalize($placeDeleted, null, ['groups' => ['place:read']]);
 
-        return $this->buildSuccessResponse(Response::HTTP_OK,$placeNormalizer,$loggedUser);
+        return $this->buildSuccessResponse(Response::HTTP_OK, $placeNormalizer, $loggedUser);
     }
 }
