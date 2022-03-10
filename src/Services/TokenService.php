@@ -53,6 +53,18 @@ class TokenService
      */
     public function create(User $user, string $target, ?DateTime $datetime = null): Token
     {
+        if (Token::TYPE_REFRESH_TOKEN === $target) {
+            $hasToken = $this->tokenRepository->findRefreshTokenByUser($user);
+        }
+        if (Token::TYPE_ACCESS_TOKEN === $target) {
+            $hasToken = $this->tokenRepository->findAccessTokenByUser($user);
+        }
+
+        if (null !== $hasToken) {
+            $this->em->remove($hasToken);
+            $this->em->flush();
+        }
+
         $tokenStr = $this->RandomToken();
         $expirationDate = ($datetime) ?? new DateTime('+1 day');
 
@@ -79,8 +91,6 @@ class TokenService
 
         $accessToken = $this->create($user, Token::TYPE_ACCESS_TOKEN);
         $refreshToken ??= $this->create($user, Token::TYPE_REFRESH_TOKEN);
-
-        $this->create($user, Token::TYPE_ACCESS_TOKEN);
 
         return new AuthToken(
             'email',
