@@ -108,7 +108,8 @@ class AlbumService
 
         $album
             ->setTitle($title)
-            ->setDescription($description);
+            ->setDescription($description)
+            ->setUpdatedAt(new DateTime());
 
         $this->em->persist($album);
         $this->em->flush();
