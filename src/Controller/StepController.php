@@ -80,7 +80,7 @@ class StepController extends HelloworldController
             $endedAt
         );
 
-        return $this->buildSuccessResponse(Response::HTTP_CREATED, $this->normalizeStep($step), $loggedUser);
+        return $this->buildSuccessResponse(Response::HTTP_CREATED, $step, $loggedUser, ['groups' => ['step:read', 'step:nested']]);
     }
 
     /**
@@ -100,7 +100,7 @@ class StepController extends HelloworldController
 
         $steps = $this->stepService->getAll();
 
-        return $this->buildSuccessResponse(Response::HTTP_OK, $this->normalizeStep($steps), $loggedUser);
+        return $this->buildSuccessResponse(Response::HTTP_OK, $steps, $loggedUser, ['groups' => ['step:read', 'step:nested']]);
     }
 
     /**
@@ -120,7 +120,7 @@ class StepController extends HelloworldController
 
         $step = $this->stepService->getByUuid($uuid);
 
-        return $this->buildSuccessResponse(Response::HTTP_OK, $this->normalizeStep($step), $loggedUser);
+        return $this->buildSuccessResponse(Response::HTTP_OK, $step, $loggedUser, ['groups' => ['step:read', 'step:nested']]);
     }
 
     /**
@@ -143,7 +143,7 @@ class StepController extends HelloworldController
         }
         $stepDeleted = $this->stepService->delete($step);
 
-        return $this->buildSuccessResponse(Response::HTTP_OK, $this->normalizeStep($stepDeleted), $loggedUser);
+        return $this->buildSuccessResponse(Response::HTTP_OK, $stepDeleted, $loggedUser, ['groups' => ['step:read', 'step:nested']]);
     }
 
     /**
@@ -169,6 +169,7 @@ class StepController extends HelloworldController
         }
 
         $errors = $this->validate($parameters, [
+            'albumId' => [new Type(['type' => 'int']), new NotBlank()],
             'placeId' => [new Type(['type' => 'int']), new NotBlank()],
             'startedAt' => [new Optional([new DateTime(['format' => 'Y-m-d']), new NotBlank()])],
             'endedAt' => [new Optional([new DateTime(['format' => 'Y-m-d']), new NotBlank()])],
@@ -178,22 +179,19 @@ class StepController extends HelloworldController
         if (!empty($errors)) {
             return $errors;
         }
+        $album = $this->placeRepository->find($parameters['albumId']);
         $place = $this->placeRepository->find($parameters['placeId']);
         $startedAt = (array_key_exists('startedAt', $parameters)) ? $this->getDate($request, $parameters['startedAt']) : null;
         $endedAt = (array_key_exists('endedAt', $parameters)) ? $this->getDate($request, $parameters['endedAt']) : null;
 
         $stepUpdated = $this->stepService->update(
             $step,
+            $album,
             $place,
             $startedAt,
             $endedAt
         );
 
-        return $this->buildSuccessResponse(Response::HTTP_ACCEPTED, $this->normalizeStep($stepUpdated), $loggedUser);
-    }
-
-    private function normalizeStep($step): array
-    {
-        return null != $step ? $this->normalizer->normalize($step, null, ['groups' => 'step.by.current']) : [];
+        return $this->buildSuccessResponse(Response::HTTP_ACCEPTED, $stepUpdated, $loggedUser, ['groups' => ['step:read', 'step:nested']]);
     }
 }

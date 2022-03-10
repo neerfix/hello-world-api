@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Entity\Album;
 use App\Entity\Place;
 use App\Entity\Step;
 use App\Entity\Travel;
@@ -37,8 +38,8 @@ class StepService
         ?DateTime $endedAt = null
     ): Step {
         $step = (new Step())
-            ->setTravelId($travel)
-            ->setPlaceId($place)
+            ->setTravel($travel)
+            ->setPlace($place)
             ->setStartedAt($startedAt)
             ->setEndedAt($endedAt)
             ->setCreatedAt(new DateTime())
@@ -83,13 +84,14 @@ class StepService
      */
     public function update(
         Step $step,
+        Album $album,
         Place $place,
         ?DateTime $startedAt = null,
         ?DateTime $endedAt = null
     ): Step {
-        var_dump('pouet');
         $step
-            ->setPlaceId($place)
+            ->setAlbum($album)
+            ->setPlace($place)
             ->setStartedAt($startedAt)
             ->setEndedAt($endedAt)
             ->setUpdatedAt(new DateTime());

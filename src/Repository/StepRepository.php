@@ -26,7 +26,7 @@ class StepRepository extends ServiceEntityRepository
     public function findOneByUuid(string $uuid): ?Step
     {
         return $this->createQueryBuilder('S')
-            ->andWhere('S.uuid = :uuid')
+            ->where('S.uuid = :uuid')
             ->setParameter('uuid', $uuid)
             ->getQuery()
             ->getOneOrNullResult();
