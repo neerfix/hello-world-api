@@ -4,6 +4,7 @@ namespace App\Repository;
 
 use App\Entity\Album;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\NonUniqueResultException;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -28,6 +29,18 @@ class AlbumRepository extends ServiceEntityRepository
             ->where('A.uuid = :uuid')
             ->setParameter('uuid', $uuid)
             ->getQuery()->getOneOrNullResult();
+    }
+
+    /**
+     * @return Album[]
+     */
+    public function findAllActive(): array
+    {
+        return $this->createQueryBuilder('A')
+            ->where('A.status = :status')
+            ->setParameter('status', 'active')
+
+            ->getQuery()->getArrayResult();
     }
 
     // /**

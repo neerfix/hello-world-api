@@ -4,9 +4,9 @@ namespace App\Services;
 
 use App\Entity\Album;
 use App\Entity\Travel;
-use App\Repository\AlbumRepository;
 use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\ORM\NonUniqueResultException;
 use Exception;
 use Ramsey\Uuid\Uuid;
 use RuntimeException;
@@ -21,7 +21,6 @@ class AlbumService
 
     public function __construct(
         private EntityManagerInterface $em,
-        private AlbumRepository $albumRepository
     ) {
     }
 
@@ -63,25 +62,12 @@ class AlbumService
     /**
      * @throws Exception
      */
-    public function getAll(): array
-    {
-        return $this->albumRepository->findAll();
-    }
-
-    /**
-     * @throws Exception
-     */
-    public function getByUuid(string $uuid): ?Album
-    {
-        return $this->albumRepository->findOneByUuid($uuid);
-    }
-
-    /**
-     * @throws Exception
-     */
     public function delete(Album $album): Album
     {
-        $this->em->remove($album);
+        $album->setStatus(Album::STATUS_DELETED)
+            ->setUpdateAt(new DateTime());
+
+        $this->em->persist($album);
         $this->em->flush();
 
         return $album;

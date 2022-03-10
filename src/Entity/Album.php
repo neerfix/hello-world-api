@@ -20,6 +20,9 @@ class Album implements Statuable
 {
     use StatuableTrait;
 
+    public const STATUS_DELETED = 'deleted';
+    public const STATUS_ACTIVE = 'active';
+
     // -------------------------- >
 
     public function __construct()

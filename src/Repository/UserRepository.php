@@ -72,4 +72,16 @@ class UserRepository extends ServiceEntityRepository
 
         return $query->getQuery()->getResult();
     }
+
+    /**
+     * @return User[]
+     */
+    public function findAllActive(): array
+    {
+        return $this->createQueryBuilder('U')
+            ->where('U.status = :status')
+            ->setParameter('status', 'active')
+
+            ->getQuery()->getArrayResult();
+    }
 }

@@ -23,7 +23,7 @@ class PlaceController extends HelloworldController
         ResponseService $responseService,
         RequestService $requestService,
         ValidatorInterface $validator,
-        private NormalizerInterface $normalizer,
+        NormalizerInterface $normalizer,
         private PlaceService $placeService,
         private PlaceRepository $placeRepository
     ) {
@@ -93,7 +93,7 @@ class PlaceController extends HelloworldController
      * @throws Exception
      * @throws ExceptionInterface
      */
-    public function getAction(Request $request, string $uuid): Response
+    public function getAction(string $uuid): Response
     {
         $user = $this->getLoggedUser();
 
