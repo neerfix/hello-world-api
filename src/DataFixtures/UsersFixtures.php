@@ -13,6 +13,7 @@ class UsersFixtures extends Fixture
     private const DEFAULT_PASSWORD = '1234567890';
 
     private const USER_NEERFIX = 'neerfix';
+    private const USER_FAYAAH = 'fayaah';
 
     // ------------------------------ >
 
@@ -40,7 +41,8 @@ class UsersFixtures extends Fixture
 
             $userFixture->setRoles($userData['roles'])
                 ->setUuid($userData['uuid'])
-                ->setIsVerify($userData['isVerify']);
+                ->setIsVerify($userData['isVerify'])
+                ->setStatus($userData['status']);
 
             $manager->persist($userFixture);
             $manager->flush();
@@ -62,6 +64,19 @@ class UsersFixtures extends Fixture
                 'roles' => ['ROLE_ADMIN'],
                 'uuid' => 'UUID-NEERFIX',
                 'isVerify' => true,
+                'status' => 'active',
+            ],
+            static::USER_FAYAAH => [
+                'email' => 'louise.baulan@hello-world.ovh',
+                'password' => static::DEFAULT_PASSWORD,
+                'username' => 'fayaah',
+                'firstname' => 'Louise',
+                'lastname' => 'Baulan',
+                'birthDate' => new DateTime('2000-07-26'),
+                'roles' => ['ROLE_ADMIN'],
+                'uuid' => 'UUID-FAYAAH',
+                'isVerify' => true,
+                'status' => 'active',
             ],
         ];
 

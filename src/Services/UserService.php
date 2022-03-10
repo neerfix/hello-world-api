@@ -23,6 +23,7 @@ class UserService
         private EntityManagerInterface $em,
         private UserRepository $userRepository,
         private TextService $textService,
+        private MailerService $mailerService,
         private TokenRepository $tokenRepository,
     ) {
     }
@@ -50,16 +51,23 @@ class UserService
             ->setEmail($email)
             ->setUsername($username)
             ->setPassword('tmp-pwd')
-            ->setFirstname($firstname)
-            ->setLastname($lastname)
             ->setDateOfBirth($birthdate)
             ->setUuid(Uuid::uuid4())
             ->setIsVerify(false);
+
+        if (null !== $firstname) {
+            $user->setFirstname($firstname);
+        }
+
+        if (null !== $lastname) {
+            $user->setFirstname($lastname);
+        }
 
         $this->em->persist($user);
         $this->em->flush();
 
         $this->updatePassword($user, $password);
+        $this->mailerService->confirmationEmail($email, $user);
 
         return $user;
     }

@@ -8,6 +8,7 @@ use App\Services\RequestService;
 use App\Services\ResponseService;
 use App\Services\SecurityService;
 use App\Services\UserService;
+use Doctrine\ORM\NonUniqueResultException;
 use Exception;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -48,14 +49,14 @@ class UserController extends HelloworldController
      */
     public function getMeAction(): JsonResponse
     {
-        $loggedUser = $this->getLoggedUser($this->userRepository);
+        $loggedUser = $this->getLoggedUser();
 
         // No logged user
         if (null === $loggedUser) {
             return $this->buildErrorResponse(Response::HTTP_FORBIDDEN, 'auth.unauthorized', 'Vous n\'êtes pas autorisé à effectuer cette action');
         }
 
-        return $this->buildSuccessResponse(Response::HTTP_OK, $loggedUser, $loggedUser);
+        return $this->buildSuccessResponse(Response::HTTP_OK, $loggedUser, $loggedUser, ['groups' => 'user:read']);
     }
 
     /**
@@ -66,7 +67,7 @@ class UserController extends HelloworldController
      */
     public function getAllAction(): JsonResponse
     {
-        $loggedUser = $this->getLoggedUser($this->userRepository);
+        $loggedUser = $this->getLoggedUser();
 
         // No logged user
         if (null === $loggedUser) {
@@ -81,9 +82,8 @@ class UserController extends HelloworldController
         }
 
         $users = $this->userRepository->findAll();
-        $usersNormalizer = $this->normalizer->normalize($users, null, ['groups' => 'user.nested']);
 
-        return $this->buildSuccessResponse(Response::HTTP_OK, $usersNormalizer, $loggedUser);
+        return $this->buildSuccessResponse(Response::HTTP_OK, $users, $loggedUser, ['groups' => 'user:read']);
     }
 
     /**
@@ -97,7 +97,7 @@ class UserController extends HelloworldController
         $parameters = $this->getContent($request);
 
         $errors = $this->validate($parameters, [
-            'email' => [new Email(), new NotBlank()],
+            'email' => [new Type(['type' => 'string']), new NotBlank()],
             'password' => [new Type(['type' => 'string']), new NotBlank()],
             'birthDate' => [new DateTime(['format' => 'Y-m-d']), new NotBlank()],
             'username' => [new Type(['type' => 'string'])],
@@ -111,19 +111,43 @@ class UserController extends HelloworldController
         }
 
         $birthDate = $this->getDate($request, $parameters['birthDate']);
+        $firstname = $parameters['firstName'] ?? null;
+        $lastname = $parameters['lastName'] ?? null;
 
         $user = $this->userService->create(
             $parameters['email'],
             $parameters['username'],
             $parameters['password'],
             $birthDate,
-            $parameters['firstName'],
-            $parameters['lastName'],
+            $firstname,
+            $lastname,
         );
 
-        $usersNormalizer = $this->normalizer->normalize($user, null, ['groups' => 'user.nested']);
+        return $this->buildSuccessResponse(Response::HTTP_CREATED, $user, null, ['groups' => 'user.nested']);
+    }
 
-        return $this->buildSuccessResponse(Response::HTTP_CREATED, $usersNormalizer);
+    /**
+     * @Route("/users/{uuid}", name="get_user", methods={ "GET" })
+     *
+     * @throws ExceptionInterface
+     * @throws Exception
+     */
+    public function getUserAction(string $uuid): JsonResponse
+    {
+        $loggedUser = $this->getLoggedUser();
+
+        $user = $this->userRepository->findOneByUuid($uuid);
+
+        // No logged user
+        if (null === $loggedUser) {
+//            return $this->buildErrorResponse(Response::HTTP_FORBIDDEN, 'auth.unauthorized', 'Vous n\'êtes pas autorisé à effectuer cette action');
+        }
+
+        if (null === $user) {
+            return $this->buildErrorResponse(Response::HTTP_NOT_FOUND, 'user.not_found', 'L\'utilisateur n\'a pas été trouvé');
+        }
+
+        return $this->buildSuccessResponse(Response::HTTP_OK, $user, $loggedUser, ['groups' => 'user:read']);
     }
 
     /**
@@ -134,7 +158,7 @@ class UserController extends HelloworldController
      */
     public function deleteUser(string $uuid): JsonResponse
     {
-        $loggedUser = $this->getLoggedUser($this->userRepository);
+        $loggedUser = $this->getLoggedUser();
         $user = $this->userRepository->findOneByUuid($uuid);
 
         if (null === $user) {
@@ -147,13 +171,12 @@ class UserController extends HelloworldController
         }
 
         $userDeleted = $this->userService->delete($user, $loggedUser);
-        $usersNormalizer = $this->normalizer->normalize($userDeleted, null, ['groups' => 'user.nested']);
 
-        return $this->buildSuccessResponse(Response::HTTP_ACCEPTED, $usersNormalizer, $loggedUser);
+        return $this->buildSuccessResponse(Response::HTTP_ACCEPTED, $userDeleted, $loggedUser, ['groups' => 'user:read']);
     }
 
     /**
-     * @Route("/users/{{uuid}}", name="user_update", methods={ "PUT" })
+     * @Route("/users/{uuid}", name="user_update", methods={ "PUT" })
      *
      * @throws Exception
      * @throws ExceptionInterface
@@ -161,7 +184,7 @@ class UserController extends HelloworldController
     public function userUpdate(Request $request, string $uuid): JsonResponse
     {
         $parameters = $this->getContent($request);
-        $loggedUser = $this->getLoggedUser($this->userRepository);
+        $loggedUser = $this->getLoggedUser();
 
         // No logged used
         if (null === $loggedUser || ($this->securityService->isSameUser($loggedUser, $uuid) && !$this->securityService->isAdmin($loggedUser))) {
@@ -190,19 +213,19 @@ class UserController extends HelloworldController
         }
 
         $birthDate = $this->getDate($request, $parameters['birthDate']);
+        $firstname = $parameters['firstName'] ?? $user->getFirstname();
+        $lastname = $parameters['lastName'] ?? $user->getLastname();
 
         $user = $this->userService->update(
             $user,
             $parameters['email'],
             $parameters['username'],
             $birthDate,
-            $parameters['firstName'],
-            $parameters['lastName'],
+            $firstname,
+            $lastname,
         );
 
-        $usersNormalizer = $this->normalizer->normalize($user, null, ['groups' => 'user.nested']);
-
-        return $this->buildSuccessResponse(Response::HTTP_ACCEPTED, $usersNormalizer, $loggedUser);
+        return $this->buildSuccessResponse(Response::HTTP_ACCEPTED, $user, $loggedUser, ['groups' => 'user:read']);
     }
 
     /**
@@ -231,5 +254,30 @@ class UserController extends HelloworldController
         }
 
         return $this->buildSuccessResponse(Response::HTTP_CREATED, []);
+    }
+
+    /**
+     * @Route("/users/search", name="search_me", methods={ "GET" })
+     * }
+     *
+     * @throws ExceptionInterface
+     * @throws NonUniqueResultException
+     * @throws Exception
+     */
+    public function searchAction(Request $request): JsonResponse
+    {
+        $loggedUser = $this->getLoggedUser();
+
+        // No logged user
+        if (null === $loggedUser || !$this->securityService->isAdmin($loggedUser)) {
+//            return $this->buildErrorResponse(Response::HTTP_FORBIDDEN, 'auth.unauthorized', 'Vous n\'êtes pas autorisé à effectuer cette action');
+        }
+
+        $users = $this->userRepository->search(
+            $request->query->get('q'),
+            $request->query->get('status')
+        );
+
+        return $this->buildSuccessResponse(Response::HTTP_OK, $users, $loggedUser, ['groups' => 'user:search']);
     }
 }
