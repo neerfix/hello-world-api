@@ -60,6 +60,7 @@ class StepController extends HelloworldController
         $errors = $this->validate($parameters, [
             'travelId' => [new Type(['type' => 'int']), new NotBlank()],
             'placeId' => [new Type(['type' => 'int']), new NotBlank()],
+            'albumId' => [new Type(['type' => 'int']), new NotBlank()],
             'startedAt' => [new Optional([new DateTime(['format' => 'Y-m-d']), new NotBlank()])],
             'endedAt' => [new Optional([new DateTime(['format' => 'Y-m-d']), new NotBlank()])],
         ]);
@@ -70,12 +71,14 @@ class StepController extends HelloworldController
 
         $travel = $this->travelRepository->find($parameters['travelId']);
         $place = $this->placeRepository->find($parameters['placeId']);
+        $album = $this->albumRepository->find($parameters['albumId']);
         $startedAt = (array_key_exists('startedAt', $parameters)) ? $this->getDate($request, $parameters['startedAt']) : null;
         $endedAt = (array_key_exists('endedAt', $parameters)) ? $this->getDate($request, $parameters['endedAt']) : null;
 
         $step = $this->stepService->create(
             $travel,
             $place,
+            $album,
             $startedAt,
             $endedAt
         );

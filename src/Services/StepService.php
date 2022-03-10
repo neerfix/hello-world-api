@@ -34,12 +34,14 @@ class StepService
     public function create(
         Travel $travel,
         Place $place,
+        Album $album,
         ?DateTime $startedAt = null,
         ?DateTime $endedAt = null
     ): Step {
         $step = (new Step())
             ->setTravel($travel)
             ->setPlace($place)
+            ->setAlbum($album)
             ->setStartedAt($startedAt)
             ->setEndedAt($endedAt)
             ->setCreatedAt(new DateTime())

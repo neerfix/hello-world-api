@@ -72,7 +72,7 @@ class Album implements Statuable
     private Travel $travel;
 
     /**
-     * @ORM\OneToOne(targetEntity="Step", mappedBy="albumId")
+     * @ORM\OneToOne(targetEntity="Step", mappedBy="album")
      * @Groups("album:read")
      */
     private Step $step;
