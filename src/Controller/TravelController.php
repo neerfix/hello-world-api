@@ -42,12 +42,12 @@ class TravelController extends HelloworldController
      * @throws Exception
      * @throws ExceptionInterface
      */
-    public function index(Request $request): Response
+    public function index(): Response
     {
-        $loggedUser = $this->getLoggedUser($request);
+        $loggedUser = $this->getLoggedUser();
         $travel = $this->travelRepository->findAll();
 
-        return $this->buildSuccessResponse(Response::HTTP_OK, $travel, $loggedUser);
+        return $this->buildSuccessResponse(Response::HTTP_OK, $travel, $loggedUser, ['groups' => 'travel:read']);
     }
 
     /**
@@ -56,9 +56,9 @@ class TravelController extends HelloworldController
      * @throws Exception
      * @throws ExceptionInterface
      */
-    public function getAction(Request $request, string $uuid): Response
+    public function getAction(string $uuid): Response
     {
-        $loggedUser = $this->getLoggedUser($request);
+        $loggedUser = $this->getLoggedUser();
 
         // No logged user
         if (null === $loggedUser) {
@@ -79,9 +79,7 @@ class TravelController extends HelloworldController
             return $this->buildErrorResponse(Response::HTTP_FORBIDDEN, 'auth.unauthorized', 'Vous n\'êtes pas autorisé à effectuer cette action');
         }
 
-        $travelNormalizer = $this->normalizer->normalize($travel, null, ['groups' => ['travel:read', 'travel:nested']]);
-
-        return $this->buildSuccessResponse(Response::HTTP_OK, $travelNormalizer, $loggedUser);
+        return $this->buildSuccessResponse(Response::HTTP_OK, $travel, $loggedUser, ['groups' => ['travel:read', 'travel:nested']]);
     }
 
     /**
@@ -90,9 +88,9 @@ class TravelController extends HelloworldController
      * @throws Exception
      * @throws ExceptionInterface
      */
-    public function deleteAction(Request $request, string $uuid): Response
+    public function deleteAction(string $uuid): Response
     {
-        $loggedUser = $this->getLoggedUser($request);
+        $loggedUser = $this->getLoggedUser();
 
         // No logged user
         if (null === $loggedUser) {
@@ -118,9 +116,7 @@ class TravelController extends HelloworldController
             $loggedUser
         );
 
-        $travelNormalizer = $this->normalizer->normalize($travelDeleted, null, ['groups' => ['travel:read', 'travel:nested']]);
-
-        return $this->buildSuccessResponse(Response::HTTP_OK, $travelNormalizer, $loggedUser);
+        return $this->buildSuccessResponse(Response::HTTP_OK, $travelDeleted, $loggedUser, ['groups' => ['travel:read', 'travel:nested']]);
     }
 
     /**
@@ -131,7 +127,7 @@ class TravelController extends HelloworldController
      */
     public function updateAction(Request $request, string $uuid): Response
     {
-        $loggedUser = $this->getLoggedUser($request);
+        $loggedUser = $this->getLoggedUser();
         $parameters = $this->getContent($request);
 
         // No logged user
@@ -180,9 +176,7 @@ class TravelController extends HelloworldController
             $parameters['isSharable']
         );
 
-        $travelNormalizer = $this->normalizer->normalize($travelUpdated, null, ['groups' => ['travel:read', 'travel:nested']]);
-
-        return $this->buildSuccessResponse(Response::HTTP_OK, $travelNormalizer, $loggedUser);
+        return $this->buildSuccessResponse(Response::HTTP_OK, $travelUpdated, $loggedUser, ['groups' => ['travel:read', 'travel:nested']]);
     }
 
     /**
@@ -194,7 +188,7 @@ class TravelController extends HelloworldController
     public function addAction(Request $request): Response
     {
         $parameters = $this->getContent($request);
-        $loggedUser = $this->getLoggedUser($request);
+        $loggedUser = $this->getLoggedUser();
 
         // No logged user
         if (null === $loggedUser) {
@@ -227,8 +221,6 @@ class TravelController extends HelloworldController
             $parameters['isSharable']
         );
 
-        $travelNormalizer = $this->normalizer->normalize($travel, null, ['groups' => ['travel:read', 'travel:nested']]);
-
-        return $this->buildSuccessResponse(Response::HTTP_CREATED, $travelNormalizer, $loggedUser);
+        return $this->buildSuccessResponse(Response::HTTP_CREATED, $travel, $loggedUser, ['groups' => ['travel:read', 'travel:nested']]);
     }
 }
