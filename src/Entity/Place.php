@@ -28,6 +28,7 @@ class Place implements Statuable
     public function __construct()
     {
         $this->steps = new ArrayCollection();
+        $this->wishLists = new ArrayCollection();
 
         $this->setUpdatedAt(new DateTime());
         $this->setCreatedAt(new DateTime());
@@ -154,6 +155,11 @@ class Place implements Statuable
      * @ORM\OneToMany(targetEntity="Step", mappedBy="id")
      */
     private Collection $steps;
+
+    /**
+     * @ORM\OneToMany(targetEntity="WishList", mappedBy="place")
+     */
+    private Collection $wishLists;
 
     // -------------------------- >
 
@@ -290,5 +296,10 @@ class Place implements Statuable
         $this->uuid = $uuid;
 
         return $this;
+    }
+
+    public function getWishLists(): Collection
+    {
+        return $this->wishLists;
     }
 }

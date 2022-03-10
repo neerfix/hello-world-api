@@ -4,19 +4,19 @@ namespace App\Entity;
 
 use App\Entity\Interfaces\Statuable;
 use App\Entity\Traits\StatuableTrait;
-use App\Repository\AlbumRepository;
+use App\Repository\WishListRepository;
 use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
- * @ORM\Table(name="album", indexes={
+ * @ORM\Table(name="wishlist", indexes={
  *     @ORM\Index(name="status_idx", columns={ "status" })
  * })
- * @ORM\Entity(repositoryClass=AlbumRepository::class)
+ * @ORM\Entity(repositoryClass=WishListRepository::class)
  */
-class Album implements Statuable
+class WishList implements Statuable
 {
     use StatuableTrait;
 
@@ -24,9 +24,6 @@ class Album implements Statuable
 
     public function __construct()
     {
-        $this->steps = new ArrayCollection();
-        $this->albumFiles = new ArrayCollection();
-
         $this->setCreatedAt(new DateTime());
         $this->setUpdatedAt(new DateTime());
     }
@@ -42,40 +39,40 @@ class Album implements Statuable
 
     /**
      * @ORM\Column(name="uuid", type="string", length="180", unique=true)
-     * @Groups("album:read")
+     * @Groups("wishList:read")
      */
     private string $uuid;
 
     /**
-     * @ORM\Column(name="title", type="string", length="255")
-     * @Groups({
-     *     "album:read",
-     *     "step:nested",
-     * })
+     * @ORM\Column(name="name", type="string", length="255")
+     * @Groups("wishList:read")
      */
-    private string $title;
+    private string $name;
 
     /**
      * @ORM\Column(name="description", type="string", length="255", nullable=true)
-     * @Groups({
-     *     "album:read",
-     *     "step:nested",
-     * })
+     * @Groups("wishList:read")
      */
     private string $description;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Travel", inversedBy="albums")
-     * @ORM\JoinColumn(name="travel_id", referencedColumnName="id")
-     * @Groups("album:read")
+     * @ORM\ManyToOne(targetEntity="Place", inversedBy="wishLists")
+     * @ORM\JoinColumn(name="place_id", referencedColumnName="id")
+     * @Groups("wishList:read")
      */
-    private Travel $travel;
+    private Place $place;
 
     /**
-     * @ORM\OneToOne(targetEntity="Step", mappedBy="album")
-     * @Groups("album:read")
+     * @ORM\OneToOne(targetEntity="User", inversedBy="wishLists")
+     * @ORM\JoinColumn(name="user_id", referencedColumnName="id")
      */
-    private Step $step;
+    private User $user;
+
+    /**
+     * @ORM\Column(name="estimated_at", type="date")
+     * @Groups("wishList:read")
+     */
+    private DateTime $estimatedAt;
 
     /**
      * @ORM\Column(name="created_at", type="date")
@@ -99,21 +96,21 @@ class Album implements Statuable
         return $this->uuid;
     }
 
-    public function setUuid(string $uuid): Album
+    public function setUuid(string $uuid): WishList
     {
         $this->uuid = $uuid;
 
         return $this;
     }
 
-    public function getTitle(): string
+    public function getName(): string
     {
-        return $this->title;
+        return $this->name;
     }
 
-    public function setTitle(string $title): Album
+    public function setName(string $name): WishList
     {
-        $this->title = $title;
+        $this->name = $name;
 
         return $this;
     }
@@ -123,28 +120,40 @@ class Album implements Statuable
         return $this->description;
     }
 
-    public function setDescription(?string $description): Album
+    public function setDescription(?string $description): WishList
     {
         $this->description = $description;
 
         return $this;
     }
 
-    public function getTravel(): ?Travel
+    public function getPlace(): Place
     {
-        return $this->travel;
+        return $this->place;
     }
 
-    public function setTravel(?Travel $travel): Album
+    public function setPlace(Place $place): WishList
     {
-        $this->travel = $travel;
+        $this->place = $place;
 
         return $this;
     }
 
-    public function getStep(): ?Step
+    public function getUser(): User
     {
         return $this->step;
+    }
+
+    public function getEstimatedAt(): ?DateTime
+    {
+        return $this->estimatedAt;
+    }
+
+    public function setEstimatedAt(DateTime $estimatedAt): WishList
+    {
+        $this->estimatedAt = $estimatedAt;
+
+        return $this;
     }
 
     public function getCreatedAt(): ?DateTime
@@ -152,7 +161,7 @@ class Album implements Statuable
         return $this->createdAt;
     }
 
-    public function setCreatedAt(DateTime $createdAt): Album
+    public function setCreatedAt(DateTime $createdAt): WishList
     {
         $this->createdAt = $createdAt;
 
@@ -164,7 +173,7 @@ class Album implements Statuable
         return $this->updatedAt;
     }
 
-    public function setUpdatedAt(DateTime $updatedAt): Album
+    public function setUpdatedAt(DateTime $updatedAt): WishList
     {
         $this->updatedAt = $updatedAt;
 
