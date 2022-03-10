@@ -112,14 +112,16 @@ class UserController extends HelloworldController
         }
 
         $birthDate = $this->getDate($request, $parameters['birthDate']);
+        $firstname = $parameters['firstName'] ?? null;
+        $lastname = $parameters['lastName'] ?? null;
 
         $user = $this->userService->create(
             $parameters['email'],
             $parameters['username'],
             $parameters['password'],
             $birthDate,
-            $parameters['firstName'],
-            $parameters['lastName'],
+            $firstname,
+            $lastname,
         );
 
         $usersNormalizer = $this->normalizer->normalize($user, null, ['groups' => 'user.nested']);
@@ -191,14 +193,16 @@ class UserController extends HelloworldController
         }
 
         $birthDate = $this->getDate($request, $parameters['birthDate']);
+        $firstname = $parameters['firstName'] ?? $user->getFirstname();
+        $lastname = $parameters['lastName'] ?? $user->getLastname();
 
         $user = $this->userService->update(
             $user,
             $parameters['email'],
             $parameters['username'],
             $birthDate,
-            $parameters['firstName'],
-            $parameters['lastName'],
+            $firstname,
+            $lastname,
         );
 
         $usersNormalizer = $this->normalizer->normalize($user, null, ['groups' => 'user.nested']);
