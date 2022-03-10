@@ -81,9 +81,7 @@ class TravelController extends HelloworldController
             return $this->buildErrorResponse(Response::HTTP_FORBIDDEN, 'auth.unauthorized', 'Vous n\'êtes pas autorisé à effectuer cette action');
         }
 
-        $travelNormalizer = $this->normalizer->normalize($travel, null, ['groups' => ['travel:read', 'travel:nested']]);
-
-        return $this->buildSuccessResponse(Response::HTTP_OK, $travelNormalizer, $loggedUser);
+        return $this->buildSuccessResponse(Response::HTTP_OK, $travel, $loggedUser, ['groups' => ['travel:read', 'travel:nested']]);
     }
 
     /**
@@ -120,9 +118,7 @@ class TravelController extends HelloworldController
             $loggedUser
         );
 
-        $travelNormalizer = $this->normalizer->normalize($travelDeleted, null, ['groups' => ['travel:read', 'travel:nested']]);
-
-        return $this->buildSuccessResponse(Response::HTTP_OK, $travelNormalizer, $loggedUser);
+        return $this->buildSuccessResponse(Response::HTTP_OK, $travelDeleted, $loggedUser, ['groups' => ['travel:read', 'travel:nested']]);
     }
 
     /**
@@ -182,9 +178,7 @@ class TravelController extends HelloworldController
             $parameters['isSharable']
         );
 
-        $travelNormalizer = $this->normalizer->normalize($travelUpdated, null, ['groups' => ['travel:read', 'travel:nested']]);
-
-        return $this->buildSuccessResponse(Response::HTTP_OK, $travelNormalizer, $loggedUser);
+        return $this->buildSuccessResponse(Response::HTTP_OK, $travelUpdated, $loggedUser, ['groups' => ['travel:read', 'travel:nested']]);
     }
 
     /**
@@ -229,8 +223,6 @@ class TravelController extends HelloworldController
             $parameters['isSharable']
         );
 
-        $travelNormalizer = $this->normalizer->normalize($travel, null, ['groups' => ['travel:read', 'travel:nested']]);
-
-        return $this->buildSuccessResponse(Response::HTTP_CREATED, $travelNormalizer, $loggedUser);
+        return $this->buildSuccessResponse(Response::HTTP_CREATED, $travel, $loggedUser, ['groups' => ['travel:read', 'travel:nested']]);
     }
 }
