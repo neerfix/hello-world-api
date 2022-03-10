@@ -27,7 +27,7 @@ class TokenRepository extends ServiceEntityRepository
     public function findOneByValue(string $value): ?Token
     {
         return $this->createQueryBuilder('t')
-            ->andWhere('t.value = :value')
+            ->where('t.value = :value')
             ->setParameter('value', $value)
 
             ->getQuery()
@@ -40,7 +40,7 @@ class TokenRepository extends ServiceEntityRepository
     public function findRefreshTokenByUser(User $user): ?Token
     {
         return $this->createQueryBuilder('t')
-            ->andWhere('t.user = :user')
+            ->where('t.user = :user')
             ->andWhere('t.target = :type')
 
             ->setParameter('user', $user)
@@ -56,7 +56,7 @@ class TokenRepository extends ServiceEntityRepository
     public function findAccessTokenByUser(User $user): ?Token
     {
         return $this->createQueryBuilder('t')
-            ->andWhere('t.user = :user')
+            ->where('t.user = :user')
             ->andWhere('t.target = :type')
 
             ->setParameter('user', $user)
