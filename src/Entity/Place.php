@@ -279,6 +279,7 @@ class Place implements Statuable
     {
         return $this->id;
     }
+
     public function getUuid(): string
     {
         return $this->uuid;
