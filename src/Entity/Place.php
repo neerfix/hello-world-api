@@ -9,6 +9,7 @@ use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * @ORM\Table(name="place", indexes={
@@ -20,6 +21,8 @@ class Place implements Statuable
 {
     use StatuableTrait;
 
+    public const STATUS_ACTIVE = 'active';
+    public const STATUS_DELETED = 'deleted';
     // -------------------------- >
 
     public function __construct()
@@ -40,46 +43,81 @@ class Place implements Statuable
     private int $id;
 
     /**
+     * @Groups({
+     *     "place:read"
+     * })
+     * @ORM\Column(name="uuid", type="string", length="180", unique=true)
+     */
+    private string $uuid;
+
+    /**
+     * @Groups({
+     *     "place:read"
+     * })
      * @ORM\Column(name="address", type="string", length="255")
      */
     private string $address;
 
     /**
+     * @Groups({
+     *   "place:read"
+     * })
      * @ORM\Column(name="city", type="string", length="255")
      */
     private string $city;
 
     /**
+     * @Groups({
+     *   "place:read"
+     * })
      * @ORM\Column(name="zipcode", type="string", length="255")
      */
     private string $zipcode;
 
     /**
+     * @Groups({
+     *   "place:read"
+     * })
      * @ORM\Column(name="country", type="string", length="255")
      */
     private string $country;
 
     /**
+     * @Groups({
+     *   "place:read"
+     * })
      * @ORM\Column(name="name", type="string", length="255")
      */
     private string $name;
 
     /**
+     * @Groups({
+     *   "place:read"
+     * })
      * @ORM\Column(name="latitude", type="string", length="255")
      */
     private string $latitude;
 
     /**
+     * @Groups({
+     *   "place:read"
+     * })
      * @ORM\Column(name="longitude", type="string", length="255")
      */
     private string $longitude;
 
     /**
+     * @Groups({
+     *   "place:read"
+     * })
      * @ORM\Column(name="created_at", type="date")
      */
     private DateTime $createdAt;
 
     /**
+     * @Groups({
+     *   "place:read"
+     * })
      * @ORM\Column(name="updated_at", type="date")
      */
     private DateTime $updatedAt;
@@ -207,5 +245,17 @@ class Place implements Statuable
     public function getSteps(): Collection
     {
         return $this->steps;
+    }
+
+    public function getUuid(): string
+    {
+        return $this->uuid;
+    }
+
+    public function setUuid(string $uuid): Place
+    {
+        $this->uuid = $uuid;
+
+        return $this;
     }
 }
