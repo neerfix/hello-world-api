@@ -4,7 +4,6 @@ namespace App\Controller;
 
 use App\Entity\User;
 use App\Repository\PlaceRepository;
-use App\Repository\UserRepository;
 use App\Services\PlaceService;
 use App\Services\RequestService;
 use App\Services\ResponseService;
@@ -26,7 +25,6 @@ class PlaceController extends HelloworldController
         ValidatorInterface $validator,
         private NormalizerInterface $normalizer,
         private PlaceService $placeService,
-        private UserRepository $userRepository,
         private PlaceRepository $placeRepository
     ) {
         parent::__construct($responseService, $requestService, $validator, $normalizer);
@@ -113,10 +111,10 @@ class PlaceController extends HelloworldController
     }
 
     /**
-     * @Route("/places/{uuid}", name="update_travel", methods={ "PUT" })
+     * @Route("/places/{uuid}", name="update_place", methods={ "PUT" })
      *
      * @throws Exception
-     * @throws \Symfony\Component\Serializer\Exception\ExceptionInterface
+     * @throws ExceptionInterface
      */
     public function updateAction(Request $request, string $uuid): Response
     {
