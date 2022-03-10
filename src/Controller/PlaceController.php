@@ -109,9 +109,7 @@ class PlaceController extends HelloworldController
             return $this->buildErrorResponse(Response::HTTP_NOT_FOUND, 'not.found', 'La localisation n\'a pas été trouvée');
         }
 
-        $placeNormalizer = $this->normalizer->normalize($place, null, ['groups' => ['place:read']]);
-
-        return $this->buildSuccessResponse(Response::HTTP_OK, $placeNormalizer, $user);
+        return $this->buildSuccessResponse(Response::HTTP_OK, $place, $user, ['groups' => ['place:read']]);
     }
 
     /**
@@ -170,9 +168,7 @@ class PlaceController extends HelloworldController
             $parameters['longitude']
         );
 
-        $placeNormalizer = $this->normalizer->normalize($placeUpdated, null, ['groups' => ['place:read']]);
-
-        return $this->buildSuccessResponse(Response::HTTP_OK, $placeNormalizer, $loggedUser);
+        return $this->buildSuccessResponse(Response::HTTP_OK, $placeUpdated, $loggedUser, ['groups' => ['place:read']]);
     }
 
     /**
@@ -206,8 +202,6 @@ class PlaceController extends HelloworldController
             $loggedUser
         );
 
-        $placeNormalizer = $this->normalizer->normalize($placeDeleted, null, ['groups' => ['place:read']]);
-
-        return $this->buildSuccessResponse(Response::HTTP_OK, $placeNormalizer, $loggedUser);
+        return $this->buildSuccessResponse(Response::HTTP_OK, $placeDeleted, $loggedUser, ['groups' => ['place:read']]);
     }
 }
