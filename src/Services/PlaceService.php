@@ -61,8 +61,7 @@ class PlaceService
         string $name,
         float $latitude,
         float $longitude
-    ) : Place
-    {
+    ): Place {
         $address = trim($address);
         $city = trim($city);
         $zipcode = trim($zipcode);
@@ -90,7 +89,7 @@ class PlaceService
     public function delete(
         Place $place,
         User $user
-    ): Place{
+    ): Place {
         return $place;
     }
 }
