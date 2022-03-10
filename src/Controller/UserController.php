@@ -46,7 +46,7 @@ class UserController extends HelloworldController
      * @throws ExceptionInterface
      * @throws Exception
      */
-    public function getMeAction(Request $request): JsonResponse
+    public function getMeAction(): JsonResponse
     {
         $loggedUser = $this->getLoggedUser();
 
@@ -64,9 +64,9 @@ class UserController extends HelloworldController
      * @throws ExceptionInterface
      * @throws Exception
      */
-    public function getAllAction(Request $request): JsonResponse
+    public function getAllAction(): JsonResponse
     {
-        $loggedUser = $this->getLoggedUser($request);
+        $loggedUser = $this->getLoggedUser();
 
         // No logged user
         if (null === $loggedUser) {
@@ -122,9 +122,31 @@ class UserController extends HelloworldController
             $lastname,
         );
 
-        $usersNormalizer = $this->normalizer->normalize($user, null, ['groups' => 'user:nested']);
+        return $this->buildSuccessResponse(Response::HTTP_CREATED, $user, null, ['groups' => 'user:read']);
+    }
 
-        return $this->buildSuccessResponse(Response::HTTP_CREATED, $usersNormalizer);
+    /**
+     * @Route("/users/{uuid}", name="get_user", methods={ "GET" })
+     *
+     * @throws ExceptionInterface
+     * @throws Exception
+     */
+    public function getUserAction(string $uuid): JsonResponse
+    {
+        $loggedUser = $this->getLoggedUser();
+
+        $user = $this->userRepository->findOneByUuid($uuid);
+
+        // No logged user
+        if (null === $loggedUser) {
+            return $this->buildErrorResponse(Response::HTTP_FORBIDDEN, 'auth.unauthorized', 'Vous n\'êtes pas autorisé à effectuer cette action');
+        }
+
+        if (null === $user) {
+            return $this->buildErrorResponse(Response::HTTP_NOT_FOUND, 'user.not_found', 'L\'utilisateur n\'a pas été trouvé');
+        }
+
+        return $this->buildSuccessResponse(Response::HTTP_OK, $user, $loggedUser, ['groups' => 'user:read']);
     }
 
     /**
@@ -149,7 +171,7 @@ class UserController extends HelloworldController
 
         $userDeleted = $this->userService->delete($user, $loggedUser);
 
-        return $this->buildSuccessResponse(Response::HTTP_ACCEPTED, $userDeleted, $loggedUser, ['groups' => 'user:nested']);
+        return $this->buildSuccessResponse(Response::HTTP_ACCEPTED, $userDeleted, $loggedUser, ['groups' => 'user:read']);
     }
 
     /**
@@ -202,7 +224,7 @@ class UserController extends HelloworldController
             $lastname,
         );
 
-        return $this->buildSuccessResponse(Response::HTTP_ACCEPTED, $user, $loggedUser, ['groups' => 'user:nested']);
+        return $this->buildSuccessResponse(Response::HTTP_ACCEPTED, $user, $loggedUser, ['groups' => 'user:read']);
     }
 
     /**
