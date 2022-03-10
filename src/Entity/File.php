@@ -40,11 +40,6 @@ class File implements Statuable
     private int $id;
 
     /**
-     * @ORM\Column(name="extension", type="string", length="255")
-     */
-    private string $extension;
-
-    /**
      * @ORM\Column(name="created_at", type="date")
      */
     private DateTime $createdAt;
@@ -64,21 +59,6 @@ class File implements Statuable
      * @ORM\Column(name="uuid", type="string", length="255")
      */
     private string $uuid;
-
-    /**
-     * @ORM\Column(name="type", type="string", length="255")
-     */
-    private string $type;
-
-    /**
-     * @ORM\Column(name="mime_type", type="string", length="255")
-     */
-    private string $mimeType;
-
-    /**
-     * @ORM\Column(name="size", type="integer")
-     */
-    private int $size;
 
     /**
      * @ORM\OneToMany(targetEntity="AlbumFile", mappedBy="fileId")
