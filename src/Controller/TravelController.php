@@ -4,7 +4,6 @@ namespace App\Controller;
 
 use App\Entity\User;
 use App\Repository\TravelRepository;
-use App\Repository\UserRepository;
 use App\Services\RequestService;
 use App\Services\ResponseService;
 use App\Services\TravelService;
@@ -31,7 +30,6 @@ class TravelController extends HelloworldController
         private NormalizerInterface $normalizer,
         private TravelService $travelService,
         private TravelRepository $travelRepository,
-        private UserRepository $userRepository,
     ) {
         parent::__construct($responseService, $requestService, $validator, $normalizer);
     }
@@ -44,9 +42,9 @@ class TravelController extends HelloworldController
      * @throws Exception
      * @throws ExceptionInterface
      */
-    public function index(): Response
+    public function index(Request $request): Response
     {
-        $loggedUser = $this->getLoggedUser();
+        $loggedUser = $this->getLoggedUser($request);
         $travel = $this->travelRepository->findAll();
 
         return $this->buildSuccessResponse(Response::HTTP_OK, $travel, $loggedUser);
@@ -60,7 +58,7 @@ class TravelController extends HelloworldController
      */
     public function getAction(Request $request, string $uuid): Response
     {
-        $loggedUser = $this->getLoggedUser();
+        $loggedUser = $this->getLoggedUser($request);
 
         // No logged user
         if (null === $loggedUser) {
@@ -94,7 +92,7 @@ class TravelController extends HelloworldController
      */
     public function deleteAction(Request $request, string $uuid): Response
     {
-        $loggedUser = $this->getLoggedUser();
+        $loggedUser = $this->getLoggedUser($request);
 
         // No logged user
         if (null === $loggedUser) {
@@ -133,7 +131,7 @@ class TravelController extends HelloworldController
      */
     public function updateAction(Request $request, string $uuid): Response
     {
-        $loggedUser = $this->getLoggedUser();
+        $loggedUser = $this->getLoggedUser($request);
         $parameters = $this->getContent($request);
 
         // No logged user
@@ -196,7 +194,7 @@ class TravelController extends HelloworldController
     public function addAction(Request $request): Response
     {
         $parameters = $this->getContent($request);
-        $loggedUser = $this->getLoggedUser();
+        $loggedUser = $this->getLoggedUser($request);
 
         // No logged user
         if (null === $loggedUser) {

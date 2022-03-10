@@ -45,7 +45,7 @@ class AlbumController extends HelloworldController
     public function addAction(Request $request): Response
     {
         $parameters = $this->getContent($request);
-        $loggedUser = $this->getLoggedUser();
+        $loggedUser = $this->getLoggedUser($request);
 
         // No logged user
         if (null === $loggedUser) {
@@ -81,9 +81,9 @@ class AlbumController extends HelloworldController
      * @throws Exception
      * @throws ExceptionInterface
      */
-    public function getAllAction(): Response
+    public function getAllAction(Request $request): Response
     {
-        $loggedUser = $this->getLoggedUser();
+        $loggedUser = $this->getLoggedUser($request);
 
         // No logged user
         if (null === $loggedUser) {
@@ -102,9 +102,9 @@ class AlbumController extends HelloworldController
      * @throws Exception
      * @throws ExceptionInterface
      */
-    public function getByUUidAction(string $uuid): Response
+    public function getByUUidAction(Request $request, string $uuid): Response
     {
-        $loggedUser = $this->getLoggedUser();
+        $loggedUser = $this->getLoggedUser($request);
 
         // No logged user
         if (null === $loggedUser) {
@@ -123,9 +123,9 @@ class AlbumController extends HelloworldController
      * @throws Exception
      * @throws ExceptionInterface
      */
-    public function deleteAction(string $uuid): Response
+    public function deleteAction(Request $request, string $uuid): Response
     {
-        $loggedUser = $this->getLoggedUser();
+        $loggedUser = $this->getLoggedUser($request);
         // No logged used
         if (null === $loggedUser) {
             return $this->buildErrorResponse(Response::HTTP_FORBIDDEN, 'auth.unauthorized', 'Vous n\'êtes pas autorisé à effectuer cette action');
@@ -150,7 +150,7 @@ class AlbumController extends HelloworldController
     public function updateAction(Request $request, string $uuid): Response
     {
         $parameters = $this->getContent($request);
-        $loggedUser = $this->getLoggedUser();
+        $loggedUser = $this->getLoggedUser($request);
 
         // No logged used
         if (null === $loggedUser) {

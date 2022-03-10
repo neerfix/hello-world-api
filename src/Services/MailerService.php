@@ -33,7 +33,7 @@ class MailerService
         $template = static::TEMPLATE_EMAIL_CONFIRMATION;
         $expirationDate = new DateTime('+7 days');
         $subject = 'HelloWorld: Email vérification 🤓 ';
-        $targetToken = Token::TARGET_EMAIL_CONFIRMATION;
+        $targetToken = Token::TYPE_EMAIL_CONFIRMATION;
 
         $this->sendEmail($template, $to, $subject, $user, $expirationDate, $targetToken);
     }
@@ -46,7 +46,7 @@ class MailerService
         $template = static::TEMPLATE_FORGET_PASSWORD;
         $expirationDate = new DateTime('+1 hour');
         $subject = 'HelloWorld: mot de passe oublié ? 😰';
-        $targetToken = Token::TARGET_FORGET_PASSWORD;
+        $targetToken = Token::TYPE_FORGET_PASSWORD;
 
         $this->sendEmail($template, $to, $subject, $user, $expirationDate, $targetToken);
     }
