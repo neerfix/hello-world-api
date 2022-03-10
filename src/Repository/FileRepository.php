@@ -19,6 +19,25 @@ class FileRepository extends ServiceEntityRepository
         parent::__construct($registry, File::class);
     }
 
+    public function getAllByStatus(string $status)
+    {
+        return $this->createQueryBuilder('f')
+            ->where('f.status = :status')
+            ->setParameter('status', $status)
+            ->getQuery()
+            ->getResult();
+    }
+
+    public function getOneByStatus(string $uuid, string $status)
+    {
+        return $this->createQueryBuilder('f')
+            ->where('f.status = :status')
+            ->setParameter('status', $status)
+            ->andWhere('f.uuid = :uuid')
+            ->setParameter('uuid', $uuid)
+            ->getQuery()
+            ->getResult();
+    }
     // /**
     //  * @return File[] Returns an array of File objects
     //  */

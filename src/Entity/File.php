@@ -6,9 +6,8 @@ use App\Entity\Interfaces\Statuable;
 use App\Entity\Traits\StatuableTrait;
 use App\Repository\FileRepository;
 use DateTime;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * @ORM\Table(name="file", indexes={
@@ -24,13 +23,13 @@ class File implements Statuable
 
     public function __construct()
     {
-        $this->albumFiles = new ArrayCollection();
-
         $this->setCreatedAt(new DateTime());
         $this->setUpdatedAt(new DateTime());
     }
 
     // -------------------------- >
+    public const STATUS_ACTIVE = 'active';
+    public const STATUS_DELETED = 'deleted';
 
     /**
      * @ORM\Id
@@ -40,48 +39,51 @@ class File implements Statuable
     private int $id;
 
     /**
+     * @Groups({
+     *     "file:read"
+     * })
      * @ORM\Column(name="created_at", type="date")
      */
     private DateTime $createdAt;
 
     /**
+     * @Groups({
+     *     "file:read"
+     * })
      * @ORM\Column(name="updated_at", type="date")
      */
     private DateTime $updatedAt;
 
     /**
+     * @Groups({
+     *     "file:read"
+     * })
      * @ORM\ManyToOne(targetEntity="User", inversedBy="files")
      * @ORM\JoinColumn(name="user_id", nullable="false", referencedColumnName="id")
      */
     private User $userId;
 
     /**
+     * @Groups({
+     *     "file:read"
+     * })
      * @ORM\Column(name="uuid", type="string", length="255")
      */
     private string $uuid;
 
     /**
-     * @ORM\OneToMany(targetEntity="AlbumFile", mappedBy="fileId")
+     * @Groups({
+     *     "file:read"
+     * })
+     * @ORM\Column(name="path", type="string")
      */
-    private Collection $albumFiles;
+    private string $path;
 
     // -------------------------- >
 
     public function getId(): ?int
     {
         return $this->id;
-    }
-
-    public function getExtension(): ?string
-    {
-        return $this->extension;
-    }
-
-    public function setExtension(?string $extension): File
-    {
-        $this->extension = $extension;
-
-        return $this;
     }
 
     public function getCreatedAt(): ?DateTime
@@ -132,38 +134,14 @@ class File implements Statuable
         return $this;
     }
 
-    public function getType(): ?string
+    public function getPath(): string
     {
-        return $this->type;
+        return $this->path;
     }
 
-    public function setType(?string $type): File
+    public function setPath(string $path): File
     {
-        $this->type = $type;
-
-        return $this;
-    }
-
-    public function getMimeType(): ?string
-    {
-        return $this->mimeType;
-    }
-
-    public function setMimeType(?string $mimeType): File
-    {
-        $this->mimeType = $mimeType;
-
-        return $this;
-    }
-
-    public function getSize(): ?int
-    {
-        return $this->size;
-    }
-
-    public function setSize(int $size): File
-    {
-        $this->size = $size;
+        $this->path = $path;
 
         return $this;
     }
