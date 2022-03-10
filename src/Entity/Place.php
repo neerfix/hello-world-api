@@ -275,6 +275,11 @@ class Place implements Statuable
         return $this->steps;
     }
 
+    public function __toString()
+    {
+        return $this->id;
+    }
+
     public function getUuid(): string
     {
         return $this->uuid;
