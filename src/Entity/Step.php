@@ -9,6 +9,7 @@ use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * @ORM\Table(name="step", indexes={
@@ -27,8 +28,14 @@ class Step implements Statuable
     private int $id;
 
     /**
+     * @ORM\Column(name="uuid", type="string", length="180", unique=true)
+     * @Groups("step.by.current")
+     */
+    private string $uuid;
+
+    /**
      * @ORM\ManyToOne(targetEntity="Travel", inversedBy="steps")
-     * @ORM\Column(name="travel_id", nullable="false")
+     * @ORM\JoinColumn(name="travel_id", referencedColumnName="id", nullable="false")
      */
     private Travel $travelId;
 
@@ -38,23 +45,25 @@ class Step implements Statuable
      * joinColumns={@ORM\JoinColumn(name="step_id", referencedColumnName="id")},
      * inverseJoinColumns={@ORM\JoinColumn(name="album_id",referencedColumnName="id")})
      */
-    private Album $albumId;
+    private Collection $albumId;
 
     /**
      * @ORM\ManyToOne(targetEntity="Place", inversedBy="steps")
-     * @ORM\Column(name="place_id")
+     * @ORM\JoinColumn(name="place_id", referencedColumnName="id")
      */
     private Place $placeId;
 
     /**
-     * @ORM\Column(name="started_at", type="date")
+     * @ORM\Column(name="started_at", type="date", nullable="true")
+     * @Groups("step.by.current")
      */
-    private DateTime $startedAt;
+    private ?DateTime $startedAt = null;
 
     /**
-     * @ORM\Column(name="ended_at", type="date")
+     * @ORM\Column(name="ended_at", type="date", nullable="true")
+     * @Groups("step.by.current")
      */
-    private DateTime $endedAt;
+    private ?DateTime $endedAt = null;
 
     /**
      * @ORM\Column(name="created_at", type="date")
@@ -76,12 +85,24 @@ class Step implements Statuable
         return $this->id;
     }
 
-    public function getTravelId(): ?travel
+    public function getUuid(): string
+    {
+        return $this->uuid;
+    }
+
+    public function setUuid(string $uuid): Step
+    {
+        $this->uuid = $uuid;
+
+        return $this;
+    }
+
+    public function getTravelId(): ?Travel
     {
         return $this->travelId;
     }
 
-    public function setTravelId(?travel $travelId): Step
+    public function setTravelId(?Travel $travelId): Step
     {
         $this->travelId = $travelId;
 
@@ -99,7 +120,7 @@ class Step implements Statuable
     public function addAlbumId(Album $albumId): Step
     {
         if (!$this->albumId->contains($albumId)) {
-            $this->albumId[] = $albumId;
+            array_push($this->albumId, $albumId);
         }
 
         return $this;
@@ -129,7 +150,7 @@ class Step implements Statuable
         return $this->startedAt;
     }
 
-    public function setStartedAt(DateTime $startedAt): Step
+    public function setStartedAt(?DateTime $startedAt = null): Step
     {
         $this->startedAt = $startedAt;
 
@@ -141,7 +162,7 @@ class Step implements Statuable
         return $this->endedAt;
     }
 
-    public function setEndedAt(DateTime $endedAt): Step
+    public function setEndedAt(?DateTime $endedAt = null): Step
     {
         $this->endedAt = $endedAt;
 
