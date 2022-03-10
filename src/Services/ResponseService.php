@@ -113,4 +113,12 @@ class ResponseService
             'field' => $field,
         ];
     }
+
+    /**
+     * @throws Exception
+     */
+    public function error401(string $code = 'auth.unauthorized', ?string $message = null): JsonResponse
+    {
+        return $this->error(Response::HTTP_UNAUTHORIZED, $code, $message);
+    }
 }

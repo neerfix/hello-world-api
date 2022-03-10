@@ -32,15 +32,13 @@ abstract class HelloworldController extends AbstractController
 
     /**
      * Override parent function to type hint return.
-     *
-     * @throws \Doctrine\ORM\NonUniqueResultException
      */
     public function getLoggedUser(): ?User
     {
-        $user = parent::getUser();
+        $user = $this->getUser();
 
         // No user
-        if (empty($user) || !($user instanceof User)) {
+        if (null === $user || !($user instanceof User)) {
             return null;
         }
 
