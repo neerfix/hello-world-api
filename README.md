@@ -85,7 +85,7 @@ Use ```make db.dev``` to re-install dev data.
 ```make docker.reset```
 
 --- ---
-# suivi de sprint
+# Suivi de sprint
 ## [Sprint 1](https://github.com/helloworld-ynovlyon/api/milestone/1) (14/02/2022 - 18/02/2022)
 ### Debut de sprint
 - Nombre d'issues pour ce sprint: 7
@@ -110,16 +110,16 @@ Use ```make db.dev``` to re-install dev data.
 - Matisse : Les parties manquantes
 - Emeline : Album + features
 - Nicolas : Faire plus de review
-- Romain :
+- Romain : Faire plus attention à ce que j'envoie 
 
 **Ce qu'il faut continuer à faire**
 - Matisse : Remplir les documentations
 - Emeline : / (nouvelle sur le back)
 - Nicolas : Alimenter le docs des bonnes pratiques et assister mes camarades.
-- Romain :
+- Romain : Review les MR et apporter une seconde lecture
 
 **Ce qu'il faut arrêter de faire**
 - Matisse : Utiliser docker 
 - Emeline : le front
 - Nicolas : de merge force avec les privilèges admin ou d'approved en fermant les yeux 🙈
-- Romain :
+- Romain : Des erreurs d'inattention dans mes relectures et de chipoter :')
