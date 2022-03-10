@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\File;
+use App\Entity\User;
 use App\Repository\FileRepository;
 use App\Repository\UserRepository;
 use App\Services\FileService;
@@ -96,5 +97,31 @@ class FileController extends HelloworldController
         $files = $this->fileRepository->getAllByStatus(File::STATUS_ACTIVE);
 
         return $this->buildSuccessResponse(Response::HTTP_OK, $files, $loggedUser, ['groups' => ['file:read']]);
+    }
+
+    /**
+     * @Route("/files/{uuid}", name="delete_file", methods={"DELETE"})
+     *
+     * @throws Exception
+     * @throws ExceptionInterface
+     */
+    public function delete(Request $request, string $uuid): Response
+    {
+        $loggedUser = $this->getLoggedUser();
+        if (null === $loggedUser) {
+            return $this->buildErrorResponse(Response::HTTP_FORBIDDEN, 'auth.unauthorized', 'Vous n\'êtes pas autorisé à effectuer cette action');
+        }
+        $file = $this->fileRepository->findOneBy(['uuid' => $uuid]);
+        if (null === $file) {
+            return $this->buildErrorResponse(Response::HTTP_NOT_FOUND, 'not.found', 'Le fichier n\'a pas été trouvé');
+        }
+        $roles = $loggedUser->getRoles();
+
+        if (!in_array(User::ROLE_ADMIN, $roles, true) && $file->getUserId() !== $loggedUser->getId()) {
+            return $this->buildErrorResponse(Response::HTTP_FORBIDDEN, 'auth.unauthorized', 'Vous n\'êtes pas autorisé à effectuer cette action');
+        }
+        $fileDeleted = $this->fileService->delete($file, $loggedUser);
+
+        return $this->buildSuccessResponse(Response::HTTP_OK, $fileDeleted, $loggedUser, ['groups' => ['file:read']]);
     }
 }
