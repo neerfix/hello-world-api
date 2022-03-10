@@ -6,9 +6,8 @@ use App\Entity\Interfaces\Statuable;
 use App\Entity\Traits\StatuableTrait;
 use App\Repository\StepRepository;
 use DateTime;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * @ORM\Table(name="step", indexes={
@@ -27,34 +26,43 @@ class Step implements Statuable
     private int $id;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Travel", inversedBy="steps")
-     * @ORM\Column(name="travel_id", nullable="false")
+     * @ORM\Column(name="uuid", type="string", length="180", unique=true)
+     * @Groups("step:read")
      */
-    private Travel $travelId;
+    private string $uuid;
 
     /**
-     * @ORM\ManyToMany(targetEntity="Album", inversedBy="steps")
-     * @ORM\JoinTable(name="step_albums",
-     * joinColumns={@ORM\JoinColumn(name="step_id", referencedColumnName="id")},
-     * inverseJoinColumns={@ORM\JoinColumn(name="album_id",referencedColumnName="id")})
+     * @ORM\ManyToOne(targetEntity="Travel", inversedBy="steps")
+     * @ORM\JoinColumn(name="travel_id", referencedColumnName="id", nullable="false")
+     * @Groups("step:read")
      */
-    private Album $albumId;
+    private Travel $travel;
+
+    /**
+     * @ORM\OneToOne(targetEntity="Album", inversedBy="step")
+     * @ORM\JoinColumn(name="album_id", referencedColumnName="id")
+     * @Groups("step:read")
+     */
+    private Album $album;
 
     /**
      * @ORM\ManyToOne(targetEntity="Place", inversedBy="steps")
-     * @ORM\Column(name="place_id")
+     * @ORM\JoinColumn(name="place_id", referencedColumnName="id")
+     * @Groups("step:read")
      */
-    private Place $placeId;
+    private Place $place;
 
     /**
-     * @ORM\Column(name="started_at", type="date")
+     * @ORM\Column(name="started_at", type="date", nullable="true")
+     * @Groups("step:read")
      */
-    private DateTime $startedAt;
+    private ?DateTime $startedAt = null;
 
     /**
-     * @ORM\Column(name="ended_at", type="date")
+     * @ORM\Column(name="ended_at", type="date", nullable="true")
+     * @Groups("step:read")
      */
-    private DateTime $endedAt;
+    private ?DateTime $endedAt = null;
 
     /**
      * @ORM\Column(name="created_at", type="date")
@@ -68,7 +76,6 @@ class Step implements Statuable
 
     public function __construct()
     {
-        $this->albumId = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -76,50 +83,57 @@ class Step implements Statuable
         return $this->id;
     }
 
-    public function getTravelId(): ?travel
+    public function getUuid(): string
     {
-        return $this->travelId;
+        return $this->uuid;
     }
 
-    public function setTravelId(?travel $travelId): Step
+    public function setUuid(string $uuid): Step
     {
-        $this->travelId = $travelId;
+        $this->uuid = $uuid;
 
         return $this;
     }
 
-    /**
-     * @return Collection|Album[]
-     */
-    public function getAlbumId(): Collection
+    public function getTravel(): Travel
     {
-        return $this->albumId;
+        return $this->travel;
     }
 
-    public function addAlbumId(Album $albumId): Step
+    public function setTravel(Travel $travel): Step
     {
-        if (!$this->albumId->contains($albumId)) {
-            $this->albumId[] = $albumId;
-        }
+        $this->travel = $travel;
 
         return $this;
     }
 
-    public function removeAlbumId(Album $albumId): Step
+    public function getAlbum(): Album
     {
-        $this->albumId->removeElement($albumId);
+        return $this->album;
+    }
+
+    public function setAlbum(Album $album): Step
+    {
+        $this->album = $album;
 
         return $this;
     }
 
-    public function getPlaceId(): ?Place
+    public function removeAlbum(Album $album): Step
     {
-        return $this->placeId;
+        $this->album->removeElement($album);
+
+        return $this;
     }
 
-    public function setPlaceId(?Place $placeId): Step
+    public function getPlace(): ?Place
     {
-        $this->placeId = $placeId;
+        return $this->place;
+    }
+
+    public function setPlace(?Place $place): Step
+    {
+        $this->place = $place;
 
         return $this;
     }
@@ -129,7 +143,7 @@ class Step implements Statuable
         return $this->startedAt;
     }
 
-    public function setStartedAt(DateTime $startedAt): Step
+    public function setStartedAt(?DateTime $startedAt = null): Step
     {
         $this->startedAt = $startedAt;
 
@@ -141,7 +155,7 @@ class Step implements Statuable
         return $this->endedAt;
     }
 
-    public function setEndedAt(DateTime $endedAt): Step
+    public function setEndedAt(?DateTime $endedAt = null): Step
     {
         $this->endedAt = $endedAt;
 

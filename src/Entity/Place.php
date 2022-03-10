@@ -55,6 +55,10 @@ class Place implements Statuable
      *     "place:read"
      * })
      * @ORM\Column(name="address", type="string", length="255")
+     * @Groups({
+     *     "place:read",
+     *     "step:nested",
+     * })
      */
     private string $address;
 
@@ -63,6 +67,10 @@ class Place implements Statuable
      *   "place:read"
      * })
      * @ORM\Column(name="city", type="string", length="255")
+     * @Groups({
+     *     "place:read",
+     *     "step:nested",
+     * })
      */
     private string $city;
 
@@ -71,6 +79,10 @@ class Place implements Statuable
      *   "place:read"
      * })
      * @ORM\Column(name="zipcode", type="string", length="255")
+     * @Groups({
+     *     "place:read",
+     *     "step:nested",
+     * })
      */
     private string $zipcode;
 
@@ -79,6 +91,10 @@ class Place implements Statuable
      *   "place:read"
      * })
      * @ORM\Column(name="country", type="string", length="255")
+     * @Groups({
+     *     "place:read",
+     *     "step:nested",
+     * })
      */
     private string $country;
 
@@ -87,6 +103,10 @@ class Place implements Statuable
      *   "place:read"
      * })
      * @ORM\Column(name="name", type="string", length="255")
+     * @Groups({
+     *     "place:read",
+     *     "step:nested",
+     * })
      */
     private string $name;
 
@@ -95,6 +115,10 @@ class Place implements Statuable
      *   "place:read"
      * })
      * @ORM\Column(name="latitude", type="string", length="255")
+     * @Groups({
+     *     "place:read",
+     *     "step:nested",
+     * })
      */
     private string $latitude;
 
@@ -103,6 +127,10 @@ class Place implements Statuable
      *   "place:read"
      * })
      * @ORM\Column(name="longitude", type="string", length="255")
+     * @Groups({
+     *     "place:read",
+     *     "step:nested",
+     * })
      */
     private string $longitude;
 
@@ -245,6 +273,11 @@ class Place implements Statuable
     public function getSteps(): Collection
     {
         return $this->steps;
+    }
+
+    public function __toString()
+    {
+        return $this->id;
     }
 
     public function getUuid(): string

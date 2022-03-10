@@ -70,9 +70,7 @@ class AlbumController extends HelloworldController
             $travel
         );
 
-        $albumNormalized = $this->normalizer->normalize($album, null, ['groups' => 'album.by.current']);
-
-        return $this->buildSuccessResponse(Response::HTTP_CREATED, $albumNormalized, $loggedUser);
+        return $this->buildSuccessResponse(Response::HTTP_CREATED, $album, $loggedUser, ['groups' => ['album:read', 'album:nested']]);
     }
 
     /**
@@ -91,9 +89,8 @@ class AlbumController extends HelloworldController
         }
 
         $albums = $this->albumService->getAll();
-        $albumsNormalized = $this->normalizer->normalize($albums, null, ['groups' => 'album.by.current']);
 
-        return $this->buildSuccessResponse(Response::HTTP_OK, $albumsNormalized, $loggedUser);
+        return $this->buildSuccessResponse(Response::HTTP_OK, $albums, $loggedUser, ['groups' => ['album:read', 'album:nested']]);
     }
 
     /**
@@ -112,9 +109,8 @@ class AlbumController extends HelloworldController
         }
 
         $album = $this->albumService->getByUuid($uuid);
-        $albumNormalized = $this->normalizer->normalize($album, null, ['groups' => 'album.by.current']);
 
-        return $this->buildSuccessResponse(Response::HTTP_OK, $albumNormalized, $loggedUser);
+        return $this->buildSuccessResponse(Response::HTTP_OK, $album, $loggedUser, ['groups' => ['album:read', 'album:nested']]);
     }
 
     /**
@@ -136,9 +132,8 @@ class AlbumController extends HelloworldController
             return $this->buildErrorResponse(Response::HTTP_NOT_FOUND, 'album.notFound', 'L\'album est introuvable');
         }
         $albumDeleted = $this->albumService->delete($album);
-        $albumNormalized = $this->normalizer->normalize($albumDeleted, null, ['groups' => 'album.by.current']);
 
-        return $this->buildSuccessResponse(Response::HTTP_OK, $albumNormalized, $loggedUser);
+        return $this->buildSuccessResponse(Response::HTTP_OK, $albumDeleted, $loggedUser, ['groups' => ['album:read', 'album:nested']]);
     }
 
     /**
@@ -178,8 +173,6 @@ class AlbumController extends HelloworldController
             $parameters['description']
         );
 
-        $albumNormalized = $this->normalizer->normalize($albumUpdated, null, ['groups' => 'album.by.current']);
-
-        return $this->buildSuccessResponse(Response::HTTP_ACCEPTED, $albumNormalized, $loggedUser);
+        return $this->buildSuccessResponse(Response::HTTP_ACCEPTED, $albumUpdated, $loggedUser, ['groups' => ['album:read', 'album:nested']]);
     }
 }

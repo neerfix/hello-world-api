@@ -88,6 +88,7 @@ abstract class AbstractController extends \Symfony\Bundle\FrameworkBundle\Contro
     private function normalizeData(mixed $data, ?User $loggedUser = null, ?array $normalizationContext = null): array
     {
         $normalizationContext = $normalizationContext ?? [];
+        $data = $data ?? [];
 
         $normalizationContext = array_merge($normalizationContext, [
             '' => $loggedUser,

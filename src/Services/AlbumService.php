@@ -49,7 +49,7 @@ class AlbumService
         $album = (new Album())
             ->setTitle($title)
             ->setDescription($description)
-            ->setTravelId($travel)
+            ->setTravel($travel)
             ->setCreatedAt(new DateTime())
             ->setUpdatedAt(new DateTime())
             ->setUuid(Uuid::uuid4());
@@ -108,7 +108,8 @@ class AlbumService
 
         $album
             ->setTitle($title)
-            ->setDescription($description);
+            ->setDescription($description)
+            ->setUpdatedAt(new DateTime());
 
         $this->em->persist($album);
         $this->em->flush();
