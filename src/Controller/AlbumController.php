@@ -70,7 +70,7 @@ class AlbumController extends HelloworldController
             $travel
         );
 
-        return $this->buildSuccessResponse(Response::HTTP_CREATED, $this->normalizeAlbum($album), $loggedUser);
+        return $this->buildSuccessResponse(Response::HTTP_CREATED, $album, $loggedUser, ['groups' => ['album:read', 'album:nested']]);
     }
 
     /**
@@ -90,7 +90,7 @@ class AlbumController extends HelloworldController
 
         $albums = $this->albumService->getAll();
 
-        return $this->buildSuccessResponse(Response::HTTP_OK, $this->normalizeAlbum($albums), $loggedUser);
+        return $this->buildSuccessResponse(Response::HTTP_OK, $albums, $loggedUser, ['groups' => ['album:read', 'album:nested']]);
     }
 
     /**
@@ -110,7 +110,7 @@ class AlbumController extends HelloworldController
 
         $album = $this->albumService->getByUuid($uuid);
 
-        return $this->buildSuccessResponse(Response::HTTP_OK, $this->normalizeAlbum($album), $loggedUser);
+        return $this->buildSuccessResponse(Response::HTTP_OK, $album, $loggedUser, ['groups' => ['album:read', 'album:nested']]);
     }
 
     /**
@@ -133,7 +133,7 @@ class AlbumController extends HelloworldController
         }
         $albumDeleted = $this->albumService->delete($album);
 
-        return $this->buildSuccessResponse(Response::HTTP_OK, $this->normalizeAlbum($albumDeleted), $loggedUser);
+        return $this->buildSuccessResponse(Response::HTTP_OK, $albumDeleted, $loggedUser, ['groups' => ['album:read', 'album:nested']]);
     }
 
     /**
@@ -173,11 +173,6 @@ class AlbumController extends HelloworldController
             $parameters['description']
         );
 
-        return $this->buildSuccessResponse(Response::HTTP_ACCEPTED, $this->normalizeAlbum($albumUpdated), $loggedUser);
-    }
-
-    private function normalizeAlbum($album): array
-    {
-        return null != $album ? $this->normalizer->normalize($album, null, ['groups' => 'album.by.current']) : [];
+        return $this->buildSuccessResponse(Response::HTTP_ACCEPTED, $albumUpdated, $loggedUser, ['groups' => ['album:read', 'album:nested']]);
     }
 }

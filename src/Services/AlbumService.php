@@ -49,7 +49,7 @@ class AlbumService
         $album = (new Album())
             ->setTitle($title)
             ->setDescription($description)
-            ->setTravelId($travel)
+            ->setTravel($travel)
             ->setCreatedAt(new DateTime())
             ->setUpdatedAt(new DateTime())
             ->setUuid(Uuid::uuid4());

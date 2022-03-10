@@ -9,6 +9,7 @@ use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * @ORM\Table(name="place", indexes={
@@ -41,36 +42,64 @@ class Place implements Statuable
 
     /**
      * @ORM\Column(name="address", type="string", length="255")
+     * @Groups({
+     *     "place:read",
+     *     "step:nested",
+     * })
      */
     private string $address;
 
     /**
      * @ORM\Column(name="city", type="string", length="255")
+     * @Groups({
+     *     "place:read",
+     *     "step:nested",
+     * })
      */
     private string $city;
 
     /**
      * @ORM\Column(name="zipcode", type="string", length="255")
+     * @Groups({
+     *     "place:read",
+     *     "step:nested",
+     * })
      */
     private string $zipcode;
 
     /**
      * @ORM\Column(name="country", type="string", length="255")
+     * @Groups({
+     *     "place:read",
+     *     "step:nested",
+     * })
      */
     private string $country;
 
     /**
      * @ORM\Column(name="name", type="string", length="255")
+     * @Groups({
+     *     "place:read",
+     *     "step:nested",
+     * })
      */
     private string $name;
 
     /**
      * @ORM\Column(name="latitude", type="string", length="255")
+     * @Groups({
+     *     "place:read",
+     *     "step:nested",
+     * })
      */
     private string $latitude;
 
     /**
      * @ORM\Column(name="longitude", type="string", length="255")
+     * @Groups({
+     *     "place:read",
+     *     "step:nested",
+     * })
      */
     private string $longitude;
 

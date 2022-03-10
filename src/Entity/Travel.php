@@ -58,7 +58,11 @@ class Travel implements Statuable
     private string $uuid;
 
     /**
-     * @Groups("travel:read")
+     * @Groups({
+     *     "travel:read",
+     *     "album:nested",
+     *     "step:nested",
+     * })
      * @ORM\Column(name="name", type="string", length="255")
      */
     private string $name;

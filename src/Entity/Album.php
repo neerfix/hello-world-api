@@ -7,7 +7,6 @@ use App\Entity\Traits\StatuableTrait;
 use App\Repository\AlbumRepository;
 use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
 
@@ -43,27 +42,40 @@ class Album implements Statuable
 
     /**
      * @ORM\Column(name="uuid", type="string", length="180", unique=true)
-     * @Groups("album.by.current")
+     * @Groups("album:read")
      */
     private string $uuid;
 
     /**
      * @ORM\Column(name="title", type="string", length="255")
-     * @Groups("album.by.current")
+     * @Groups({
+     *     "album:read",
+     *     "step:nested",
+     * })
      */
     private string $title;
 
     /**
      * @ORM\Column(name="description", type="string", length="255", nullable=true)
-     * @Groups("album.by.current")
+     * @Groups({
+     *     "album:read",
+     *     "step:nested",
+     * })
      */
     private string $description;
 
     /**
      * @ORM\ManyToOne(targetEntity="Travel", inversedBy="albums")
      * @ORM\JoinColumn(name="travel_id", referencedColumnName="id")
+     * @Groups("album:read")
      */
-    private Travel $travelId;
+    private Travel $travel;
+
+    /**
+     * @ORM\OneToOne(targetEntity="Step", mappedBy="albumId")
+     * @Groups("album:read")
+     */
+    private Step $step;
 
     /**
      * @ORM\Column(name="created_at", type="date")
@@ -74,11 +86,6 @@ class Album implements Statuable
      * @ORM\Column(name="updated_at", type="date")
      */
     private DateTime $updatedAt;
-
-    /**
-     * @ORM\ManyToMany(targetEntity="Step", inversedBy="albums")
-     */
-    private Collection $steps;
 
     // -------------------------- >
 
@@ -123,16 +130,21 @@ class Album implements Statuable
         return $this;
     }
 
-    public function getTravelId(): ?Travel
+    public function getTravel(): ?Travel
     {
-        return $this->travelId;
+        return $this->travel;
     }
 
-    public function setTravelId(?Travel $travelId): Album
+    public function setTravel(?Travel $travel): Album
     {
-        $this->travelId = $travelId;
+        $this->travel = $travel;
 
         return $this;
+    }
+
+    public function getStep(): ?Step
+    {
+        return $this->step;
     }
 
     public function getCreatedAt(): ?DateTime
