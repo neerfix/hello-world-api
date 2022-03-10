@@ -107,19 +107,19 @@ Use ```make db.dev``` to re-install dev data.
 ## Rétrospective du premier sprint
 
 **Ce qu'il faut commencer à faire :**
-- Matisse :
+- Matisse : Les parties manquantes
 - Emeline : Album + features
 - Nicolas : Faire plus de review
 - Romain :
 
 **Ce qu'il faut continuer à faire**
-- Matisse :
+- Matisse : Remplir les documentations
 - Emeline : / (nouvelle sur le back)
 - Nicolas : Alimenter le docs des bonnes pratiques et assister mes camarades.
 - Romain :
 
 **Ce qu'il faut arrêter de faire**
-- Matisse :
+- Matisse : Utiliser docker 
 - Emeline : le front
 - Nicolas : de merge force avec les privilèges admin ou d'approved en fermant les yeux 🙈
 - Romain :
