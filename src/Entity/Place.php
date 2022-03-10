@@ -21,6 +21,8 @@ class Place implements Statuable
 {
     use StatuableTrait;
 
+    public const STATUS_ACTIVE = 'active';
+    public const STATUS_DELETED = 'deleted';
     // -------------------------- >
 
     public function __construct()

@@ -5,6 +5,7 @@ namespace App\Services;
 use App\Entity\Place;
 use App\Entity\User;
 use App\Repository\PlaceRepository;
+use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use Ramsey\Uuid\Uuid;
 
@@ -38,6 +39,7 @@ class PlaceService
             ->setName($name)
             ->setLatitude($latitude)
             ->setLongitude($longitude)
+            ->setStatus(Place::STATUS_ACTIVE)
             ->setUuid(Uuid::uuid4());
 
         $this->em->persist($place);
@@ -90,6 +92,20 @@ class PlaceService
         Place $place,
         User $user
     ): Place {
+        if (Place::STATUS_DELETED === $place->getStatus()) {
+            throw new RunTimeException('La localisation est déjà supprimée');
+        }
+
+        if (!in_array(User::ROLE_ADMIN, $user->getRoles(), true)) {
+            throw new RuntimeException('Vous n\'avez pas l\'autorisation de supprimer ce voyage');
+        }
+        $place
+            ->setStatus(Place::STATUS_DELETED)
+            ->setUpdatedAt(new DateTime());
+
+        $this->em->persist($place);
+        $this->em->flush();
+
         return $place;
     }
 }
