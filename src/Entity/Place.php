@@ -28,6 +28,7 @@ class Place implements Statuable
     public function __construct()
     {
         $this->steps = new ArrayCollection();
+        $this->wishLists = new ArrayCollection();
         $this->travels = new ArrayCollection();
 
         $this->setUpdatedAt(new DateTime());
@@ -53,82 +54,71 @@ class Place implements Statuable
 
     /**
      * @Groups({
-     *     "place:read"
-     * })
-     * @ORM\Column(name="address", type="string", length="255",nullable=true)
-     * @Groups({
      *     "place:read",
      *     "step:nested",
+     *     "wishList:nested",
      * })
+     * @ORM\Column(name="address", type="string", length="255",nullable=true)
      */
     private string $address;
 
     /**
      * @Groups({
-     *   "place:read"
+     *   "place:read",
+     *    "step:nested",
+     *    "wishList:nested",
      * })
      * @ORM\Column(name="city", type="string", length="255", nullable=true)
-     * @Groups({
-     *     "place:read",
-     *     "step:nested",
-     * })
      */
     private string $city;
 
     /**
      * @Groups({
-     *   "place:read"
+     *   "place:read",
+     *   "step:nested",
+     *   "wishList:nested",
      * })
      * @ORM\Column(name="zipcode", type="string", length="255", nullable=true)
-     * @Groups({
-     *     "place:read",
-     *     "step:nested",
-     * })
      */
     private string $zipcode;
 
     /**
      * @Groups({
-     *   "place:read"
+     *   "place:read",
+     *    "step:nested",
+     *    "wishList:nested",
      * })
      * @ORM\Column(name="country", type="string", length="255",nullable=true)
-     * @Groups({
-     *     "place:read",
-     *     "step:nested",
-     * })
      */
     private string $country;
 
     /**
      * @Groups({
-     *   "place:read"
-     * })
-     * @ORM\Column(name="name", type="string", length="255")
-     * @Groups({
      *     "place:read",
      *     "step:nested",
+     *     "wishList:nested",
      * })
+     * @ORM\Column(name="name", type="string", length="255")
      */
     private string $name;
 
     /**
      * @Groups({
-     *   "place:read"
-     * })
-     * @ORM\Column(name="latitude", type="string", length="255")
-     * @Groups({
      *     "place:read",
      *     "step:nested",
+     *     "wishList:nested",
      * })
+     * @ORM\Column(name="latitude", type="string", length="255")
      */
     private string $latitude;
 
     /**
-     * @ORM\Column(name="longitude", type="string", length="255")
      * @Groups({
      *     "place:read",
      *     "step:nested",
+     *     "wishList:nested",
      * })
+     * @ORM\Column(name="longitude", type="string", length="255")
      */
     private string $longitude;
 
@@ -153,6 +143,11 @@ class Place implements Statuable
      */
     private Collection $steps;
 
+    /**
+     * @ORM\OneToMany(targetEntity="WishList", mappedBy="place")
+     */
+    private Collection $wishLists;
+  
     /**
      * @ORM\OneToMany(targetEntity="Travel", mappedBy="placeId")
      */
@@ -293,5 +288,10 @@ class Place implements Statuable
         $this->uuid = $uuid;
 
         return $this;
+    }
+
+    public function getWishLists(): Collection
+    {
+        return $this->wishLists;
     }
 }

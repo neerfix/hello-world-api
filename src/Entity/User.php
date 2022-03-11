@@ -33,6 +33,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, Statuab
         $this->followings = new ArrayCollection();
         $this->followers = new ArrayCollection();
         $this->files = new ArrayCollection();
+        $this->wishLists = new ArrayCollection();
     }
 
     public const STATUS_ACTIVE = 'active'; // Active account
@@ -183,6 +184,14 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, Statuab
      * @ORM\OneToMany(targetEntity="File",mappedBy="userId")
      */
     private Collection $files;
+
+    /**
+     * @Groups({
+     *     "user:read",
+     * })
+     * @ORM\OneToMany(targetEntity="WishList", mappedBy="user")
+     */
+    private Collection $wishLists;
 
     // ------------------------- >
 
@@ -356,5 +365,10 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, Statuab
     public function getFiles(): Collection
     {
         return $this->files;
+    }
+
+    public function getWishLists(): Collection
+    {
+        return $this->wishLists;
     }
 }

@@ -2,8 +2,9 @@
 
 namespace App\Services;
 
-use App\Entity\Album;
-use App\Entity\Travel;
+use App\Entity\Place;
+use App\Entity\User;
+use App\Entity\WishList;
 use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\NonUniqueResultException;
@@ -11,7 +12,7 @@ use Exception;
 use Ramsey\Uuid\Uuid;
 use RuntimeException;
 
-class AlbumService
+class WishListService
 {
     // ------------------------ >
 
@@ -20,7 +21,7 @@ class AlbumService
     // ------------------------ >
 
     public function __construct(
-        private EntityManagerInterface $em,
+        private EntityManagerInterface $em
     ) {
     }
 
@@ -30,10 +31,12 @@ class AlbumService
      * @throws Exception
      */
     public function create(
-        string $title,
+        string $name,
+        Place $place,
+        User $user,
         ?string $description = null,
-        Travel $travel
-    ): Album {
+        ?DateTime $estimatedAt = null
+    ): WishList {
         if (null !== $description) {
             preg_match_all('/([a-zA-Z][-\'0-9a-zÀ-ÿ]+)/m', $description, $words, PREG_SET_ORDER, 0);
 
@@ -43,45 +46,51 @@ class AlbumService
             }
         }
 
-        $title = trim($title);
+        $name = trim($name);
 
-        $album = (new Album())
-            ->setTitle($title)
+        $wishList = (new WishList())
+            ->setName($name)
             ->setDescription($description)
-            ->setTravel($travel)
+            ->setPlace($place)
+            ->setUser($user)
+            ->setEstimatedAt($estimatedAt)
             ->setCreatedAt(new DateTime())
             ->setUpdatedAt(new DateTime())
             ->setUuid(Uuid::uuid4())
-            ->setStatus(Album::STATUS_ACTIVE);
+            ->setStatus(WishList::STATUS_ACTIVE);
 
-        $this->em->persist($album);
+        $this->em->persist($wishList);
         $this->em->flush();
 
-        return $album;
+        return $wishList;
     }
 
     /**
      * @throws Exception
      */
-    public function delete(Album $album): Album
+    public function delete(WishList $wishList): WishList
     {
-        $album->setStatus(Album::STATUS_DELETED)
-            ->setUpdateAt(new DateTime());
+        $wishList
+            ->setStatus(WishList::STATUS_DELETED)
+            ->setUpdatedAt(new DateTime());
 
-        $this->em->persist($album);
+        $this->em->persist($wishList);
         $this->em->flush();
 
-        return $album;
+        return $wishList;
     }
 
     /**
      * @throws NonUniqueResultException
      */
     public function update(
-        Album $album,
-        string $title,
-        string $description,
-    ): Album {
+        WishList $wishList,
+        string $name,
+        Place $place,
+        User $user,
+        ?string $description = null,
+        ?DateTime $estimatedAt = null,
+    ): WishList {
         if (null !== $description) {
             preg_match_all('/([a-zA-Z][-\'0-9a-zÀ-ÿ]+)/m', $description, $words, PREG_SET_ORDER, 0);
 
@@ -91,16 +100,19 @@ class AlbumService
             }
         }
 
-        $title = trim($title);
+        $name = trim($name);
 
-        $album
-            ->setTitle($title)
+        $wishList
+            ->setName($name)
             ->setDescription($description)
+            ->setPlace($place)
+            ->setUser($user)
+            ->setEstimatedAt($estimatedAt)
             ->setUpdatedAt(new DateTime());
 
-        $this->em->persist($album);
+        $this->em->persist($wishList);
         $this->em->flush();
 
-        return $album;
+        return $wishList;
     }
 }
