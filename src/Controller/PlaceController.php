@@ -47,10 +47,6 @@ class PlaceController extends HelloworldController
         }
 
         $errors = $this->validate($parameters, [
-            'address' => [new Type(['type' => 'string']), new NotBlank()],
-            'city' => [new Type(['type' => 'string']), new NotBlank()],
-            'zipcode' => [new Type(['type' => 'string']), new NotBlank()],
-            'country' => [new Type(['type' => 'string']), new NotBlank()],
             'name' => [new Type(['type' => 'string']), new NotBlank()],
             'latitude' => [new Type(['type' => 'float']), new NotBlank()],
             'longitude' => [new Type(['type' => 'float']), new NotBlank()],
@@ -61,13 +57,13 @@ class PlaceController extends HelloworldController
         }
 
         $place = $this->placeService->create(
+            $parameters['name'],
+            $parameters['latitude'],
+            $parameters['longitude'],
             $parameters['address'],
             $parameters['city'],
             $parameters['zipcode'],
             $parameters['country'],
-            $parameters['name'],
-            $parameters['latitude'],
-            $parameters['longitude']
         );
 
         return $this->buildSuccessResponse(Response::HTTP_CREATED, $place, $loggedUser, ['groups' => ['place:read']]);
@@ -141,10 +137,6 @@ class PlaceController extends HelloworldController
         }
 
         $errors = $this->validate($parameters, [
-            'address' => [new Type(['type' => 'string']), new NotBlank()],
-            'city' => [new Type(['type' => 'string']), new NotBlank()],
-            'zipcode' => [new Type(['type' => 'string']), new NotBlank()],
-            'country' => [new Type(['type' => 'string']), new NotBlank()],
             'name' => [new Type(['type' => 'string']), new NotBlank()],
             'latitude' => [new Type(['type' => 'float']), new NotBlank()],
             'longitude' => [new Type(['type' => 'float']), new NotBlank()],
@@ -157,13 +149,13 @@ class PlaceController extends HelloworldController
         $placeUpdated = $this->placeService->update(
             $place,
             $loggedUser,
+            $parameters['name'],
+            $parameters['latitude'],
+            $parameters['longitude'],
             $parameters['address'],
             $parameters['city'],
             $parameters['zipcode'],
-            $parameters['country'],
-            $parameters['name'],
-            $parameters['latitude'],
-            $parameters['longitude']
+            $parameters['country']
         );
 
         return $this->buildSuccessResponse(Response::HTTP_OK, $placeUpdated, $loggedUser, ['groups' => ['place:read']]);

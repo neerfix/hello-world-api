@@ -59,10 +59,15 @@ class TravelService
             ->setDescription($description)
             ->setUserId($user)
             ->setPlaceId($place)
-            ->setIsShared($isShared);
-
+            ->setIsShared($isShared)
+            ->setStatus(Travel::STATUS_ACTIVE);
         $this->em->persist($travel);
-        $this->em->flush();
+
+        try {
+            $this->em->flush();
+        } catch (Exception $e) {
+            dd($e);
+        }
 
         return $travel;
     }
