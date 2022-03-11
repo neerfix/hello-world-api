@@ -46,7 +46,7 @@ class UserService
         $lastname = !empty($lastname) ? $this->textService->cleanLastName($lastname) : null;
 
         if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-            throw new RuntimeException('l\'email n\'est pas valide', 'users.create.email.invalid', 'email');
+            throw new Exception('l\'email n\'est pas valide', 'users.create.email.invalid', 'email');
         }
 
         $existingEmail = $this->userRepository->findOneByEmail($email);
@@ -66,14 +66,12 @@ class UserService
             ->setTime(0, 0, 0);
 
         if ($birthdate > new DateTime()) {
-            throw new RuntimeException('La date de naissance n\'est pas valide', 'users.create.birthdate.invalid', 'birthdate');
+            throw new Exception('La date de naissance n\'est pas valide', 'users.create.birthdate.invalid', 'birthdate');
         }
 
-        if (null !== $password) {
-            // Invalid password
-            if (empty($password) || $password < static::MIN_PASSWORD_LENGTH) {
-                throw new RuntimeException('le mot de passe est trop court. Il doit faire au minimum '.static::MIN_PASSWORD_LENGTH.' caractère', '', 'password');
-            }
+        // Invalid password
+        if (strlen($password) < static::MIN_PASSWORD_LENGTH) {
+            throw new Exception('le mot de passe est trop court. Il doit faire au minimum '.static::MIN_PASSWORD_LENGTH.' caractère');
         }
 
         $user = (new User())
