@@ -58,17 +58,17 @@ class TravelFixtures extends Fixture
     public static function getData(?string $travelName = null): array
     {
         $data = [
-            static::BASIC_TRAVEL => [
-                'uuid' => 'UUID_BASIC_TRAVEL',
-                'name' => 'basic_travel',
-                'budget' => 2500.50,
-                'Description' => "I'm doing a wonderful 
-                                    travel on a basic location",
-                'startedAt' => new DateTime('2022-04-02'),
-                'endedAt' => new DateTime('2022-04-12'),
-                'isSharable' => true,
-                'author' => 'UUID_NEERFIX',
-            ],
+//            static::BASIC_TRAVEL => [
+//                'uuid' => 'UUID_BASIC_TRAVEL',
+//                'name' => 'basic_travel',
+//                'budget' => 2500.50,
+//                'Description' => "I'm doing a wonderful
+//                                    travel on a basic location",
+//                'startedAt' => new DateTime('2022-04-02'),
+//                'endedAt' => new DateTime('2022-04-12'),
+//                'isSharable' => true,
+//                'author' => 'UUID_NEERFIX',
+//            ],
         ];
 
         if (!empty($travelName)) {

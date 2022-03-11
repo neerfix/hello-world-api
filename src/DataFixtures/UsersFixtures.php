@@ -67,6 +67,7 @@ class UsersFixtures extends Fixture
                 'uuid' => 'UUID-NEERFIX',
                 'isVerify' => true,
                 'status' => 'active',
+                'hasToken' => false,
             ],
             static::USER_FAYAAH => [
                 'email' => 'louise.baulan@hello-world.ovh',
@@ -79,6 +80,7 @@ class UsersFixtures extends Fixture
                 'uuid' => 'UUID-FAYAAH',
                 'isVerify' => true,
                 'status' => 'active',
+                'hasToken' => false,
             ],
         ];
 
