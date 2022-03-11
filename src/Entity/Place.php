@@ -46,7 +46,8 @@ class Place implements Statuable
 
     /**
      * @Groups({
-     *     "place:read"
+     *     "place:read",
+     *     "travel:read"
      * })
      * @ORM\Column(name="uuid", type="string", length="180", unique=true)
      */
@@ -57,6 +58,7 @@ class Place implements Statuable
      *     "place:read",
      *     "step:nested",
      *     "wishList:nested",
+     *     "travel:read"
      * })
      * @ORM\Column(name="address", type="string", length="255",nullable=true)
      */
@@ -67,6 +69,7 @@ class Place implements Statuable
      *   "place:read",
      *    "step:nested",
      *    "wishList:nested",
+     *     "travel:read"
      * })
      * @ORM\Column(name="city", type="string", length="255", nullable=true)
      */
@@ -77,6 +80,7 @@ class Place implements Statuable
      *   "place:read",
      *   "step:nested",
      *   "wishList:nested",
+     *     "travel:read"
      * })
      * @ORM\Column(name="zipcode", type="string", length="255", nullable=true)
      */
@@ -87,6 +91,7 @@ class Place implements Statuable
      *   "place:read",
      *    "step:nested",
      *    "wishList:nested",
+     *     "travel:read"
      * })
      * @ORM\Column(name="country", type="string", length="255",nullable=true)
      */
@@ -97,6 +102,7 @@ class Place implements Statuable
      *     "place:read",
      *     "step:nested",
      *     "wishList:nested",
+     *     "travel:read",
      * })
      * @ORM\Column(name="name", type="string", length="255")
      */
@@ -107,6 +113,7 @@ class Place implements Statuable
      *     "place:read",
      *     "step:nested",
      *     "wishList:nested",
+     *     "travel:read"
      * })
      * @ORM\Column(name="latitude", type="string", length="255")
      */
@@ -117,6 +124,7 @@ class Place implements Statuable
      *     "place:read",
      *     "step:nested",
      *     "wishList:nested",
+     *     "travel:read"
      * })
      * @ORM\Column(name="longitude", type="string", length="255")
      */
@@ -147,7 +155,7 @@ class Place implements Statuable
      * @ORM\OneToMany(targetEntity="WishList", mappedBy="place")
      */
     private Collection $wishLists;
-  
+
     /**
      * @ORM\OneToMany(targetEntity="Travel", mappedBy="placeId")
      */
