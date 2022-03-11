@@ -51,7 +51,7 @@ class TravelController extends HelloworldController
         $loggedUser = $this->getLoggedUser();
         $travel = $this->travelRepository->findAllActive();
 
-        return $this->buildSuccessResponse(Response::HTTP_OK, $travel, $loggedUser, ['groups' => 'travel:read']);
+        return $this->buildSuccessResponse(Response::HTTP_OK, $travel, $loggedUser, ['groups' => ['travel:read', 'travel:nested']]);
     }
 
     /**

@@ -48,7 +48,7 @@ class Place implements Statuable
     /**
      * @Groups({
      *     "place:read",
-     *     "travel:read"
+     *     "travel:nested"
      * })
      * @ORM\Column(name="uuid", type="string", length="180", unique=true)
      */
@@ -59,7 +59,7 @@ class Place implements Statuable
      *     "place:read",
      *     "step:nested",
      *     "wishList:nested",
-     *     "travel:read"
+     *     "travel:nested"
      * })
      * @ORM\Column(name="address", type="string", length="255",nullable=true)
      */
@@ -68,9 +68,9 @@ class Place implements Statuable
     /**
      * @Groups({
      *   "place:read",
-     *    "step:nested",
-     *    "wishList:nested",
-     *     "travel:read"
+     *   "step:nested",
+     *   "wishList:nested",
+     *   "travel:nested"
      * })
      * @ORM\Column(name="city", type="string", length="255", nullable=true)
      */
@@ -81,7 +81,7 @@ class Place implements Statuable
      *   "place:read",
      *   "step:nested",
      *   "wishList:nested",
-     *     "travel:read"
+     *   "travel:nested"
      * })
      * @ORM\Column(name="zipcode", type="string", length="255", nullable=true)
      */
@@ -92,7 +92,7 @@ class Place implements Statuable
      *   "place:read",
      *    "step:nested",
      *    "wishList:nested",
-     *     "travel:read"
+     *     "travel:nested"
      * })
      * @ORM\Column(name="country", type="string", length="255",nullable=true)
      */
@@ -103,7 +103,7 @@ class Place implements Statuable
      *     "place:read",
      *     "step:nested",
      *     "wishList:nested",
-     *     "travel:read",
+     *     "travel:nested",
      * })
      * @ORM\Column(name="name", type="string", length="255")
      */
@@ -114,7 +114,7 @@ class Place implements Statuable
      *     "place:read",
      *     "step:nested",
      *     "wishList:nested",
-     *     "travel:read"
+     *     "travel:nested"
      * })
      * @ORM\Column(name="latitude", type="string", length="255")
      */
@@ -125,7 +125,7 @@ class Place implements Statuable
      *     "place:read",
      *     "step:nested",
      *     "wishList:nested",
-     *     "travel:read"
+     *     "travel:nested"
      * })
      * @ORM\Column(name="longitude", type="string", length="255")
      */
