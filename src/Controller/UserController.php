@@ -200,7 +200,7 @@ class UserController extends HelloworldController
             'email' => [new Type(['type' => 'string']), new NotBlank()],
             'password' => [new Type(['type' => 'string']), new NotBlank()],
             'birthDate' => [new DateTime(['format' => 'Y-m-d']), new NotBlank()],
-            'userName' => [new Type(['type' => 'string'])],
+            'username' => [new Type(['type' => 'string'])],
             'firstName' => [new Optional([new Type(['type' => 'string'])])],
             'lastName' => [new Optional([new Type(['type' => 'string'])])],
             'isVerify' => [new Type(['type' => 'bool'])],
