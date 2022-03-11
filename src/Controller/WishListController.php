@@ -68,14 +68,23 @@ class WishListController extends HelloworldController
         }
 
         $place = $this->placeRepository->find($parameters['placeId']);
+        if (null === $place) {
+            return $this->buildErrorResponse(Response::HTTP_NOT_FOUND, 'place.notFound', 'Le lieu est introuvable');
+        }
+
         $user = $this->userRepository->find($parameters['userId']);
+        if (null === $user) {
+            return $this->buildErrorResponse(Response::HTTP_NOT_FOUND, 'user.notFound', 'L\'utilisateur est introuvable');
+        }
+
         $estimatedAt = (array_key_exists('estimatedAt', $parameters)) ? $this->getDate($request, $parameters['estimatedAt']) : null;
+        $description = (array_key_exists('description', $parameters)) ? $parameters['description'] : null;
 
         $wishList = $this->wishListService->create(
             $parameters['name'],
-            $parameters['description'],
             $place,
             $user,
+            $description,
             $estimatedAt
         );
 
@@ -118,6 +127,9 @@ class WishListController extends HelloworldController
         }
 
         $wishList = $this->wishListRepository->findOneByUuid($uuid);
+        if (null === $wishList) {
+            return $this->buildErrorResponse(Response::HTTP_NOT_FOUND, 'wishList.notFound', 'La liste de souhait est introuvable');
+        }
 
         return $this->buildSuccessResponse(Response::HTTP_OK, $wishList, $loggedUser, ['groups' => ['wishList:read', 'wishList:nested']]);
     }
@@ -138,7 +150,7 @@ class WishListController extends HelloworldController
 
         $wishList = $this->wishListRepository->findOneByUuid($uuid);
         if (null === $wishList) {
-            return $this->buildErrorResponse(Response::HTTP_NOT_FOUND, 'wishList.notFound', 'L\'wishList est introuvable');
+            return $this->buildErrorResponse(Response::HTTP_NOT_FOUND, 'wishList.notFound', 'La liste de souhait est introuvable');
         }
 
         $wishListDeleted = $this->wishListService->delete($wishList);
@@ -164,7 +176,7 @@ class WishListController extends HelloworldController
 
         $wishList = $this->wishListRepository->findOneByUuid($uuid);
         if (null === $wishList) {
-            return $this->buildErrorResponse(Response::HTTP_NOT_FOUND, 'wishList.notFound', 'L\'wishList est introuvable');
+            return $this->buildErrorResponse(Response::HTTP_NOT_FOUND, 'wishList.notFound', 'La liste de souhait est introuvable');
         }
 
         $errors = $this->validate($parameters, [
@@ -180,15 +192,24 @@ class WishListController extends HelloworldController
         }
 
         $place = $this->placeRepository->find($parameters['placeId']);
+        if (null === $place) {
+            return $this->buildErrorResponse(Response::HTTP_NOT_FOUND, 'place.notFound', 'Le lieu est introuvable');
+        }
+
         $user = $this->userRepository->find($parameters['userId']);
+        if (null === $user) {
+            return $this->buildErrorResponse(Response::HTTP_NOT_FOUND, 'user.notFound', 'L\'utilisateur est introuvable');
+        }
+
         $estimatedAt = (array_key_exists('estimatedAt', $parameters)) ? $this->getDate($request, $parameters['estimatedAt']) : null;
+        $description = (array_key_exists('description', $parameters)) ? $parameters['description'] : null;
 
         $wishListUpdated = $this->wishListService->update(
             $wishList,
             $parameters['name'],
-            $parameters['description'],
             $place,
             $user,
+            $description,
             $estimatedAt,
         );
 

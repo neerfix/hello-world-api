@@ -32,9 +32,9 @@ class WishListService
      */
     public function create(
         string $name,
-        ?string $description = null,
         Place $place,
         User $user,
+        ?string $description = null,
         ?DateTime $estimatedAt = null
     ): WishList {
         if (null !== $description) {
@@ -86,9 +86,9 @@ class WishListService
     public function update(
         WishList $wishList,
         string $name,
-        ?string $description = null,
         Place $place,
         User $user,
+        ?string $description = null,
         ?DateTime $estimatedAt = null,
     ): WishList {
         if (null !== $description) {

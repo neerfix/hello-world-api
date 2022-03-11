@@ -55,7 +55,7 @@ class WishList implements Statuable
      * @ORM\Column(name="description", type="string", length="255", nullable=true)
      * @Groups("wishList:read")
      */
-    private string $description;
+    private ?string $description;
 
     /**
      * @ORM\ManyToOne(targetEntity="Place", inversedBy="wishLists")
@@ -71,10 +71,10 @@ class WishList implements Statuable
     private User $user;
 
     /**
-     * @ORM\Column(name="estimated_at", type="date")
+     * @ORM\Column(name="estimated_at", type="date", nullable=true)
      * @Groups("wishList:read")
      */
-    private DateTime $estimatedAt;
+    private ?DateTime $estimatedAt;
 
     /**
      * @ORM\Column(name="created_at", type="date")
@@ -158,7 +158,7 @@ class WishList implements Statuable
         return $this->estimatedAt;
     }
 
-    public function setEstimatedAt(DateTime $estimatedAt): WishList
+    public function setEstimatedAt(?DateTime $estimatedAt): WishList
     {
         $this->estimatedAt = $estimatedAt;
 
@@ -170,7 +170,7 @@ class WishList implements Statuable
         return $this->createdAt;
     }
 
-    public function setCreatedAt(DateTime $createdAt): WishList
+    public function setCreatedAt(?DateTime $createdAt): WishList
     {
         $this->createdAt = $createdAt;
 
@@ -182,7 +182,7 @@ class WishList implements Statuable
         return $this->updatedAt;
     }
 
-    public function setUpdatedAt(DateTime $updatedAt): WishList
+    public function setUpdatedAt(?DateTime $updatedAt): WishList
     {
         $this->updatedAt = $updatedAt;
 
