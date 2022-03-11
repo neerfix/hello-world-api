@@ -60,7 +60,9 @@ class TravelService
             ->setUserId($user)
             ->setPlaceId($place)
             ->setIsShared($isShared)
+            ->setUuid(Uuid::uuid4())
             ->setStatus(Travel::STATUS_ACTIVE);
+
         $this->em->persist($travel);
 
         try {
