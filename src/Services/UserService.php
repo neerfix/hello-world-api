@@ -172,7 +172,7 @@ class UserService
 
         // Existing email
         if (null !== $existingEmail) {
-            throw new RuntimeException('cet email est déjà utilisé', 'users.create.email.already_exist', 'email');
+            throw new RuntimeException('cet email est déjà utilisé', null, 'email');
         }
 
         if (null === $user) {
