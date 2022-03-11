@@ -18,6 +18,14 @@ use Symfony\Component\Serializer\Annotation\Groups;
 class Step implements Statuable
 {
     use StatuableTrait;
+
+    // ----------------------- >
+
+    public const STATUS_DELETED = 'deleted';
+    public const STATUS_ACTIVE = 'active';
+
+    // ----------------------- >
+
     /**
      * @ORM\Id
      * @ORM\GeneratedValue

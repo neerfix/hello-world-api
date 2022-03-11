@@ -32,32 +32,15 @@ class StepRepository extends ServiceEntityRepository
             ->getOneOrNullResult();
     }
 
-    // /**
-    //  * @return Step[] Returns an array of Step objects
-    //  */
-    /*
-    public function findByExampleField($value)
+    /**
+     * @return Step[]
+     */
+    public function findAllActive(): array
     {
-        return $this->createQueryBuilder('s')
-            ->andWhere('s.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('s.id', 'ASC')
-            ->setMaxResults(10)
-            ->getQuery()
-            ->getResult()
-        ;
-    }
-    */
+        return $this->createQueryBuilder('S')
+            ->where('S.status = :status')
+            ->setParameter('status', 'active')
 
-    /*
-    public function findOneBySomeField($value): ?Step
-    {
-        return $this->createQueryBuilder('s')
-            ->andWhere('s.exampleField = :val')
-            ->setParameter('val', $value)
-            ->getQuery()
-            ->getOneOrNullResult()
-        ;
+            ->getQuery()->getArrayResult();
     }
-    */
 }

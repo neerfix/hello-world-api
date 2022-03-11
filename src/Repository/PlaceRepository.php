@@ -19,32 +19,15 @@ class PlaceRepository extends ServiceEntityRepository
         parent::__construct($registry, Place::class);
     }
 
-    // /**
-    //  * @return Place[] Returns an array of Place objects
-    //  */
-    /*
-    public function findByExampleField($value)
+    /**
+     * @return Place[]
+     */
+    public function findAllActive(): array
     {
-        return $this->createQueryBuilder('p')
-            ->andWhere('p.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('p.id', 'ASC')
-            ->setMaxResults(10)
-            ->getQuery()
-            ->getResult()
-        ;
-    }
-    */
+        return $this->createQueryBuilder('P')
+            ->where('P.status = :status')
+            ->setParameter('status', 'active')
 
-    /*
-    public function findOneBySomeField($value): ?Place
-    {
-        return $this->createQueryBuilder('p')
-            ->andWhere('p.exampleField = :val')
-            ->setParameter('val', $value)
-            ->getQuery()
-            ->getOneOrNullResult()
-        ;
+            ->getQuery()->getArrayResult();
     }
-    */
 }

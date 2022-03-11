@@ -4,7 +4,6 @@ namespace App\Controller;
 
 use App\Entity\User;
 use App\Repository\TravelRepository;
-use App\Repository\UserRepository;
 use App\Services\RequestService;
 use App\Services\ResponseService;
 use App\Services\TravelService;
@@ -28,10 +27,9 @@ class TravelController extends HelloworldController
         ResponseService $responseService,
         RequestService $requestService,
         ValidatorInterface $validator,
-        private NormalizerInterface $normalizer,
+        NormalizerInterface $normalizer,
         private TravelService $travelService,
         private TravelRepository $travelRepository,
-        private UserRepository $userRepository,
     ) {
         parent::__construct($responseService, $requestService, $validator, $normalizer);
     }
@@ -47,9 +45,9 @@ class TravelController extends HelloworldController
     public function index(): Response
     {
         $loggedUser = $this->getLoggedUser();
-        $travel = $this->travelRepository->findAll();
+        $travel = $this->travelRepository->findAllActive();
 
-        return $this->buildSuccessResponse(Response::HTTP_OK, $travel, $loggedUser);
+        return $this->buildSuccessResponse(Response::HTTP_OK, $travel, $loggedUser, ['groups' => 'travel:read']);
     }
 
     /**
@@ -58,7 +56,7 @@ class TravelController extends HelloworldController
      * @throws Exception
      * @throws ExceptionInterface
      */
-    public function getAction(Request $request, string $uuid): Response
+    public function getAction(string $uuid): Response
     {
         $loggedUser = $this->getLoggedUser();
 
@@ -90,7 +88,7 @@ class TravelController extends HelloworldController
      * @throws Exception
      * @throws ExceptionInterface
      */
-    public function deleteAction(Request $request, string $uuid): Response
+    public function deleteAction(string $uuid): Response
     {
         $loggedUser = $this->getLoggedUser();
 

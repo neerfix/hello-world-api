@@ -8,7 +8,6 @@ use App\Services\RequestService;
 use App\Services\ResponseService;
 use App\Services\SecurityService;
 use App\Services\UserService;
-use Doctrine\ORM\NonUniqueResultException;
 use Exception;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -81,7 +80,7 @@ class UserController extends HelloworldController
             return $this->buildErrorResponse(Response::HTTP_FORBIDDEN, 'auth.unauthorized', 'Vous n\'êtes pas autorisé à effectuer cette action');
         }
 
-        $users = $this->userRepository->findAll();
+        $users = $this->userRepository->findAllActive();
 
         return $this->buildSuccessResponse(Response::HTTP_OK, $users, $loggedUser, ['groups' => 'user:read']);
     }
@@ -123,7 +122,7 @@ class UserController extends HelloworldController
             $lastname,
         );
 
-        return $this->buildSuccessResponse(Response::HTTP_CREATED, $user, null, ['groups' => 'user.nested']);
+        return $this->buildSuccessResponse(Response::HTTP_CREATED, $user, null, ['groups' => 'user:read']);
     }
 
     /**
@@ -140,7 +139,7 @@ class UserController extends HelloworldController
 
         // No logged user
         if (null === $loggedUser) {
-//            return $this->buildErrorResponse(Response::HTTP_FORBIDDEN, 'auth.unauthorized', 'Vous n\'êtes pas autorisé à effectuer cette action');
+            return $this->buildErrorResponse(Response::HTTP_FORBIDDEN, 'auth.unauthorized', 'Vous n\'êtes pas autorisé à effectuer cette action');
         }
 
         if (null === $user) {
@@ -191,7 +190,7 @@ class UserController extends HelloworldController
             return $this->buildErrorResponse(Response::HTTP_FORBIDDEN, 'auth.unauthorized', 'Vous n\'êtes pas autorisé à effectuer cette action');
         }
 
-        $user = $this->userRepository->findOneBy($uuid);
+        $user = $this->userRepository->findOneByUuid($uuid);
 
         if (null === $user) {
             return $this->buildErrorResponse(Response::HTTP_NOT_FOUND, 'user.notFound', 'L\'utilisateur est introuvable');
@@ -261,7 +260,6 @@ class UserController extends HelloworldController
      * }
      *
      * @throws ExceptionInterface
-     * @throws NonUniqueResultException
      * @throws Exception
      */
     public function searchAction(Request $request): JsonResponse
@@ -270,7 +268,7 @@ class UserController extends HelloworldController
 
         // No logged user
         if (null === $loggedUser || !$this->securityService->isAdmin($loggedUser)) {
-//            return $this->buildErrorResponse(Response::HTTP_FORBIDDEN, 'auth.unauthorized', 'Vous n\'êtes pas autorisé à effectuer cette action');
+            return $this->buildErrorResponse(Response::HTTP_FORBIDDEN, 'auth.unauthorized', 'Vous n\'êtes pas autorisé à effectuer cette action');
         }
 
         $users = $this->userRepository->search(

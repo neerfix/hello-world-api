@@ -19,32 +19,23 @@ class FileRepository extends ServiceEntityRepository
         parent::__construct($registry, File::class);
     }
 
-    // /**
-    //  * @return File[] Returns an array of File objects
-    //  */
-    /*
-    public function findByExampleField($value)
+    public function getAllByStatus(string $status)
     {
         return $this->createQueryBuilder('f')
-            ->andWhere('f.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('f.id', 'ASC')
-            ->setMaxResults(10)
+            ->where('f.status = :status')
+            ->setParameter('status', $status)
             ->getQuery()
-            ->getResult()
-        ;
+            ->getResult();
     }
-    */
 
-    /*
-    public function findOneBySomeField($value): ?File
+    public function getOneByStatus(string $uuid, string $status)
     {
         return $this->createQueryBuilder('f')
-            ->andWhere('f.exampleField = :val')
-            ->setParameter('val', $value)
+            ->where('f.status = :status')
+            ->setParameter('status', $status)
+            ->andWhere('f.uuid = :uuid')
+            ->setParameter('uuid', $uuid)
             ->getQuery()
-            ->getOneOrNullResult()
-        ;
+            ->getResult();
     }
-    */
 }

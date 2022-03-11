@@ -10,10 +10,10 @@ use Exception;
 
 class UsersFixtures extends Fixture
 {
-    private const DEFAULT_PASSWORD = '1234567890';
+    public const DEFAULT_PASSWORD = '1234567890';
 
-    private const USER_NEERFIX = 'neerfix';
-    private const USER_FAYAAH = 'fayaah';
+    public const USER_NEERFIX = 'neerfix';
+    public const USER_FAYAAH = 'fayaah';
 
     // ------------------------------ >
 
@@ -46,6 +46,8 @@ class UsersFixtures extends Fixture
 
             $manager->persist($userFixture);
             $manager->flush();
+
+            $this->addReference($userData['uuid'], $userFixture);
         }
     }
 
@@ -62,7 +64,7 @@ class UsersFixtures extends Fixture
                 'lastname' => 'Notararigo',
                 'birthDate' => new DateTime('1996-12-26'),
                 'roles' => ['ROLE_ADMIN'],
-                'uuid' => 'UUID-NEERFIX',
+                'uuid' => 'UUID_NEERFIX',
                 'isVerify' => true,
                 'status' => 'active',
             ],
@@ -74,7 +76,7 @@ class UsersFixtures extends Fixture
                 'lastname' => 'Baulan',
                 'birthDate' => new DateTime('2000-07-26'),
                 'roles' => ['ROLE_ADMIN'],
-                'uuid' => 'UUID-FAYAAH',
+                'uuid' => 'UUID_FAYAAH',
                 'isVerify' => true,
                 'status' => 'active',
             ],

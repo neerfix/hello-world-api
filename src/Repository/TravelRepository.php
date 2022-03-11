@@ -19,32 +19,15 @@ class TravelRepository extends ServiceEntityRepository
         parent::__construct($registry, Travel::class);
     }
 
-    // /**
-    //  * @return Travel[] Returns an array of Travel objects
-    //  */
-    /*
-    public function findByExampleField($value)
+    /**
+     * @return Travel[]
+     */
+    public function findAllActive(): array
     {
-        return $this->createQueryBuilder('t')
-            ->andWhere('t.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('t.id', 'ASC')
-            ->setMaxResults(10)
-            ->getQuery()
-            ->getResult()
-        ;
-    }
-    */
+        return $this->createQueryBuilder('T')
+            ->where('T.status = :status')
+            ->setParameter('status', 'active')
 
-    /*
-    public function findOneBySomeField($value): ?Travel
-    {
-        return $this->createQueryBuilder('t')
-            ->andWhere('t.exampleField = :val')
-            ->setParameter('val', $value)
-            ->getQuery()
-            ->getOneOrNullResult()
-        ;
+            ->getQuery()->getArrayResult();
     }
-    */
 }

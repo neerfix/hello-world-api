@@ -3,12 +3,10 @@
 namespace App\Controller\Auth;
 
 use App\Controller\HelloworldController;
-use App\Entity\Token;
 use App\Entity\User;
+use App\Services\AuthService;
 use App\Services\RequestService;
 use App\Services\ResponseService;
-use App\Services\TokenService;
-use DateTime;
 use Exception;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -26,7 +24,7 @@ class LoginController extends HelloworldController
         RequestService $requestService,
         ValidatorInterface $validator,
         NormalizerInterface $normalizer,
-        private TokenService $tokenService,
+        private AuthService $authService
     ) {
         parent::__construct($responseService, $requestService, $validator, $normalizer);
     }
@@ -47,13 +45,8 @@ class LoginController extends HelloworldController
             ], Response::HTTP_UNAUTHORIZED);
         }
 
-        $accessToken = $this->tokenService->create($user, Token::TARGET_ACCESS_TOKEN);
-        $refreshToken = $this->tokenService->create($user, Token::TARGET_REFRESH_TOKEN, new DateTime('+1 year'));
+        $token = $this->authService->loginFromEmail($user);
 
-        return $this->buildSuccessResponse(Response::HTTP_ACCEPTED, [
-            'user' => $user->getUserIdentifier(),
-            'accessToken' => $accessToken->getValue(),
-            'refreshToken' => $refreshToken->getValue(),
-        ], $user);
+        return $this->buildSuccessResponse(Response::HTTP_ACCEPTED, $token, $user);
     }
 }

@@ -57,7 +57,8 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, Statuab
      * @Groups({
      *     "user:read",
      *     "user:search",
-     *     "travel:nested"
+     *     "travel:nested",
+     *     "file:nested"
      * })
      * @ORM\Column(name="uuid", type="string", length="180", unique=true)
      */
@@ -66,7 +67,8 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, Statuab
     /**
      * @Groups({
      *     "user:read",
-     *     "travel:nested"
+     *     "travel:nested",
+     *     "file:nested"
      * })
      * @ORM\Column(name="roles", type="json")
      */
@@ -82,7 +84,8 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, Statuab
      * @Groups({
      *     "user:read",
      *     "user:search",
-     *     "travel:nested"
+     *     "travel:nested",
+     *     "file:nested"
      * })
      * @ORM\Column(name="email", type="string", length="255", unique=true)
      */
@@ -91,7 +94,8 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, Statuab
     /**
      * @Groups({
      *     "user:read",
-     *     "travel:nested"
+     *     "travel:nested",
+     *     "file:nested"
      * })
      * @ORM\Column(name="date_of_birth", type="date")
      */
@@ -101,7 +105,8 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, Statuab
      * @Groups({
      *     "user:read",
      *     "user:search",
-     *     "travel:nested"
+     *     "travel:nested",
+     *     "file:nested"
      * })
      * @ORM\Column(name="firstname", type="string", length="50", nullable=true)
      */
@@ -111,7 +116,8 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, Statuab
      * @Groups({
      *     "user:read",
      *     "user:search",
-     *     "travel:nested"
+     *     "travel:nested",
+     *     "file:nested"
      * })
      * @ORM\Column(name="lastname", type="string", length="70", nullable=true)
      */
@@ -121,7 +127,8 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, Statuab
      * @Groups({
      *     "user:read",
      *     "user:search",
-     *     "travel:nested"
+     *     "travel:nested",
+     *     "file:nested"
      * })
      * @ORM\Column(name="username", type="string", length="55", unique=true)
      */
@@ -131,7 +138,8 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, Statuab
      * @Groups({
      *     "user:read",
      *     "user:search",
-     *     "travel:nested"
+     *     "travel:nested",
+     *     "file:nested"
      * })
      * @ORM\Column(name="is_verify", type="boolean")
      */

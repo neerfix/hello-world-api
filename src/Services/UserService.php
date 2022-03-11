@@ -45,7 +45,34 @@ class UserService
         $firstname = !empty($firstname) ? $this->textService->cleanFirstName($firstname) : null;
         $lastname = !empty($lastname) ? $this->textService->cleanLastName($lastname) : null;
 
-        $this->getExceptionToValidationCreateOrUpdateUser($email, $username, $birthdate, $password);
+        if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+            throw new Exception('l\'email n\'est pas valide', 'users.create.email.invalid', 'email');
+        }
+
+        $existingEmail = $this->userRepository->findOneByEmail($email);
+
+        // Existing email
+        if (null !== $existingEmail) {
+            throw new Exception('cet email est déjà utilisé');
+        }
+
+        $existingUsername = $this->userRepository->findOneByUsername($username);
+
+        if (null !== $existingUsername) {
+            throw new Exception('cet username est déjà utilisé');
+        }
+
+        $birthdate = (clone $birthdate)
+            ->setTime(0, 0, 0);
+
+        if ($birthdate > new DateTime()) {
+            throw new Exception('La date de naissance n\'est pas valide', 'users.create.birthdate.invalid', 'birthdate');
+        }
+
+        // Invalid password
+        if (strlen($password) < static::MIN_PASSWORD_LENGTH) {
+            throw new Exception('le mot de passe est trop court. Il doit faire au minimum '.static::MIN_PASSWORD_LENGTH.' caractère');
+        }
 
         $user = (new User())
             ->setEmail($email)
@@ -104,6 +131,7 @@ class UserService
 
     /**
      * @throws NonUniqueResultException
+     * @throws Exception
      */
     public function update(
         User $user,
@@ -117,7 +145,31 @@ class UserService
         $firstname = !empty($firstname) ? $this->textService->cleanFirstName($firstname) : null;
         $lastname = !empty($lastname) ? $this->textService->cleanLastName($lastname) : null;
 
-        $this->getExceptionToValidationCreateOrUpdateUser($email, $username, $birthdate, null, $user);
+        if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+            throw new RuntimeException('l\'email n\'est pas valide', 'users.create.email.invalid', 'email');
+        }
+
+        $existingEmail = $this->userRepository->findOneByEmail($email);
+
+        // Existing email
+        if (null !== $existingEmail) {
+            throw new Exception('cet email est déjà utilisé');
+        }
+
+        if (null === $user) {
+            $existingUsername = $this->userRepository->findOneByUsername($username);
+
+            if (null !== $existingUsername) {
+                throw new Exception('cet username est déjà utilisé');
+            }
+        }
+
+        $birthdate = (clone $birthdate)
+            ->setTime(0, 0, 0);
+
+        if ($birthdate > new DateTime()) {
+            throw new RuntimeException('La date de naissance n\'est pas valide', 'users.create.birthdate.invalid', 'birthdate');
+        }
 
         $user
             ->setEmail($email)
@@ -151,50 +203,5 @@ class UserService
         $this->em->flush();
 
         return $user;
-    }
-
-    /**
-     * @throws NonUniqueResultException
-     * @throws Exception
-     */
-    private function getExceptionToValidationCreateOrUpdateUser(
-        string $email,
-        string $username,
-        DateTime $birthdate,
-        ?string $password = null,
-        ?User $user = null
-    ): void {
-        if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-            throw new RuntimeException('l\'email n\'est pas valide', 'users.create.email.invalid', 'email');
-        }
-
-        $existingEmail = $this->userRepository->findOneByEmail($email);
-
-        // Existing email
-        if (null !== $existingEmail) {
-            throw new RuntimeException('cet email est déjà utilisé', 'users.create.email.already_exist', 'email');
-        }
-
-        if (null === $user) {
-            $existingUsername = $this->userRepository->findOneByUsername($username);
-
-            if (null !== $existingUsername) {
-                return;
-            }
-        }
-
-        $birthdate = (clone $birthdate)
-            ->setTime(0, 0, 0);
-
-        if ($birthdate > new DateTime()) {
-            throw new RuntimeException('La date de naissance n\'est pas valide', 'users.create.birthdate.invalid', 'birthdate');
-        }
-
-        if (null !== $password) {
-            // Invalid password
-            if (empty($password) || $password < static::MIN_PASSWORD_LENGTH) {
-                throw new RuntimeException('le mot de passe est trop court. Il doit faire au minimum '.static::MIN_PASSWORD_LENGTH.' caractère', '', 'password');
-            }
-        }
     }
 }

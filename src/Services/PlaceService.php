@@ -8,6 +8,7 @@ use App\Repository\PlaceRepository;
 use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use Ramsey\Uuid\Uuid;
+use RuntimeException;
 
 class PlaceService
 {

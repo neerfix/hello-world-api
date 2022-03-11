@@ -2,8 +2,8 @@
 
 namespace App\Controller;
 
+use App\Repository\AlbumRepository;
 use App\Repository\TravelRepository;
-use App\Repository\UserRepository;
 use App\Services\AlbumService;
 use App\Services\RequestService;
 use App\Services\ResponseService;
@@ -26,10 +26,10 @@ class AlbumController extends HelloworldController
         ResponseService $responseService,
         RequestService $requestService,
         ValidatorInterface $validator,
-        private NormalizerInterface $normalizer,
+        NormalizerInterface $normalizer,
         private AlbumService $albumService,
         private TravelRepository $travelRepository,
-        private UserRepository $userRepository
+        private AlbumRepository $albumRepository,
     ) {
         parent::__construct($responseService, $requestService, $validator, $normalizer);
     }
@@ -88,7 +88,7 @@ class AlbumController extends HelloworldController
             return $this->buildErrorResponse(Response::HTTP_FORBIDDEN, 'auth.unauthorized', 'Vous n\'êtes pas autorisé à effectuer cette action');
         }
 
-        $albums = $this->albumService->getAll();
+        $albums = $this->albumRepository->getAll();
 
         return $this->buildSuccessResponse(Response::HTTP_OK, $albums, $loggedUser, ['groups' => ['album:read', 'album:nested']]);
     }
@@ -108,7 +108,7 @@ class AlbumController extends HelloworldController
             return $this->buildErrorResponse(Response::HTTP_FORBIDDEN, 'auth.unauthorized', 'Vous n\'êtes pas autorisé à effectuer cette action');
         }
 
-        $album = $this->albumService->getByUuid($uuid);
+        $album = $this->albumRepository->findOneByUuid($uuid);
 
         return $this->buildSuccessResponse(Response::HTTP_OK, $album, $loggedUser, ['groups' => ['album:read', 'album:nested']]);
     }
@@ -122,15 +122,18 @@ class AlbumController extends HelloworldController
     public function deleteAction(string $uuid): Response
     {
         $loggedUser = $this->getLoggedUser();
+
         // No logged used
         if (null === $loggedUser) {
             return $this->buildErrorResponse(Response::HTTP_FORBIDDEN, 'auth.unauthorized', 'Vous n\'êtes pas autorisé à effectuer cette action');
         }
 
-        $album = $this->albumService->getByUuid($uuid);
+        $album = $this->albumRepository->findOneByUuid($uuid);
+
         if (null === $album) {
             return $this->buildErrorResponse(Response::HTTP_NOT_FOUND, 'album.notFound', 'L\'album est introuvable');
         }
+
         $albumDeleted = $this->albumService->delete($album);
 
         return $this->buildSuccessResponse(Response::HTTP_OK, $albumDeleted, $loggedUser, ['groups' => ['album:read', 'album:nested']]);
@@ -152,7 +155,8 @@ class AlbumController extends HelloworldController
             return $this->buildErrorResponse(Response::HTTP_FORBIDDEN, 'auth.unauthorized', 'Vous n\'êtes pas autorisé à effectuer cette action');
         }
 
-        $album = $this->albumService->getByUuid($uuid);
+        $album = $this->albumRepository->findOneByUuid($uuid);
+
         if (null === $album) {
             return $this->buildErrorResponse(Response::HTTP_NOT_FOUND, 'album.notFound', 'L\'album est introuvable');
         }
