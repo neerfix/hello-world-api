@@ -88,7 +88,7 @@ class AlbumController extends HelloworldController
             return $this->buildErrorResponse(Response::HTTP_FORBIDDEN, 'auth.unauthorized', 'Vous n\'êtes pas autorisé à effectuer cette action');
         }
 
-        $albums = $this->albumRepository->getAll();
+        $albums = $this->albumRepository->findAllActive();
 
         return $this->buildSuccessResponse(Response::HTTP_OK, $albums, $loggedUser, ['groups' => ['album:read', 'album:nested']]);
     }

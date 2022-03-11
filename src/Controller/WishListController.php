@@ -2,23 +2,23 @@
 
 namespace App\Controller;
 
-use Exception;
+use App\Repository\PlaceRepository;
+use App\Repository\UserRepository;
+use App\Repository\WishListRepository;
 use App\Services\RequestService;
 use App\Services\ResponseService;
 use App\Services\WishListService;
-use App\Repository\UserRepository;
-use App\Repository\PlaceRepository;
-use App\Repository\WishListRepository;
+use Exception;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Validator\Constraints\Type;
+use Symfony\Component\Serializer\Exception\ExceptionInterface;
+use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 use Symfony\Component\Validator\Constraints\DateTime;
 use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\Validator\Constraints\Optional;
+use Symfony\Component\Validator\Constraints\Type;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
-use Symfony\Component\Serializer\Exception\ExceptionInterface;
-use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 
 class WishListController extends HelloworldController
 {
@@ -181,13 +181,15 @@ class WishListController extends HelloworldController
 
         $place = $this->placeRepository->find($parameters['placeId']);
         $user = $this->userRepository->find($parameters['userId']);
+        $estimatedAt = (array_key_exists('estimatedAt', $parameters)) ? $this->getDate($request, $parameters['estimatedAt']) : null;
 
-        $wishList = $this->wishListService->update(
+        $wishListUpdated = $this->wishListService->update(
+            $wishList,
             $parameters['name'],
             $parameters['description'],
             $place,
             $user,
-            $parameters['estimatedAt'],
+            $estimatedAt,
         );
 
         return $this->buildSuccessResponse(Response::HTTP_ACCEPTED, $wishListUpdated, $loggedUser, ['groups' => ['wishList:read', 'wishList:nested']]);

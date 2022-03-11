@@ -51,7 +51,8 @@ class AlbumService
             ->setTravel($travel)
             ->setCreatedAt(new DateTime())
             ->setUpdatedAt(new DateTime())
-            ->setUuid(Uuid::uuid4());
+            ->setUuid(Uuid::uuid4())
+            ->setStatus(Album::STATUS_ACTIVE);
 
         $this->em->persist($album);
         $this->em->flush();

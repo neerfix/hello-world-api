@@ -53,85 +53,71 @@ class Place implements Statuable
 
     /**
      * @Groups({
-     *     "place:read"
-     * })
-     * @ORM\Column(name="address", type="string", length="255")
-     * @Groups({
      *     "place:read",
      *     "step:nested",
+     *     "wishList:nested",
      * })
+     * @ORM\Column(name="address", type="string", length="255")
      */
     private string $address;
 
     /**
      * @Groups({
-     *   "place:read"
-     * })
-     * @ORM\Column(name="city", type="string", length="255")
-     * @Groups({
      *     "place:read",
      *     "step:nested",
+     *     "wishList:nested",
      * })
+     * @ORM\Column(name="city", type="string", length="255")
      */
     private string $city;
 
     /**
      * @Groups({
-     *   "place:read"
-     * })
-     * @ORM\Column(name="zipcode", type="string", length="255")
-     * @Groups({
      *     "place:read",
      *     "step:nested",
+     *     "wishList:nested",
      * })
+     * @ORM\Column(name="zipcode", type="string", length="255")
      */
     private string $zipcode;
 
     /**
      * @Groups({
-     *   "place:read"
-     * })
-     * @ORM\Column(name="country", type="string", length="255")
-     * @Groups({
      *     "place:read",
      *     "step:nested",
+     *     "wishList:nested",
      * })
+     * @ORM\Column(name="country", type="string", length="255")
      */
     private string $country;
 
     /**
      * @Groups({
-     *   "place:read"
-     * })
-     * @ORM\Column(name="name", type="string", length="255")
-     * @Groups({
      *     "place:read",
      *     "step:nested",
+     *     "wishList:nested",
      * })
+     * @ORM\Column(name="name", type="string", length="255")
      */
     private string $name;
 
     /**
      * @Groups({
-     *   "place:read"
-     * })
-     * @ORM\Column(name="latitude", type="string", length="255")
-     * @Groups({
      *     "place:read",
      *     "step:nested",
+     *     "wishList:nested",
      * })
+     * @ORM\Column(name="latitude", type="string", length="255")
      */
     private string $latitude;
 
     /**
      * @Groups({
-     *   "place:read"
-     * })
-     * @ORM\Column(name="longitude", type="string", length="255")
-     * @Groups({
      *     "place:read",
      *     "step:nested",
+     *     "wishList:nested",
      * })
+     * @ORM\Column(name="longitude", type="string", length="255")
      */
     private string $longitude;
 

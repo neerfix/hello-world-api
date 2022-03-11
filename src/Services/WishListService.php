@@ -2,9 +2,9 @@
 
 namespace App\Services;
 
-use App\Entity\WishList;
 use App\Entity\Place;
 use App\Entity\User;
+use App\Entity\WishList;
 use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\NonUniqueResultException;
@@ -56,7 +56,8 @@ class WishListService
             ->setEstimatedAt($estimatedAt)
             ->setCreatedAt(new DateTime())
             ->setUpdatedAt(new DateTime())
-            ->setUuid(Uuid::uuid4());
+            ->setUuid(Uuid::uuid4())
+            ->setStatus(WishList::STATUS_ACTIVE);
 
         $this->em->persist($wishList);
         $this->em->flush();
@@ -69,8 +70,9 @@ class WishListService
      */
     public function delete(WishList $wishList): WishList
     {
-        $wishList->setStatus(WishList::STATUS_DELETED)
-            ->setUpdateAt(new DateTime());
+        $wishList
+            ->setStatus(WishList::STATUS_DELETED)
+            ->setUpdatedAt(new DateTime());
 
         $this->em->persist($wishList);
         $this->em->flush();
