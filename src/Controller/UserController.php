@@ -197,7 +197,7 @@ class UserController extends HelloworldController
         }
 
         $errors = $this->validate($parameters, [
-            'email' => [new Email(), new NotBlank()],
+            'email' => [new Type(['type' => 'string']), new NotBlank()],
             'password' => [new Type(['type' => 'string']), new NotBlank()],
             'birthDate' => [new DateTime(['format' => 'Y-m-d']), new NotBlank()],
             'userName' => [new Type(['type' => 'string'])],
