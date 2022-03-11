@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\User;
+use App\Repository\PlaceRepository;
 use App\Repository\TravelRepository;
 use App\Services\RequestService;
 use App\Services\ResponseService;
@@ -30,6 +31,7 @@ class TravelController extends HelloworldController
         NormalizerInterface $normalizer,
         private TravelService $travelService,
         private TravelRepository $travelRepository,
+        private PlaceRepository $placeRepository,
     ) {
         parent::__construct($responseService, $requestService, $validator, $normalizer);
     }
@@ -156,17 +158,20 @@ class TravelController extends HelloworldController
             'startedAt' => [new Optional([new DateTime(['format' => 'Y-m-d']), new NotBlank()])],
             'endedAt' => [new Optional([new DateTime(['format' => 'Y-m-d']), new NotBlank()])],
             'isSharable' => [new Type(['type' => 'bool']), new NotBlank()],
+            'placeId' => [new Type(['type' => 'int']), new NotBlank()],
         ]);
 
         if (!empty($errors)) {
             return $errors;
         }
 
+        $place = $this->placeRepository->find($parameters['placeId']);
         $startedAt = $this->getDate($request, $request->request->get('startedAt'));
         $endedAt = $this->getDate($request, $request->request->get('endedAt'));
 
         $travelUpdated = $this->travelService->update(
             $travel,
+            $place,
             $loggedUser,
             $parameters['name'],
             $parameters['budget'],
@@ -202,17 +207,20 @@ class TravelController extends HelloworldController
             'startedAt' => [new Optional([new DateTime(['format' => 'Y-m-d']), new NotBlank()])],
             'endedAt' => [new Optional([new DateTime(['format' => 'Y-m-d']), new NotBlank()])],
             'isSharable' => [new Type(['type' => 'bool']), new NotBlank()],
+            'placeId' => [new Type(['type' => 'int']), new NotBlank()],
         ]);
 
         if (!empty($errors)) {
             return $errors;
         }
 
+        $place = $this->placeRepository->find($parameters['placeId']);
         $startedAt = $this->getDate($request, $request->request->get('startedAt'));
         $endedAt = $this->getDate($request, $request->request->get('endedAt'));
 
         $travel = $this->travelService->create(
             $loggedUser,
+            $place,
             $parameters['name'],
             $parameters['budget'],
             $startedAt,
