@@ -158,8 +158,8 @@ class TravelController extends HelloworldController
             'name' => [new Type(['type' => 'string']), new NotBlank()],
             'budget' => [new Type(['type' => 'float']), new NotBlank()],
             'description' => [new Optional([new Type(['type' => 'string']), new NotBlank()])],
-            'startedAt' => [new Optional([new DateTime(['format' => 'd-m-Y']), new NotBlank()])],
-            'endedAt' => [new Optional([new DateTime(['format' => 'd-m-Y']), new NotBlank()])],
+            'startedAt' => [new Optional([new DateTime(['format' => 'Y-m-d']), new NotBlank()])],
+            'endedAt' => [new Optional([new DateTime(['format' => 'Y-m-d']), new NotBlank()])],
             'isSharable' => [new Type(['type' => 'bool']), new NotBlank()],
         ]);
 
@@ -177,7 +177,6 @@ class TravelController extends HelloworldController
             return $errors;
         }
         $place = 'truc';
-//        $place = $this->placeService->create($placeRequest['name'],$placeRequest['latitude'], $placeRequest['longitude'], $placeRequest['address'], $placeRequest['city'], $placeRequest['zipcode'], $placeRequest['country']);
 
         $startedAt = $this->getDate($request, $request->request->get('startedAt'));
         $endedAt = $this->getDate($request, $request->request->get('endedAt'));
@@ -218,8 +217,8 @@ class TravelController extends HelloworldController
             'name' => [new Type(['type' => 'string']), new NotBlank()],
             'budget' => [new Type(['type' => 'float']), new NotBlank()],
             'description' => [new Optional([new Type(['type' => 'string']), new NotBlank()])],
-            'startedAt' => [new Optional([new DateTime(['format' => 'd-m-Y']), new NotBlank()])],
-            'endedAt' => [new Optional([new DateTime(['format' => 'd-m-Y']), new NotBlank()])],
+            'startedAt' => [new Optional([new DateTime(['format' => 'Y-m-d']), new NotBlank()])],
+            'endedAt' => [new Optional([new DateTime(['format' => 'Y-m-d']), new NotBlank()])],
             'isSharable' => [new Type(['type' => 'bool']), new NotBlank()],
         ]);
 

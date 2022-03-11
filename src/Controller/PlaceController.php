@@ -14,6 +14,7 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Serializer\Exception\ExceptionInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 use Symfony\Component\Validator\Constraints\NotBlank;
+use Symfony\Component\Validator\Constraints\Optional;
 use Symfony\Component\Validator\Constraints\Type;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
@@ -50,6 +51,10 @@ class PlaceController extends HelloworldController
             'name' => [new Type(['type' => 'string']), new NotBlank()],
             'latitude' => [new Type(['type' => 'float']), new NotBlank()],
             'longitude' => [new Type(['type' => 'float']), new NotBlank()],
+            'address' => [new Optional([new Type(['type' => 'string']), new NotBlank()])],
+            'city' => [new Optional([new Type(['type' => 'string']), new NotBlank()])],
+            'zipcode' => [new Optional([new Type(['type' => 'string']), new NotBlank()])],
+            'country' => [new Optional([new Type(['type' => 'string']), new NotBlank()])],
         ]);
 
         if (!empty($errors)) {
@@ -140,6 +145,10 @@ class PlaceController extends HelloworldController
             'name' => [new Type(['type' => 'string']), new NotBlank()],
             'latitude' => [new Type(['type' => 'float']), new NotBlank()],
             'longitude' => [new Type(['type' => 'float']), new NotBlank()],
+            'address' => [new Optional([new Type(['type' => 'string']), new NotBlank()])],
+            'city' => [new Optional([new Type(['type' => 'string']), new NotBlank()])],
+            'zipcode' => [new Optional([new Type(['type' => 'string']), new NotBlank()])],
+            'country' => [new Optional([new Type(['type' => 'string']), new NotBlank()])],
         ]);
 
         if (!empty($errors)) {
