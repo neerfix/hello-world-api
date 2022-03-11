@@ -17,11 +17,16 @@ final class Version20220311093048 extends AbstractMigration
         return '';
     }
 
+    public function isTransactional(): bool
+    {
+        return false;
+    }
+
     public function up(Schema $schema): void
     {
         // this up() migration is auto-generated, please modify it to your needs
         $this->addSql('ALTER TABLE place RENAME INDEX uniq_39956e49d17f70a6 TO UNIQ_741D53CDD17F50A6;');
-        $this->addSql('ALTER TABLE travel ADD place_id INT DEFAULT NULL;');
+        $this->addSql('ALTER TABLE travel ADD place_id INT NOT NULL;');
         $this->addSql('ALTER TABLE travel ADD CONSTRAINT FK_2D0B6BCEDA6A219 FOREIGN KEY (place_id) REFERENCES place (id);');
         $this->addSql(' CREATE INDEX IDX_2D0B6BCEDA6A219 ON travel (place_id);');
         $this->addSql('ALTER TABLE step ADD uuid VARCHAR(180) NOT NULL;');
