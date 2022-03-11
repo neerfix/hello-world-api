@@ -152,12 +152,12 @@ class Travel implements Statuable
         return $this;
     }
 
-    public function getBudget(): ?float
+    public function getBudget(): ?string
     {
         return $this->budget;
     }
 
-    public function setBudget(?float $budget = null): Travel
+    public function setBudget(?string $budget = null): Travel
     {
         $this->budget = $budget;
 

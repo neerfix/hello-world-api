@@ -215,7 +215,7 @@ class TravelController extends HelloworldController
 
         $errors = $this->validate($parameters, [
             'name' => [new Type(['type' => 'string']), new NotBlank()],
-            'budget' => [new Type(['type' => 'float']), new NotBlank()],
+            'budget' => [new Type(['type' => 'string']), new NotBlank()],
             'description' => [new Optional([new Type(['type' => 'string']), new NotBlank()])],
             'startedAt' => [new Optional([new DateTime(['format' => 'Y-m-d']), new NotBlank()])],
             'endedAt' => [new Optional([new DateTime(['format' => 'Y-m-d']), new NotBlank()])],
