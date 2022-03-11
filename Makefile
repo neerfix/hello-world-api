@@ -38,7 +38,7 @@ install:
 	yarn install
 	composer install --no-dev --optimize-autoloader
 	APP_ENV=prod APP_DEBUG=0 php bin/console cache:clear
-	php bin/console doctrine:migration:diff
+	php bin/console doctrine:migration:migrate --no-interaction
 
 install-dev:
 	yarn install
