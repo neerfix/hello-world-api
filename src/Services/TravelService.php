@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Entity\Place;
 use App\Entity\Travel;
 use App\Entity\User;
 use DateTime;
@@ -31,6 +32,7 @@ class TravelService
      */
     public function create(
         User $user,
+        Place $place,
         string $name,
         float $budget,
         ?DateTime $startedAt = null,
@@ -56,16 +58,25 @@ class TravelService
             ->setEndedAt($endedAt)
             ->setDescription($description)
             ->setUserId($user)
-            ->setIsShared($isShared);
+            ->setPlaceId($place)
+            ->setIsShared($isShared)
+            ->setUuid(Uuid::uuid4())
+            ->setStatus(Travel::STATUS_ACTIVE);
 
         $this->em->persist($travel);
-        $this->em->flush();
+
+        try {
+            $this->em->flush();
+        } catch (Exception $e) {
+            dd($e);
+        }
 
         return $travel;
     }
 
     public function update(
         Travel $travel,
+        Place $place,
         User $user,
         string $name,
         float $budget,
@@ -92,7 +103,7 @@ class TravelService
             ->setEndedAt($endedAt)
             ->setDescription($description)
             ->setUserId($user)
-            ->setUuid(Uuid::uuid4())
+            ->setPlaceId($place)
             ->setIsShared($isSharable);
 
         $this->em->persist($travel);
