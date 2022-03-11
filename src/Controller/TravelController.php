@@ -27,7 +27,7 @@ class TravelController extends HelloworldController
         ResponseService $responseService,
         RequestService $requestService,
         ValidatorInterface $validator,
-        private NormalizerInterface $normalizer,
+        NormalizerInterface $normalizer,
         private TravelService $travelService,
         private TravelRepository $travelRepository,
     ) {
@@ -45,7 +45,7 @@ class TravelController extends HelloworldController
     public function index(): Response
     {
         $loggedUser = $this->getLoggedUser();
-        $travel = $this->travelRepository->findAll();
+        $travel = $this->travelRepository->findAllActive();
 
         return $this->buildSuccessResponse(Response::HTTP_OK, $travel, $loggedUser, ['groups' => 'travel:read']);
     }

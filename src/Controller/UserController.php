@@ -80,7 +80,7 @@ class UserController extends HelloworldController
             return $this->buildErrorResponse(Response::HTTP_FORBIDDEN, 'auth.unauthorized', 'Vous n\'êtes pas autorisé à effectuer cette action');
         }
 
-        $users = $this->userRepository->findAll();
+        $users = $this->userRepository->findAllActive();
 
         return $this->buildSuccessResponse(Response::HTTP_OK, $users, $loggedUser, ['groups' => 'user:read']);
     }

@@ -6,7 +6,6 @@ use App\Entity\Album;
 use App\Entity\Place;
 use App\Entity\Step;
 use App\Entity\Travel;
-use App\Repository\StepRepository;
 use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use Exception;
@@ -16,13 +15,8 @@ class StepService
 {
     // ------------------------ >
 
-    private const DESCRIPTION_MINIMAL_WORD = 5;
-
-    // ------------------------ >
-
     public function __construct(
         private EntityManagerInterface $em,
-        private StepRepository $stepRepository
     ) {
     }
 
@@ -57,33 +51,17 @@ class StepService
     /**
      * @throws Exception
      */
-    public function getAll(): array
-    {
-        return $this->stepRepository->findAll();
-    }
-
-    /**
-     * @throws Exception
-     */
-    public function getByUuid(string $uuid): ?Step
-    {
-        return $this->stepRepository->findOneByUuid($uuid);
-    }
-
-    /**
-     * @throws Exception
-     */
     public function delete(Step $step): Step
     {
-        $this->em->remove($step);
+        $step->setStatus(Step::STATUS_DELETED)
+            ->setUpdatedAt(new DateTime());
+
+        $this->em->persist($step);
         $this->em->flush();
 
         return $step;
     }
 
-    /**
-     * @throws NonUniqueResultException
-     */
     public function update(
         Step $step,
         Album $album,

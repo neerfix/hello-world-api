@@ -4,8 +4,8 @@ namespace App\Controller;
 
 use App\Repository\AlbumRepository;
 use App\Repository\PlaceRepository;
+use App\Repository\StepRepository;
 use App\Repository\TravelRepository;
-use App\Repository\UserRepository;
 use App\Services\RequestService;
 use App\Services\ResponseService;
 use App\Services\StepService;
@@ -29,12 +29,12 @@ class StepController extends HelloworldController
         ResponseService $responseService,
         RequestService $requestService,
         ValidatorInterface $validator,
-        private NormalizerInterface $normalizer,
+        NormalizerInterface $normalizer,
         private StepService $stepService,
         private TravelRepository $travelRepository,
-        private UserRepository $userRepository,
         private AlbumRepository $albumRepository,
-        private PlaceRepository $placeRepository
+        private PlaceRepository $placeRepository,
+        private StepRepository $stepRepository,
     ) {
         parent::__construct($responseService, $requestService, $validator, $normalizer);
     }
@@ -50,7 +50,7 @@ class StepController extends HelloworldController
     public function addAction(Request $request): Response
     {
         $parameters = $this->getContent($request);
-        $loggedUser = $this->getLoggedUser($this->userRepository);
+        $loggedUser = $this->getLoggedUser();
 
         // No logged user
         if (null === $loggedUser) {
@@ -94,14 +94,14 @@ class StepController extends HelloworldController
      */
     public function getAllAction(): Response
     {
-        $loggedUser = $this->getLoggedUser($this->userRepository);
+        $loggedUser = $this->getLoggedUser();
 
         // No logged user
         if (null === $loggedUser) {
             return $this->buildErrorResponse(Response::HTTP_FORBIDDEN, 'auth.unauthorized', 'Vous n\'êtes pas autorisé à effectuer cette action');
         }
 
-        $steps = $this->stepService->getAll();
+        $steps = $this->stepRepository->findAllActive();
 
         return $this->buildSuccessResponse(Response::HTTP_OK, $steps, $loggedUser, ['groups' => ['step:read', 'step:nested']]);
     }
@@ -114,14 +114,14 @@ class StepController extends HelloworldController
      */
     public function getByUUidAction(string $uuid): Response
     {
-        $loggedUser = $this->getLoggedUser($this->userRepository);
+        $loggedUser = $this->getLoggedUser();
 
         // No logged user
         if (null === $loggedUser) {
             return $this->buildErrorResponse(Response::HTTP_FORBIDDEN, 'auth.unauthorized', 'Vous n\'êtes pas autorisé à effectuer cette action');
         }
 
-        $step = $this->stepService->getByUuid($uuid);
+        $step = $this->stepRepository->findOneByUuid($uuid);
 
         return $this->buildSuccessResponse(Response::HTTP_OK, $step, $loggedUser, ['groups' => ['step:read', 'step:nested']]);
     }
@@ -134,16 +134,19 @@ class StepController extends HelloworldController
      */
     public function deleteAction(string $uuid): Response
     {
-        $loggedUser = $this->getLoggedUser($this->userRepository);
+        $loggedUser = $this->getLoggedUser();
+
         // No logged used
         if (null === $loggedUser) {
             return $this->buildErrorResponse(Response::HTTP_FORBIDDEN, 'auth.unauthorized', 'Vous n\'êtes pas autorisé à effectuer cette action');
         }
 
-        $step = $this->stepService->getByUuid($uuid);
+        $step = $this->stepRepository->findOneByUuid($uuid);
+
         if (null === $step) {
             return $this->buildErrorResponse(Response::HTTP_NOT_FOUND, 'step.notFound', 'L\'step est introuvable');
         }
+
         $stepDeleted = $this->stepService->delete($step);
 
         return $this->buildSuccessResponse(Response::HTTP_OK, $stepDeleted, $loggedUser, ['groups' => ['step:read', 'step:nested']]);
@@ -158,14 +161,14 @@ class StepController extends HelloworldController
     public function updateAction(Request $request, string $uuid): Response
     {
         $parameters = $this->getContent($request);
-        $loggedUser = $this->getLoggedUser($this->userRepository);
+        $loggedUser = $this->getLoggedUser();
 
         // No logged used
         if (null === $loggedUser) {
             return $this->buildErrorResponse(Response::HTTP_FORBIDDEN, 'auth.unauthorized', 'Vous n\'êtes pas autorisé à effectuer cette action');
         }
 
-        $step = $this->stepService->getByUuid($uuid);
+        $step = $this->stepRepository->findOneByUuid($uuid);
 
         if (null === $step) {
             return $this->buildErrorResponse(Response::HTTP_NOT_FOUND, 'step.notFound', 'L\'step est introuvable');

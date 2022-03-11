@@ -5,7 +5,6 @@ namespace App\Controller;
 use App\Entity\File;
 use App\Entity\User;
 use App\Repository\FileRepository;
-use App\Repository\UserRepository;
 use App\Services\FileService;
 use App\Services\RequestService;
 use App\Services\ResponseService;
@@ -28,7 +27,6 @@ class FileController extends HelloworldController
         NormalizerInterface $normalizer,
         private FileService $fileService,
         private FileRepository $fileRepository,
-        private UserRepository $userRepository
     ) {
         parent::__construct($responseService, $requestService, $validator, $normalizer);
     }
@@ -70,14 +68,16 @@ class FileController extends HelloworldController
      * @throws Exception
      * @throws ExceptionInterface
      */
-    public function getAction(Request $request, string $uuid): Response
+    public function getAction(string $uuid): Response
     {
         $loggedUser = $this->getLoggedUser();
 
         if (null === $loggedUser) {
             return $this->buildErrorResponse(Response::HTTP_FORBIDDEN, 'auth.unauthorized', 'Vous n\'êtes pas autorisé à effectuer cette action');
         }
+
         $file = $this->fileRepository->getOneByStatus($uuid, File::STATUS_ACTIVE);
+
         if (null === $file) {
             return $this->buildErrorResponse(Response::HTTP_NOT_FOUND, 'not.found', 'Le fichier n\'a pas été trouvé');
         }
@@ -108,18 +108,23 @@ class FileController extends HelloworldController
     public function delete(Request $request, string $uuid): Response
     {
         $loggedUser = $this->getLoggedUser();
+
         if (null === $loggedUser) {
             return $this->buildErrorResponse(Response::HTTP_FORBIDDEN, 'auth.unauthorized', 'Vous n\'êtes pas autorisé à effectuer cette action');
         }
+
         $file = $this->fileRepository->findOneBy(['uuid' => $uuid]);
+
         if (null === $file) {
             return $this->buildErrorResponse(Response::HTTP_NOT_FOUND, 'not.found', 'Le fichier n\'a pas été trouvé');
         }
+
         $roles = $loggedUser->getRoles();
 
         if (!in_array(User::ROLE_ADMIN, $roles, true) && $file->getUserId() !== $loggedUser->getId()) {
             return $this->buildErrorResponse(Response::HTTP_FORBIDDEN, 'auth.unauthorized', 'Vous n\'êtes pas autorisé à effectuer cette action');
         }
+
         $fileDeleted = $this->fileService->delete($file, $loggedUser);
 
         return $this->buildSuccessResponse(Response::HTTP_OK, $fileDeleted, $loggedUser, ['groups' => ['file:read']]);

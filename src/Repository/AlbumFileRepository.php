@@ -19,22 +19,17 @@ class AlbumFileRepository extends ServiceEntityRepository
         parent::__construct($registry, AlbumFile::class);
     }
 
-    // /**
-    //  * @return AlbumFile[] Returns an array of AlbumFile objects
-    //  */
-    /*
-    public function findByExampleField($value)
+    /**
+     * @return AlbumFile[]
+     */
+    public function findAllActive(): array
     {
-        return $this->createQueryBuilder('a')
-            ->andWhere('a.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('a.id', 'ASC')
-            ->setMaxResults(10)
-            ->getQuery()
-            ->getResult()
-        ;
+        return $this->createQueryBuilder('AF')
+            ->where('AF.status = :status')
+            ->setParameter('status', 'active')
+
+            ->getQuery()->getArrayResult();
     }
-    */
 
     /*
     public function findOneBySomeField($value): ?AlbumFile
