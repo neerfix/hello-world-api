@@ -100,8 +100,8 @@ class UserController extends HelloworldController
             'password' => [new Type(['type' => 'string']), new NotBlank()],
             'birthDate' => [new DateTime(['format' => 'Y-m-d']), new NotBlank()],
             'username' => [new Type(['type' => 'string'])],
-            'firstName' => [new Optional([new Type(['type' => 'string'])])],
-            'lastName' => [new Optional([new Type(['type' => 'string'])])],
+            'firstname' => [new Optional([new Type(['type' => 'string'])])],
+            'lastname' => [new Optional([new Type(['type' => 'string'])])],
         ]);
 
         // Validation errors
@@ -110,8 +110,8 @@ class UserController extends HelloworldController
         }
 
         $birthDate = $this->getDate($request, $parameters['birthDate']);
-        $firstname = $parameters['firstName'] ?? null;
-        $lastname = $parameters['lastName'] ?? null;
+        $firstname = $parameters['firstname'] ?? null;
+        $lastname = $parameters['lastname'] ?? null;
 
         $user = $this->userService->create(
             $parameters['email'],
@@ -201,8 +201,8 @@ class UserController extends HelloworldController
             'password' => [new Type(['type' => 'string']), new NotBlank()],
             'birthDate' => [new DateTime(['format' => 'Y-m-d']), new NotBlank()],
             'username' => [new Type(['type' => 'string'])],
-            'firstName' => [new Optional([new Type(['type' => 'string'])])],
-            'lastName' => [new Optional([new Type(['type' => 'string'])])],
+            'firstname' => [new Optional([new Type(['type' => 'string'])])],
+            'lastname' => [new Optional([new Type(['type' => 'string'])])],
             'isVerify' => [new Type(['type' => 'bool'])],
         ]);
 
@@ -212,8 +212,8 @@ class UserController extends HelloworldController
         }
 
         $birthDate = $this->getDate($request, $parameters['birthDate']);
-        $firstname = $parameters['firstName'] ?? $user->getFirstname();
-        $lastname = $parameters['lastName'] ?? $user->getLastname();
+        $firstname = $parameters['firstname'] ?? $user->getFirstname();
+        $lastname = $parameters['lastname'] ?? $user->getLastname();
 
         $user = $this->userService->update(
             $user,

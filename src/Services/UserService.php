@@ -165,9 +165,15 @@ class UserService
         $user
             ->setEmail($email)
             ->setUsername($username)
-            ->setFirstname($firstname)
-            ->setLastname($lastname)
             ->setDateOfBirth($birthdate);
+
+        if (null !== $firstname) {
+            $user->setFirstname($firstname);
+        }
+
+        if (null !== $lastname) {
+            $user->setFirstname($lastname);
+        }
 
         $this->em->persist($user);
         $this->em->flush();
