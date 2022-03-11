@@ -103,7 +103,6 @@ class TravelService
             ->setEndedAt($endedAt)
             ->setDescription($description)
             ->setUserId($user)
-            ->setUuid(Uuid::uuid4())
             ->setPlaceId($place)
             ->setIsShared($isSharable);
 
