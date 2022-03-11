@@ -62,7 +62,7 @@ class WishList implements Statuable
     private Place $place;
 
     /**
-     * @ORM\OneToOne(targetEntity="User", inversedBy="wishLists")
+     * @ORM\ManyToOne(targetEntity="User", inversedBy="wishLists")
      * @ORM\JoinColumn(name="user_id", referencedColumnName="id")
      */
     private User $user;
@@ -140,7 +140,14 @@ class WishList implements Statuable
 
     public function getUser(): User
     {
-        return $this->step;
+        return $this->user;
+    }
+
+    public function setUser(User $user): WishList
+    {
+        $this->user = $user;
+
+        return $this;
     }
 
     public function getEstimatedAt(): ?DateTime
