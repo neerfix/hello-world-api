@@ -70,7 +70,7 @@ class Travel implements Statuable
      * @Groups("travel:read")
      * @ORM\Column(name="budget", type="string", length="255")
      */
-    private string $budget;
+    private ?string $budget;
 
     /**
      * @Groups("travel:read")
@@ -151,12 +151,12 @@ class Travel implements Statuable
         return $this;
     }
 
-    public function getBudget(): float
+    public function getBudget(): ?string
     {
         return $this->budget;
     }
 
-    public function setBudget(float $budget = null): Travel
+    public function setBudget(?string $budget): Travel
     {
         $this->budget = $budget;
 

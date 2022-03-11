@@ -150,7 +150,7 @@ class TravelController extends HelloworldController
 
         $errors = $this->validate($parameters, [
             'name' => [new Type(['type' => 'string']), new NotBlank()],
-            'budget' => [new Type(['type' => 'float']), new NotBlank()],
+            'budget' => [new Optional([new Type(['type' => 'string']), new NotBlank()])],
             'description' => [new Optional([new Type(['type' => 'string']), new NotBlank()])],
             'startedAt' => [new Optional([new DateTime(['format' => 'Y-m-d']), new NotBlank()])],
             'endedAt' => [new Optional([new DateTime(['format' => 'Y-m-d']), new NotBlank()])],
@@ -180,6 +180,7 @@ class TravelController extends HelloworldController
 
         $startedAt = $this->getDate($request, $request->request->get('startedAt'));
         $endedAt = $this->getDate($request, $request->request->get('endedAt'));
+        $budget = (array_key_exists('budget', $parameters)) ? $parameters['budget'] : null;
         $description = (array_key_exists('description', $parameters)) ? $parameters['description'] : null;
         $isSharable = (array_key_exists('isSharable', $parameters)) ? $parameters['isSharable'] : null;
 
@@ -188,7 +189,7 @@ class TravelController extends HelloworldController
             $loggedUser,
             $place,
             $parameters['name'],
-            $parameters['budget'],
+            $budget,
             $startedAt,
             $endedAt,
             $description,
@@ -217,7 +218,7 @@ class TravelController extends HelloworldController
 
         $errors = $this->validate($parameters, [
             'name' => [new Type(['type' => 'string']), new NotBlank()],
-            'budget' => [new Type(['type' => 'float']), new NotBlank()],
+            'budget' => [new Optional([new Type(['type' => 'string']), new NotBlank()])],
             'description' => [new Optional([new Type(['type' => 'string']), new NotBlank()])],
             'startedAt' => [new Optional([new DateTime(['format' => 'Y-m-d']), new NotBlank()])],
             'endedAt' => [new Optional([new DateTime(['format' => 'Y-m-d']), new NotBlank()])],
@@ -251,6 +252,7 @@ class TravelController extends HelloworldController
 
         $startedAt = $this->getDate($request, $request->request->get('startedAt'));
         $endedAt = $this->getDate($request, $request->request->get('endedAt'));
+        $budget = (array_key_exists('budget', $parameters)) ? $parameters['budget'] : null;
         $description = (array_key_exists('description', $parameters)) ? $parameters['description'] : null;
         $isSharable = (array_key_exists('isSharable', $parameters)) ? $parameters['isSharable'] : null;
 
@@ -258,7 +260,7 @@ class TravelController extends HelloworldController
             $loggedUser,
             $place,
             $parameters['name'],
-            $parameters['budget'],
+            $budget,
             $startedAt,
             $endedAt,
             $description,
