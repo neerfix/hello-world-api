@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\User;
 use App\Repository\PlaceRepository;
 use App\Repository\TravelRepository;
+use App\Services\PlaceService;
 use App\Services\RequestService;
 use App\Services\ResponseService;
 use App\Services\TravelService;
@@ -32,6 +33,7 @@ class TravelController extends HelloworldController
         private TravelService $travelService,
         private TravelRepository $travelRepository,
         private PlaceRepository $placeRepository,
+        private PlaceService $placeService
     ) {
         parent::__construct($responseService, $requestService, $validator, $normalizer);
     }
@@ -131,6 +133,7 @@ class TravelController extends HelloworldController
     {
         $loggedUser = $this->getLoggedUser();
         $parameters = $this->getContent($request);
+        $placeRequest = $parameters['place'];
 
         // No logged user
         if (null === $loggedUser) {
@@ -155,17 +158,27 @@ class TravelController extends HelloworldController
             'name' => [new Type(['type' => 'string']), new NotBlank()],
             'budget' => [new Type(['type' => 'float']), new NotBlank()],
             'description' => [new Optional([new Type(['type' => 'string']), new NotBlank()])],
-            'startedAt' => [new Optional([new DateTime(['format' => 'Y-m-d']), new NotBlank()])],
-            'endedAt' => [new Optional([new DateTime(['format' => 'Y-m-d']), new NotBlank()])],
+            'startedAt' => [new Optional([new DateTime(['format' => 'd-m-Y']), new NotBlank()])],
+            'endedAt' => [new Optional([new DateTime(['format' => 'd-m-Y']), new NotBlank()])],
             'isSharable' => [new Type(['type' => 'bool']), new NotBlank()],
-            'placeId' => [new Type(['type' => 'int']), new NotBlank()],
         ]);
 
         if (!empty($errors)) {
             return $errors;
         }
 
-        $place = $this->placeRepository->find($parameters['placeId']);
+        $errorsPlace = $this->validate($placeRequest, [
+            'name' => [new Type(['type' => 'string']), new NotBlank()],
+            'latitude' => [new Type(['type' => 'float']), new NotBlank()],
+            'longitude' => [new Type(['type' => 'float']), new NotBlank()],
+        ]);
+
+        if (!empty($errorsPlace)) {
+            return $errors;
+        }
+        $place = 'truc';
+//        $place = $this->placeService->create($placeRequest['name'],$placeRequest['latitude'], $placeRequest['longitude'], $placeRequest['address'], $placeRequest['city'], $placeRequest['zipcode'], $placeRequest['country']);
+
         $startedAt = $this->getDate($request, $request->request->get('startedAt'));
         $endedAt = $this->getDate($request, $request->request->get('endedAt'));
 
@@ -194,6 +207,7 @@ class TravelController extends HelloworldController
     {
         $parameters = $this->getContent($request);
         $loggedUser = $this->getLoggedUser();
+        $placeRequest = $parameters['place'];
 
         // No logged user
         if (null === $loggedUser) {
@@ -204,17 +218,32 @@ class TravelController extends HelloworldController
             'name' => [new Type(['type' => 'string']), new NotBlank()],
             'budget' => [new Type(['type' => 'float']), new NotBlank()],
             'description' => [new Optional([new Type(['type' => 'string']), new NotBlank()])],
-            'startedAt' => [new Optional([new DateTime(['format' => 'Y-m-d']), new NotBlank()])],
-            'endedAt' => [new Optional([new DateTime(['format' => 'Y-m-d']), new NotBlank()])],
+            'startedAt' => [new Optional([new DateTime(['format' => 'd-m-Y']), new NotBlank()])],
+            'endedAt' => [new Optional([new DateTime(['format' => 'd-m-Y']), new NotBlank()])],
             'isSharable' => [new Type(['type' => 'bool']), new NotBlank()],
-            'placeId' => [new Type(['type' => 'int']), new NotBlank()],
         ]);
 
         if (!empty($errors)) {
             return $errors;
         }
 
-        $place = $this->placeRepository->find($parameters['placeId']);
+        $errorsPlace = $this->validate($placeRequest, [
+            'name' => [new Type(['type' => 'string']), new NotBlank()],
+            'latitude' => [new Type(['type' => 'float']), new NotBlank()],
+            'longitude' => [new Type(['type' => 'float']), new NotBlank()],
+        ]);
+
+        if (!empty($errorsPlace)) {
+            return $errors;
+        }
+
+        $placeAddress = (isset($placeRequest['address'])) ? $placeRequest['address'] : null;
+        $placeCity = (isset($placeRequest['city'])) ? $placeRequest['city'] : null;
+        $placeZipcode = (isset($placeRequest['zipcode'])) ? $placeRequest['zipcode'] : null;
+        $placeCountry = (isset($placeRequest['country'])) ? $placeRequest['country'] : null;
+
+        $place = $this->placeService->create($placeRequest['name'], $placeRequest['latitude'], $placeRequest['longitude'], $placeAddress, $placeCity, $placeZipcode, $placeCountry);
+
         $startedAt = $this->getDate($request, $request->request->get('startedAt'));
         $endedAt = $this->getDate($request, $request->request->get('endedAt'));
 

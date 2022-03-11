@@ -18,13 +18,14 @@ class PlaceService
     ) {
     }
 
-    public function create(string $address,
-                           string $city,
-                           string $zipcode,
-                           string $country,
-                           string $name,
-                           float $latitude,
-                           float $longitude): Place
+    public function create(
+        string $name,
+        float $latitude,
+        float $longitude,
+        ?string $address = null,
+        ?string $city = null,
+        ?string $zipcode = null,
+        ?string $country = null): Place
     {
         $address = trim($address);
         $city = trim($city);
@@ -57,13 +58,13 @@ class PlaceService
     public function update(
         Place $place,
         User $user,
-        string $address,
-        string $city,
-        string $zipcode,
-        string $country,
         string $name,
         float $latitude,
-        float $longitude
+        float $longitude,
+        ?string $address = null,
+        ?string $city = null,
+        ?string $zipcode = null,
+        ?string $country = null
     ): Place {
         $address = trim($address);
         $city = trim($city);
