@@ -75,12 +75,6 @@ class TravelController extends HelloworldController
             return $this->buildErrorResponse(Response::HTTP_NOT_FOUND, 'not.found', 'Le voyage demandé n\'est pas trouvé');
         }
 
-        $roles = $loggedUser->getRoles();
-
-        if (!in_array(User::ROLE_ADMIN, $roles, true) && $travel->getUserId() !== $loggedUser->getId()) {
-            return $this->buildErrorResponse(Response::HTTP_FORBIDDEN, 'auth.unauthorized', 'Vous n\'êtes pas autorisé à effectuer cette action');
-        }
-
         return $this->buildSuccessResponse(Response::HTTP_OK, $travel, $loggedUser, ['groups' => ['travel:read', 'travel:nested']]);
     }
 
