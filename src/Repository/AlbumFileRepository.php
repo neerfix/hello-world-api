@@ -30,16 +30,4 @@ class AlbumFileRepository extends ServiceEntityRepository
 
             ->getQuery()->getArrayResult();
     }
-
-    /*
-    public function findOneBySomeField($value): ?AlbumFile
-    {
-        return $this->createQueryBuilder('a')
-            ->andWhere('a.exampleField = :val')
-            ->setParameter('val', $value)
-            ->getQuery()
-            ->getOneOrNullResult()
-        ;
-    }
-    */
 }

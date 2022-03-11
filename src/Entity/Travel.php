@@ -35,7 +35,6 @@ class Travel implements Statuable
         $this->albums = new ArrayCollection();
         $this->steps = new ArrayCollection();
 
-        // TODO move it from all Entity to AbstractEntity
         $this->setCreatedAt(new DateTime());
         $this->setUpdatedAt(new DateTime());
     }
@@ -71,19 +70,19 @@ class Travel implements Statuable
      * @Groups("travel:read")
      * @ORM\Column(name="budget", type="string", length="255")
      */
-    private string $budget;
+    private ?string $budget;
 
     /**
      * @Groups("travel:read")
      * @ORM\Column(name="is_shared", type="boolean")
      */
-    private bool $isShared = false;
+    private bool $isShared = true;
 
     /**
      * @Groups("travel:read")
      * @ORM\Column(name="description", type="text")
      */
-    private string $description;
+    private ?string $description;
 
     /**
      * @Groups("travel:read")
@@ -164,7 +163,7 @@ class Travel implements Statuable
         return $this;
     }
 
-    public function getIsShared(): ?bool
+    public function getIsShared(): bool
     {
         return $this->isShared;
     }
@@ -212,19 +211,19 @@ class Travel implements Statuable
         return $this;
     }
 
-    public function getUserId(): ?User
+    public function getUserId(): User
     {
         return $this->userId;
     }
 
-    public function setUserId(?User $userId): Travel
+    public function setUserId(User $userId): Travel
     {
         $this->userId = $userId;
 
         return $this;
     }
 
-    public function getCreatedAt(): ?DateTime
+    public function getCreatedAt(): DateTime
     {
         return $this->createdAt;
     }
@@ -236,7 +235,7 @@ class Travel implements Statuable
         return $this;
     }
 
-    public function getUpdatedAt(): ?DateTime
+    public function getUpdatedAt(): DateTime
     {
         return $this->updatedAt;
     }

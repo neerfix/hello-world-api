@@ -61,14 +61,19 @@ class PlaceController extends HelloworldController
             return $errors;
         }
 
+        $address = (array_key_exists('address', $parameters)) ? $parameters['address'] : null;
+        $city = (array_key_exists('city', $parameters)) ? $parameters['city'] : null;
+        $zipcode = (array_key_exists('zipcode', $parameters)) ? $parameters['zipcode'] : null;
+        $country = (array_key_exists('country', $parameters)) ? $parameters['country'] : null;
+
         $place = $this->placeService->create(
             $parameters['name'],
             $parameters['latitude'],
             $parameters['longitude'],
-            $parameters['address'],
-            $parameters['city'],
-            $parameters['zipcode'],
-            $parameters['country'],
+            $address,
+            $city,
+            $zipcode,
+            $country
         );
 
         return $this->buildSuccessResponse(Response::HTTP_CREATED, $place, $loggedUser, ['groups' => ['place:read']]);
@@ -102,7 +107,7 @@ class PlaceController extends HelloworldController
             return $this->buildErrorResponse(Response::HTTP_FORBIDDEN, 'auth.unauthorized', 'Vous n\'êtes pas autorisé à effectuer cette action');
         }
 
-        $place = $this->placeService->getByUuid($uuid);
+        $place = $this->placeRepository->findOneBy(['uuid' => $uuid]);
 
         if (null === $place) {
             return $this->buildErrorResponse(Response::HTTP_NOT_FOUND, 'not.found', 'La localisation n\'a pas été trouvée');
@@ -127,16 +132,13 @@ class PlaceController extends HelloworldController
             return $this->buildErrorResponse(Response::HTTP_FORBIDDEN, 'auth.unauthorized', 'Vous n\'êtes pas autorisé à effectuer cette action');
         }
 
-        $place = $this->placeService->getByUuid($uuid);
-
-        // No logged user
+        $place = $this->placeRepository->findOneBy(['uuid' => $uuid]);
         if (null === $place) {
             return $this->buildErrorResponse(Response::HTTP_NOT_FOUND, 'not.found', 'La localisation n\'a pas été trouvée');
         }
 
         $roles = $loggedUser->getRoles();
 
-        // No logged used
         if (!in_array(User::ROLE_ADMIN, $roles, true)) {
             return $this->buildErrorResponse(Response::HTTP_FORBIDDEN, 'auth.unauthorized', 'Vous n\'êtes pas autorisé à effectuer cette action');
         }
@@ -155,16 +157,20 @@ class PlaceController extends HelloworldController
             return $errors;
         }
 
+        $address = (array_key_exists('address', $parameters)) ? $parameters['address'] : null;
+        $city = (array_key_exists('city', $parameters)) ? $parameters['city'] : null;
+        $zipcode = (array_key_exists('zipcode', $parameters)) ? $parameters['zipcode'] : null;
+        $country = (array_key_exists('country', $parameters)) ? $parameters['country'] : null;
+
         $placeUpdated = $this->placeService->update(
             $place,
-            $loggedUser,
             $parameters['name'],
             $parameters['latitude'],
             $parameters['longitude'],
-            $parameters['address'],
-            $parameters['city'],
-            $parameters['zipcode'],
-            $parameters['country']
+            $address,
+            $city,
+            $zipcode,
+            $country
         );
 
         return $this->buildSuccessResponse(Response::HTTP_OK, $placeUpdated, $loggedUser, ['groups' => ['place:read']]);
@@ -184,7 +190,7 @@ class PlaceController extends HelloworldController
             return $this->buildErrorResponse(Response::HTTP_FORBIDDEN, 'auth.unauthorized', 'Vous n\'êtes pas autorisé à effectuer cette action');
         }
 
-        $place = $this->placeService->getByUuid($uuid);
+        $place = $this->placeRepository->findOneBy(['uuid' => $uuid]);
 
         if (null === $place) {
             return $this->buildErrorResponse(Response::HTTP_NOT_FOUND, 'not.found', 'La localisation n\'a pas été trouvée');

@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Entity\Token;
+use App\Entity\Travel;
 use App\Entity\User;
 use App\Repository\TokenRepository;
 use App\Repository\UserRepository;
@@ -80,7 +81,8 @@ class UserService
             ->setPassword('tmp-pwd')
             ->setDateOfBirth($birthdate)
             ->setUuid(Uuid::uuid4())
-            ->setIsVerify(false);
+            ->setIsVerify(false)
+            ->setStatus(Travel::STATUS_ACTIVE);
 
         if (null !== $firstname) {
             $user->setFirstname($firstname);

@@ -4,7 +4,6 @@ namespace App\Services;
 
 use App\Entity\Place;
 use App\Entity\User;
-use App\Repository\PlaceRepository;
 use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use Ramsey\Uuid\Uuid;
@@ -13,8 +12,7 @@ use RuntimeException;
 class PlaceService
 {
     public function __construct(
-        private EntityManagerInterface $em,
-        private placeRepository $placeRepository
+        private EntityManagerInterface $em
     ) {
     }
 
@@ -27,10 +25,6 @@ class PlaceService
         ?string $zipcode = null,
         ?string $country = null): Place
     {
-        $address = trim($address);
-        $city = trim($city);
-        $zipcode = trim($zipcode);
-        $country = trim($country);
         $name = trim($name);
 
         $place = (new Place())
@@ -50,14 +44,8 @@ class PlaceService
         return $place;
     }
 
-    public function getByUuid(string $uuid): ?Place
-    {
-        return $this->placeRepository->findOneBy(['uuid' => $uuid]);
-    }
-
     public function update(
         Place $place,
-        User $user,
         string $name,
         float $latitude,
         float $longitude,
@@ -66,10 +54,6 @@ class PlaceService
         ?string $zipcode = null,
         ?string $country = null
     ): Place {
-        $address = trim($address);
-        $city = trim($city);
-        $zipcode = trim($zipcode);
-        $country = trim($country);
         $name = trim($name);
 
         $place
@@ -99,7 +83,7 @@ class PlaceService
         }
 
         if (!in_array(User::ROLE_ADMIN, $user->getRoles(), true)) {
-            throw new RuntimeException('Vous n\'avez pas l\'autorisation de supprimer ce voyage');
+            throw new RuntimeException('Vous n\'avez pas l\'autorisation de supprimer cette localisation');
         }
         $place
             ->setStatus(Place::STATUS_DELETED)

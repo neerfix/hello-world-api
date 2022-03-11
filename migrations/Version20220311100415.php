@@ -25,7 +25,6 @@ final class Version20220311100415 extends AbstractMigration
     public function up(Schema $schema): void
     {
         // this up() migration is auto-generated, please modify it to your needs
-        $this->addSql('ALTER TABLE place RENAME INDEX uniq_39956e49d17f70a6 TO UNIQ_741D53CDD17F50A6');
         $this->addSql('ALTER TABLE wishlist DROP INDEX UNIQ_9CE12A31A76ED395, ADD INDEX IDX_9CE12A31A76ED395 (user_id)');
     }
 

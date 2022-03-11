@@ -23,6 +23,7 @@ class Place implements Statuable
 
     public const STATUS_ACTIVE = 'active';
     public const STATUS_DELETED = 'deleted';
+
     // -------------------------- >
 
     public function __construct()
@@ -62,7 +63,7 @@ class Place implements Statuable
      * })
      * @ORM\Column(name="address", type="string", length="255",nullable=true)
      */
-    private string $address;
+    private ?string $address;
 
     /**
      * @Groups({
@@ -73,7 +74,7 @@ class Place implements Statuable
      * })
      * @ORM\Column(name="city", type="string", length="255", nullable=true)
      */
-    private string $city;
+    private ?string $city;
 
     /**
      * @Groups({
@@ -84,7 +85,7 @@ class Place implements Statuable
      * })
      * @ORM\Column(name="zipcode", type="string", length="255", nullable=true)
      */
-    private string $zipcode;
+    private ?string $zipcode;
 
     /**
      * @Groups({
@@ -95,7 +96,7 @@ class Place implements Statuable
      * })
      * @ORM\Column(name="country", type="string", length="255",nullable=true)
      */
-    private string $country;
+    private ?string $country;
 
     /**
      * @Groups({
@@ -168,24 +169,24 @@ class Place implements Statuable
         return $this->id;
     }
 
-    public function getAddress(): string
+    public function getAddress(): ?string
     {
         return $this->address;
     }
 
-    public function setAddress(string $address): Place
+    public function setAddress(?string $address): Place
     {
         $this->address = $address;
 
         return $this;
     }
 
-    public function getCity(): string
+    public function getCity(): ?string
     {
         return $this->city;
     }
 
-    public function setCity(string $city): Place
+    public function setCity(?string $city): Place
     {
         $this->city = $city;
 
@@ -197,19 +198,19 @@ class Place implements Statuable
         return $this->zipcode;
     }
 
-    public function setZipcode(string $zipcode): Place
+    public function setZipcode(?string $zipcode): Place
     {
         $this->zipcode = $zipcode;
 
         return $this;
     }
 
-    public function getCountry(): string
+    public function getCountry(): ?string
     {
         return $this->country;
     }
 
-    public function setCountry(string $country): Place
+    public function setCountry(?string $country): Place
     {
         $this->country = $country;
 

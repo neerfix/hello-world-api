@@ -34,7 +34,7 @@ class TravelService
         User $user,
         Place $place,
         string $name,
-        string $budget,
+        ?string $budget,
         ?DateTime $startedAt = null,
         ?DateTime $endedAt = null,
         ?string $description = null,
@@ -61,7 +61,9 @@ class TravelService
             ->setPlaceId($place)
             ->setIsShared($isShared)
             ->setUuid(Uuid::uuid4())
-            ->setStatus(Travel::STATUS_ACTIVE);
+            ->setStatus(Travel::STATUS_ACTIVE)
+            ->setCreatedAt(new DateTime())
+            ->setUpdatedAt(new DateTime());
 
         $this->em->persist($travel);
 
@@ -76,10 +78,10 @@ class TravelService
 
     public function update(
         Travel $travel,
-        Place $place,
         User $user,
+        Place $place,
         string $name,
-        string $budget,
+        ?string $budget,
         ?DateTime $startedAt = null,
         ?DateTime $endedAt = null,
         ?string $description = null,
@@ -104,7 +106,8 @@ class TravelService
             ->setDescription($description)
             ->setUserId($user)
             ->setPlaceId($place)
-            ->setIsShared($isSharable);
+            ->setIsShared($isSharable)
+            ->setUpdatedAt(new DateTime());
 
         $this->em->persist($travel);
         $this->em->flush();
@@ -121,10 +124,6 @@ class TravelService
     ): Travel {
         if (Travel::STATUS_DELETED === $travel->getStatus()) {
             throw new RuntimeException('Le voyage est déjà supprimé');
-        }
-
-        if (!in_array(User::ROLE_ADMIN, $user->getRoles(), true) || $travel->getUserId() !== $user->getId()) {
-            throw new RuntimeException('Vous n\'avez pas l\'autorisation de supprimer ce voyage');
         }
 
         $travel

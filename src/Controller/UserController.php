@@ -75,8 +75,7 @@ class UserController extends HelloworldController
 
         $roles = $loggedUser->getRoles();
 
-        // No logged used
-        if (in_array(User::ROLE_ADMIN, $roles, true)) {
+        if (!in_array(User::ROLE_ADMIN, $roles, true)) {
             return $this->buildErrorResponse(Response::HTTP_FORBIDDEN, 'auth.unauthorized', 'Vous n\'êtes pas autorisé à effectuer cette action');
         }
 
