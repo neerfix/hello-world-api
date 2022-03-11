@@ -123,3 +123,17 @@ Use ```make db.dev``` to re-install dev data.
 - Emeline : le front
 - Nicolas : de merge force avec les privilèges admin ou d'approved en fermant les yeux 🙈
 - Romain : Des erreurs d'inattention dans mes relectures et de chipoter :')
+
+--- ---
+
+## mini-rapport du projet :
+
+Court et intense le projet a éte un vrai sprint du début à la fin. Le back a pris du retard à
+ cause de la nouvelle authentification de Symfony 6.
+ Le back comprends des CRUD sur les entités, un checkEmail pour l'inscription et un recherche de personnes par query.
+ 
+### Sentry 
+ <img width="1223" alt="image" src="https://user-images.githubusercontent.com/13368283/157912856-cf4a2700-5c21-4ecf-8b65-c3cb6f598484.png">
+
+### Bot Discord 
+<img width="925" alt="image" src="https://user-images.githubusercontent.com/13368283/157912945-44d7fe0e-2312-45e1-b51f-9f41a8ba538b.png">
