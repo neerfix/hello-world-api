@@ -63,11 +63,16 @@ class AlbumController extends HelloworldController
         }
 
         $travel = $this->travelRepository->find($parameters['travelId']);
+        if (null === $travel) {
+            return $this->buildErrorResponse(Response::HTTP_NOT_FOUND, 'travel.notFound', 'Le voyage est introuvable');
+        }
+
+        $description = (array_key_exists('description', $parameters)) ? $parameters['description'] : null;
 
         $album = $this->albumService->create(
             $parameters['title'],
-            $parameters['description'],
-            $travel
+            $travel,
+            $parameters['description']
         );
 
         return $this->buildSuccessResponse(Response::HTTP_CREATED, $album, $loggedUser, ['groups' => ['album:read', 'album:nested']]);
@@ -109,6 +114,10 @@ class AlbumController extends HelloworldController
         }
 
         $album = $this->albumRepository->findOneByUuid($uuid);
+
+        if (null === $album) {
+            return $this->buildErrorResponse(Response::HTTP_NOT_FOUND, 'album.notFound', 'L\'album est introuvable');
+        }
 
         return $this->buildSuccessResponse(Response::HTTP_OK, $album, $loggedUser, ['groups' => ['album:read', 'album:nested']]);
     }
@@ -170,6 +179,8 @@ class AlbumController extends HelloworldController
         if (!empty($errors)) {
             return $errors;
         }
+
+        $description = (array_key_exists('description', $parameters)) ? $parameters['description'] : null;
 
         $albumUpdated = $this->albumService->update(
             $album,

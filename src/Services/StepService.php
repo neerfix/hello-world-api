@@ -27,8 +27,8 @@ class StepService
      */
     public function create(
         Travel $travel,
-        Place $place,
-        Album $album,
+        ?Album $album = null,
+        ?Place $place = null,
         ?DateTime $startedAt = null,
         ?DateTime $endedAt = null
     ): Step {
@@ -40,7 +40,8 @@ class StepService
             ->setEndedAt($endedAt)
             ->setCreatedAt(new DateTime())
             ->setUpdatedAt(new DateTime())
-            ->setUuid(Uuid::uuid4());
+            ->setUuid(Uuid::uuid4())
+            ->setStatus(Step::STATUS_ACTIVE);
 
         $this->em->persist($step);
         $this->em->flush();
@@ -64,8 +65,8 @@ class StepService
 
     public function update(
         Step $step,
-        Album $album,
-        Place $place,
+        ?Album $album = null,
+        ?Place $place = null,
         ?DateTime $startedAt = null,
         ?DateTime $endedAt = null
     ): Step {

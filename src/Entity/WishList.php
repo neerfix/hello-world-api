@@ -165,24 +165,24 @@ class WishList implements Statuable
         return $this;
     }
 
-    public function getCreatedAt(): ?DateTime
+    public function getCreatedAt(): DateTime
     {
         return $this->createdAt;
     }
 
-    public function setCreatedAt(?DateTime $createdAt): WishList
+    public function setCreatedAt(DateTime $createdAt): WishList
     {
         $this->createdAt = $createdAt;
 
         return $this;
     }
 
-    public function getUpdatedAt(): ?DateTime
+    public function getUpdatedAt(): DateTime
     {
         return $this->updatedAt;
     }
 
-    public function setUpdatedAt(?DateTime $updatedAt): WishList
+    public function setUpdatedAt(DateTime $updatedAt): WishList
     {
         $this->updatedAt = $updatedAt;
 

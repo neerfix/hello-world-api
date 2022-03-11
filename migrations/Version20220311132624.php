@@ -25,8 +25,6 @@ final class Version20220311132624 extends AbstractMigration
     public function up(Schema $schema): void
     {
         // this up() migration is auto-generated, please modify it to your needs
-        $this->addSql('ALTER TABLE step ADD uuid VARCHAR(180) NOT NULL');
-        $this->addSql('CREATE UNIQUE INDEX UNIQ_43B9FE3CD17F50A6 ON step (uuid)');
         $this->addSql('ALTER TABLE wishlist CHANGE estimated_at estimated_at DATE DEFAULT NULL');
     }
 

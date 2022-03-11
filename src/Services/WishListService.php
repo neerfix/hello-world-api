@@ -89,7 +89,7 @@ class WishListService
         Place $place,
         User $user,
         ?string $description = null,
-        ?DateTime $estimatedAt = null,
+        ?DateTime $estimatedAt = null
     ): WishList {
         if (null !== $description) {
             preg_match_all('/([a-zA-Z][-\'0-9a-zÀ-ÿ]+)/m', $description, $words, PREG_SET_ORDER, 0);

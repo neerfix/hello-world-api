@@ -155,7 +155,7 @@ class Login implements Statuable
         return $this;
     }
 
-    public function getCreatedAt(): ?DateTime
+    public function getCreatedAt(): DateTime
     {
         return $this->createdAt;
     }
@@ -167,7 +167,7 @@ class Login implements Statuable
         return $this;
     }
 
-    public function getUpdatedAt(): ?DateTime
+    public function getUpdatedAt(): DateTime
     {
         return $this->updatedAt;
     }

@@ -37,9 +37,6 @@ class FileService
         if (File::STATUS_DELETED === $file->getStatus()) {
             throw new RuntimeException('Le fichier est déjà supprimé');
         }
-        if (!in_array(User::ROLE_ADMIN, $user->getRoles(), true) && $file->getUserId() !== $user->getId()) {
-            throw new RuntimeException('Vous n\'avez pas l\'autorisation de supprimer ce fichier');
-        }
 
         $file
             ->setStatus(File::STATUS_DELETED)

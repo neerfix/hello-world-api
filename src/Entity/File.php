@@ -81,12 +81,12 @@ class File implements Statuable
 
     // -------------------------- >
 
-    public function getId(): ?int
+    public function getId(): int
     {
         return $this->id;
     }
 
-    public function getCreatedAt(): ?DateTime
+    public function getCreatedAt(): DateTime
     {
         return $this->createdAt;
     }
@@ -98,7 +98,7 @@ class File implements Statuable
         return $this;
     }
 
-    public function getUpdatedAt(): ?DateTime
+    public function getUpdatedAt(): DateTime
     {
         return $this->updatedAt;
     }
@@ -110,19 +110,19 @@ class File implements Statuable
         return $this;
     }
 
-    public function getUserId(): ?User
+    public function getUserId(): User
     {
         return $this->userId;
     }
 
-    public function setUserId(?User $userId): File
+    public function setUserId(User $userId): File
     {
         $this->userId = $userId;
 
         return $this;
     }
 
-    public function getUuid(): ?string
+    public function getUuid(): string
     {
         return $this->uuid;
     }

@@ -234,7 +234,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, Statuab
     {
         $roles = $this->roles;
         // guarantee every user at least has ROLE_USER
-        $roles[] = static::ROLE_USER;
+        array_push($roles, static::ROLE_USER);
 
         return array_unique($roles);
     }
@@ -282,7 +282,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, Statuab
         return $this;
     }
 
-    public function getDateOfBirth(): ?DateTime
+    public function getDateOfBirth(): DateTime
     {
         return $this->dateOfBirth;
     }
@@ -299,7 +299,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, Statuab
         return $this->firstname;
     }
 
-    public function setFirstname(string $firstname): User
+    public function setFirstname(?string $firstname): User
     {
         $this->firstname = $firstname;
 
@@ -311,7 +311,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, Statuab
         return $this->lastname;
     }
 
-    public function setLastname(string $lastname): User
+    public function setLastname(?string $lastname): User
     {
         $this->lastname = $lastname;
 
@@ -330,7 +330,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, Statuab
         return $this;
     }
 
-    public function getIsVerify(): ?bool
+    public function getIsVerify(): bool
     {
         return $this->isVerify;
     }

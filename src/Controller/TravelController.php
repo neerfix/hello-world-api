@@ -71,15 +71,13 @@ class TravelController extends HelloworldController
 
         $travel = $this->travelRepository->findOneBy(['uuid' => $uuid]);
 
-        // No logged user
         if (null === $travel) {
             return $this->buildErrorResponse(Response::HTTP_NOT_FOUND, 'not.found', 'Le voyage demandé n\'est pas trouvé');
         }
 
         $roles = $loggedUser->getRoles();
 
-        // No logged used
-        if (!in_array(User::ROLE_ADMIN, $roles, true) || $travel->getUserId() !== $loggedUser->getId()) {
+        if (!in_array(User::ROLE_ADMIN, $roles, true) && $travel->getUserId() !== $loggedUser->getId()) {
             return $this->buildErrorResponse(Response::HTTP_FORBIDDEN, 'auth.unauthorized', 'Vous n\'êtes pas autorisé à effectuer cette action');
         }
 
@@ -103,15 +101,13 @@ class TravelController extends HelloworldController
 
         $travel = $this->travelRepository->findOneBy(['uuid' => $uuid]);
 
-        // No logged user
         if (null === $travel) {
             return $this->buildErrorResponse(Response::HTTP_NOT_FOUND, 'not.found', 'Le voyage demandé n\'est pas trouvé');
         }
 
         $roles = $loggedUser->getRoles();
 
-        // No logged used
-        if (!in_array(User::ROLE_ADMIN, $roles, true) || $travel->getUserId() !== $loggedUser->getId()) {
+        if (!in_array(User::ROLE_ADMIN, $roles, true) && $travel->getUserId() !== $loggedUser->getId()) {
             return $this->buildErrorResponse(Response::HTTP_FORBIDDEN, 'auth.unauthorized', 'Vous n\'êtes pas autorisé à effectuer cette action');
         }
 
@@ -142,15 +138,13 @@ class TravelController extends HelloworldController
 
         $travel = $this->travelRepository->findOneBy(['uuid' => $uuid]);
 
-        // No logged user
         if (null === $travel) {
             return $this->buildErrorResponse(Response::HTTP_NOT_FOUND, 'not.found', 'Le voyage demandé n\'est pas trouvé');
         }
 
         $roles = $loggedUser->getRoles();
 
-        // No logged used
-        if (!in_array(User::ROLE_ADMIN, $roles, true) || $travel->getUserId() !== $loggedUser->getId()) {
+        if (!in_array(User::ROLE_ADMIN, $roles, true) && $travel->getUserId() !== $loggedUser->getId()) {
             return $this->buildErrorResponse(Response::HTTP_FORBIDDEN, 'auth.unauthorized', 'Vous n\'êtes pas autorisé à effectuer cette action');
         }
 
@@ -160,7 +154,7 @@ class TravelController extends HelloworldController
             'description' => [new Optional([new Type(['type' => 'string']), new NotBlank()])],
             'startedAt' => [new Optional([new DateTime(['format' => 'Y-m-d']), new NotBlank()])],
             'endedAt' => [new Optional([new DateTime(['format' => 'Y-m-d']), new NotBlank()])],
-            'isSharable' => [new Type(['type' => 'bool']), new NotBlank()],
+            'isSharable' => [new Optional([new Type(['type' => 'bool']), new NotBlank()])],
         ]);
 
         if (!empty($errors)) {
@@ -176,21 +170,29 @@ class TravelController extends HelloworldController
         if (!empty($errorsPlace)) {
             return $errors;
         }
-        $place = 'truc';
+
+        $place = $this->placeService->update(
+            $travel->getPlaceId(),
+            $placeRequest['name'],
+            $placeRequest['latitude'],
+            $placeRequest['longitude']
+        );
 
         $startedAt = $this->getDate($request, $request->request->get('startedAt'));
         $endedAt = $this->getDate($request, $request->request->get('endedAt'));
+        $description = (array_key_exists('description', $parameters)) ? $parameters['description'] : null;
+        $isSharable = (array_key_exists('isSharable', $parameters)) ? $parameters['isSharable'] : null;
 
         $travelUpdated = $this->travelService->update(
             $travel,
-            $place,
             $loggedUser,
+            $place,
             $parameters['name'],
             $parameters['budget'],
             $startedAt,
             $endedAt,
-            $parameters['description'],
-            $parameters['isSharable']
+            $description,
+            $isSharable
         );
 
         return $this->buildSuccessResponse(Response::HTTP_OK, $travelUpdated, $loggedUser, ['groups' => ['travel:read', 'travel:nested']]);
@@ -219,7 +221,7 @@ class TravelController extends HelloworldController
             'description' => [new Optional([new Type(['type' => 'string']), new NotBlank()])],
             'startedAt' => [new Optional([new DateTime(['format' => 'Y-m-d']), new NotBlank()])],
             'endedAt' => [new Optional([new DateTime(['format' => 'Y-m-d']), new NotBlank()])],
-            'isSharable' => [new Type(['type' => 'bool']), new NotBlank()],
+            'isSharable' => [new Optional([new Type(['type' => 'bool']), new NotBlank()])],
         ]);
 
         if (!empty($errors)) {
@@ -237,7 +239,7 @@ class TravelController extends HelloworldController
         ]);
 
         if (!empty($errorsPlace)) {
-            return $errors;
+            return $errorsPlace;
         }
 
         $placeAddress = (isset($placeRequest['address'])) ? $placeRequest['address'] : null;
@@ -249,6 +251,8 @@ class TravelController extends HelloworldController
 
         $startedAt = $this->getDate($request, $request->request->get('startedAt'));
         $endedAt = $this->getDate($request, $request->request->get('endedAt'));
+        $description = (array_key_exists('description', $parameters)) ? $parameters['description'] : null;
+        $isSharable = (array_key_exists('isSharable', $parameters)) ? $parameters['isSharable'] : null;
 
         $travel = $this->travelService->create(
             $loggedUser,
@@ -257,8 +261,8 @@ class TravelController extends HelloworldController
             $parameters['budget'],
             $startedAt,
             $endedAt,
-            $parameters['description'],
-            $parameters['isSharable']
+            $description,
+            $isSharable
         );
 
         return $this->buildSuccessResponse(Response::HTTP_CREATED, $travel, $loggedUser, ['groups' => ['travel:read', 'travel:nested']]);

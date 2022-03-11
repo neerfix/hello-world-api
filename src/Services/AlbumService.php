@@ -31,8 +31,8 @@ class AlbumService
      */
     public function create(
         string $title,
-        ?string $description = null,
-        Travel $travel
+        Travel $travel,
+        ?string $description = null
     ): Album {
         if (null !== $description) {
             preg_match_all('/([a-zA-Z][-\'0-9a-zÀ-ÿ]+)/m', $description, $words, PREG_SET_ORDER, 0);
@@ -65,8 +65,9 @@ class AlbumService
      */
     public function delete(Album $album): Album
     {
-        $album->setStatus(Album::STATUS_DELETED)
-            ->setUpdateAt(new DateTime());
+        $album
+            ->setStatus(Album::STATUS_DELETED)
+            ->setUpdatedAt(new DateTime());
 
         $this->em->persist($album);
         $this->em->flush();
@@ -80,7 +81,7 @@ class AlbumService
     public function update(
         Album $album,
         string $title,
-        string $description,
+        ?string $description = null
     ): Album {
         if (null !== $description) {
             preg_match_all('/([a-zA-Z][-\'0-9a-zÀ-ÿ]+)/m', $description, $words, PREG_SET_ORDER, 0);

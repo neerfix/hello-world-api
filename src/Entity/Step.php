@@ -51,14 +51,14 @@ class Step implements Statuable
      * @ORM\JoinColumn(name="album_id", referencedColumnName="id")
      * @Groups("step:read")
      */
-    private Album $album;
+    private ?Album $album;
 
     /**
      * @ORM\ManyToOne(targetEntity="Place", inversedBy="steps")
      * @ORM\JoinColumn(name="place_id", referencedColumnName="id")
      * @Groups("step:read")
      */
-    private Place $place;
+    private ?Place $place;
 
     /**
      * @ORM\Column(name="started_at", type="date", nullable="true")
@@ -86,7 +86,7 @@ class Step implements Statuable
     {
     }
 
-    public function getId(): ?int
+    public function getId(): int
     {
         return $this->id;
     }
@@ -115,21 +115,14 @@ class Step implements Statuable
         return $this;
     }
 
-    public function getAlbum(): Album
+    public function getAlbum(): ?Album
     {
         return $this->album;
     }
 
-    public function setAlbum(Album $album): Step
+    public function setAlbum(?Album $album): Step
     {
         $this->album = $album;
-
-        return $this;
-    }
-
-    public function removeAlbum(Album $album): Step
-    {
-        $this->album->removeElement($album);
 
         return $this;
     }
@@ -170,7 +163,7 @@ class Step implements Statuable
         return $this;
     }
 
-    public function getCreatedAt(): ?DateTime
+    public function getCreatedAt(): DateTime
     {
         return $this->createdAt;
     }
@@ -182,7 +175,7 @@ class Step implements Statuable
         return $this;
     }
 
-    public function getUpdatedAt(): ?DateTime
+    public function getUpdatedAt(): DateTime
     {
         return $this->updatedAt;
     }

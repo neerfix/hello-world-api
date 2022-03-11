@@ -27,9 +27,7 @@ class Album implements Statuable
 
     public function __construct()
     {
-        $this->steps = new ArrayCollection();
         $this->albumFiles = new ArrayCollection();
-
         $this->setCreatedAt(new DateTime());
         $this->setUpdatedAt(new DateTime());
     }
@@ -65,7 +63,7 @@ class Album implements Statuable
      *     "step:nested",
      * })
      */
-    private string $description;
+    private ?string $description;
 
     /**
      * @ORM\ManyToOne(targetEntity="Travel", inversedBy="albums")
@@ -78,7 +76,7 @@ class Album implements Statuable
      * @ORM\OneToOne(targetEntity="Step", mappedBy="album")
      * @Groups("album:read")
      */
-    private Step $step;
+    private ?Step $step;
 
     /**
      * @ORM\Column(name="created_at", type="date")
@@ -133,12 +131,12 @@ class Album implements Statuable
         return $this;
     }
 
-    public function getTravel(): ?Travel
+    public function getTravel(): Travel
     {
         return $this->travel;
     }
 
-    public function setTravel(?Travel $travel): Album
+    public function setTravel(Travel $travel): Album
     {
         $this->travel = $travel;
 
@@ -150,7 +148,7 @@ class Album implements Statuable
         return $this->step;
     }
 
-    public function getCreatedAt(): ?DateTime
+    public function getCreatedAt(): DateTime
     {
         return $this->createdAt;
     }
@@ -162,7 +160,7 @@ class Album implements Statuable
         return $this;
     }
 
-    public function getUpdatedAt(): ?DateTime
+    public function getUpdatedAt(): DateTime
     {
         return $this->updatedAt;
     }

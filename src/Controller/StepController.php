@@ -59,8 +59,8 @@ class StepController extends HelloworldController
 
         $errors = $this->validate($parameters, [
             'travelId' => [new Type(['type' => 'int']), new NotBlank()],
-            'placeId' => [new Type(['type' => 'int']), new NotBlank()],
-            'albumId' => [new Type(['type' => 'int']), new NotBlank()],
+            'placeId' => [new Optional([new Type(['type' => 'int']), new NotBlank()])],
+            'albumId' => [new Optional([new Type(['type' => 'int']), new NotBlank()])],
             'startedAt' => [new Optional([new DateTime(['format' => 'Y-m-d']), new NotBlank()])],
             'endedAt' => [new Optional([new DateTime(['format' => 'Y-m-d']), new NotBlank()])],
         ]);
@@ -70,15 +70,33 @@ class StepController extends HelloworldController
         }
 
         $travel = $this->travelRepository->find($parameters['travelId']);
-        $place = $this->placeRepository->find($parameters['placeId']);
-        $album = $this->albumRepository->find($parameters['albumId']);
+        if (null === $travel) {
+            return $this->buildErrorResponse(Response::HTTP_NOT_FOUND, 'travel.notFound', 'Le voyage est introuvable');
+        }
+
+        $place = null;
+        if (array_key_exists('placeId', $parameters)) {
+            $place = $this->placeRepository->find($parameters['placeId']);
+            if (null === $place) {
+                return $this->buildErrorResponse(Response::HTTP_NOT_FOUND, 'place.notFound', 'Le lieu est introuvable');
+            }
+        }
+
+        $album = null;
+        if (array_key_exists('albumId', $parameters)) {
+            $album = $this->albumRepository->find($parameters['albumId']);
+            if (null === $album) {
+                return $this->buildErrorResponse(Response::HTTP_NOT_FOUND, 'album.notFound', 'L\'album est introuvable');
+            }
+        }
+
         $startedAt = (array_key_exists('startedAt', $parameters)) ? $this->getDate($request, $parameters['startedAt']) : null;
         $endedAt = (array_key_exists('endedAt', $parameters)) ? $this->getDate($request, $parameters['endedAt']) : null;
 
         $step = $this->stepService->create(
             $travel,
-            $place,
             $album,
+            $place,
             $startedAt,
             $endedAt
         );
@@ -122,6 +140,9 @@ class StepController extends HelloworldController
         }
 
         $step = $this->stepRepository->findOneByUuid($uuid);
+        if (null === $step) {
+            return $this->buildErrorResponse(Response::HTTP_NOT_FOUND, 'step.notFound', 'L\'étape est introuvable');
+        }
 
         return $this->buildSuccessResponse(Response::HTTP_OK, $step, $loggedUser, ['groups' => ['step:read', 'step:nested']]);
     }
@@ -144,7 +165,7 @@ class StepController extends HelloworldController
         $step = $this->stepRepository->findOneByUuid($uuid);
 
         if (null === $step) {
-            return $this->buildErrorResponse(Response::HTTP_NOT_FOUND, 'step.notFound', 'L\'step est introuvable');
+            return $this->buildErrorResponse(Response::HTTP_NOT_FOUND, 'step.notFound', 'L\'étape est introuvable');
         }
 
         $stepDeleted = $this->stepService->delete($step);
@@ -171,12 +192,12 @@ class StepController extends HelloworldController
         $step = $this->stepRepository->findOneByUuid($uuid);
 
         if (null === $step) {
-            return $this->buildErrorResponse(Response::HTTP_NOT_FOUND, 'step.notFound', 'L\'step est introuvable');
+            return $this->buildErrorResponse(Response::HTTP_NOT_FOUND, 'step.notFound', 'L\'étape est introuvable');
         }
 
         $errors = $this->validate($parameters, [
-            'albumId' => [new Type(['type' => 'int']), new NotBlank()],
-            'placeId' => [new Type(['type' => 'int']), new NotBlank()],
+            'albumId' => [new Optional([new Type(['type' => 'int']), new NotBlank()])],
+            'placeId' => [new Optional([new Type(['type' => 'int']), new NotBlank()])],
             'startedAt' => [new Optional([new DateTime(['format' => 'Y-m-d']), new NotBlank()])],
             'endedAt' => [new Optional([new DateTime(['format' => 'Y-m-d']), new NotBlank()])],
         ]);
@@ -185,8 +206,23 @@ class StepController extends HelloworldController
         if (!empty($errors)) {
             return $errors;
         }
-        $album = $this->placeRepository->find($parameters['albumId']);
-        $place = $this->placeRepository->find($parameters['placeId']);
+
+        $album = null;
+        if (array_key_exists('albumId', $parameters)) {
+            $album = $this->placeRepository->find($parameters['albumId']);
+            if (null === $album) {
+                return $this->buildErrorResponse(Response::HTTP_NOT_FOUND, 'album.notFound', 'L\'album est introuvable');
+            }
+        }
+
+        $place = null;
+        if (array_key_exists('placeId', $parameters)) {
+            $place = $this->placeRepository->find($parameters['placeId']);
+            if (null === $place) {
+                return $this->buildErrorResponse(Response::HTTP_NOT_FOUND, 'place.notFound', 'Le lieu est introuvable');
+            }
+        }
+
         $startedAt = (array_key_exists('startedAt', $parameters)) ? $this->getDate($request, $parameters['startedAt']) : null;
         $endedAt = (array_key_exists('endedAt', $parameters)) ? $this->getDate($request, $parameters['endedAt']) : null;
 
