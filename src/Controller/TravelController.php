@@ -230,6 +230,10 @@ class TravelController extends HelloworldController
             'name' => [new Type(['type' => 'string']), new NotBlank()],
             'latitude' => [new Type(['type' => 'float']), new NotBlank()],
             'longitude' => [new Type(['type' => 'float']), new NotBlank()],
+            'address' => [new Optional([new Type(['type' => 'string']), new NotBlank()])],
+            'city' => [new Optional([new Type(['type' => 'string']), new NotBlank()])],
+            'zipcode' => [new Optional([new Type(['type' => 'string']), new NotBlank()])],
+            'country' => [new Optional([new Type(['type' => 'string']), new NotBlank()])],
         ]);
 
         if (!empty($errorsPlace)) {
