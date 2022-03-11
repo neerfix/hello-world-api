@@ -99,8 +99,15 @@ Use ```make db.dev``` to re-install dev data.
 
 
 ## [Sprint 2](https://github.com/helloworld-ynovlyon/api/milestone/2) (07/03/2022 - 11/03/2022)
+### Début de sprint
 - Nombre d'issues pour ce sprint: 9
 - Poids total du sprint: 28
+
+### Fin de sprint
+- Nombre d'issues pour ce sprint: 16
+- Nombre d'issues réalisés: 13
+- Poids total du sprint: 40
+- Poids total du sprint réalisés: 30
 
 --- ---
 
@@ -131,6 +138,8 @@ Use ```make db.dev``` to re-install dev data.
 Court et intense le projet a éte un vrai sprint du début à la fin. Le back a pris du retard à
  cause de la nouvelle authentification de Symfony 6.
  Le back comprends des CRUD sur les entités, un checkEmail pour l'inscription et un recherche de personnes par query.
+Concernant le front, l'authentification est en place avec la création de voyage mais dû à quelques bug fix par ci par là, l'intégration de fonctionnalité front/back à pris beaucoup de retard.
+Le sprint 2 à été mieux organisé que le premier mais manque encore de temps pour le finir complètement.
  
 ### Sentry 
  <img width="1223" alt="image" src="https://user-images.githubusercontent.com/13368283/157912856-cf4a2700-5c21-4ecf-8b65-c3cb6f598484.png">
