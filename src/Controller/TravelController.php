@@ -237,7 +237,7 @@ class TravelController extends HelloworldController
         ]);
 
         if (!empty($errorsPlace)) {
-            return $errors;
+            return $errorsPlace;
         }
 
         $placeAddress = (isset($placeRequest['address'])) ? $placeRequest['address'] : null;
