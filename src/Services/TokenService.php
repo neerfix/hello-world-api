@@ -53,6 +53,8 @@ class TokenService
      */
     public function create(User $user, string $target, ?DateTime $datetime = null): Token
     {
+        $hasToken = null;
+
         if (Token::TYPE_REFRESH_TOKEN === $target) {
             $hasToken = $this->tokenRepository->findRefreshTokenByUser($user);
         }
