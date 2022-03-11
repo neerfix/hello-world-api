@@ -58,6 +58,7 @@ class TokenService
         if (Token::TYPE_REFRESH_TOKEN === $target) {
             $hasToken = $this->tokenRepository->findRefreshTokenByUser($user);
         }
+
         if (Token::TYPE_ACCESS_TOKEN === $target) {
             $hasToken = $this->tokenRepository->findAccessTokenByUser($user);
         }

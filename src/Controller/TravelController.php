@@ -3,7 +3,9 @@
 namespace App\Controller;
 
 use App\Entity\User;
+use App\Repository\PlaceRepository;
 use App\Repository\TravelRepository;
+use App\Services\PlaceService;
 use App\Services\RequestService;
 use App\Services\ResponseService;
 use App\Services\TravelService;
@@ -30,6 +32,8 @@ class TravelController extends HelloworldController
         NormalizerInterface $normalizer,
         private TravelService $travelService,
         private TravelRepository $travelRepository,
+        private PlaceRepository $placeRepository,
+        private PlaceService $placeService
     ) {
         parent::__construct($responseService, $requestService, $validator, $normalizer);
     }
@@ -129,6 +133,7 @@ class TravelController extends HelloworldController
     {
         $loggedUser = $this->getLoggedUser();
         $parameters = $this->getContent($request);
+        $placeRequest = $parameters['place'];
 
         // No logged user
         if (null === $loggedUser) {
@@ -162,11 +167,23 @@ class TravelController extends HelloworldController
             return $errors;
         }
 
+        $errorsPlace = $this->validate($placeRequest, [
+            'name' => [new Type(['type' => 'string']), new NotBlank()],
+            'latitude' => [new Type(['type' => 'float']), new NotBlank()],
+            'longitude' => [new Type(['type' => 'float']), new NotBlank()],
+        ]);
+
+        if (!empty($errorsPlace)) {
+            return $errors;
+        }
+        $place = 'truc';
+
         $startedAt = $this->getDate($request, $request->request->get('startedAt'));
         $endedAt = $this->getDate($request, $request->request->get('endedAt'));
 
         $travelUpdated = $this->travelService->update(
             $travel,
+            $place,
             $loggedUser,
             $parameters['name'],
             $parameters['budget'],
@@ -189,6 +206,7 @@ class TravelController extends HelloworldController
     {
         $parameters = $this->getContent($request);
         $loggedUser = $this->getLoggedUser();
+        $placeRequest = $parameters['place'];
 
         // No logged user
         if (null === $loggedUser) {
@@ -208,11 +226,33 @@ class TravelController extends HelloworldController
             return $errors;
         }
 
+        $errorsPlace = $this->validate($placeRequest, [
+            'name' => [new Type(['type' => 'string']), new NotBlank()],
+            'latitude' => [new Type(['type' => 'float']), new NotBlank()],
+            'longitude' => [new Type(['type' => 'float']), new NotBlank()],
+            'address' => [new Optional([new Type(['type' => 'string']), new NotBlank()])],
+            'city' => [new Optional([new Type(['type' => 'string']), new NotBlank()])],
+            'zipcode' => [new Optional([new Type(['type' => 'string']), new NotBlank()])],
+            'country' => [new Optional([new Type(['type' => 'string']), new NotBlank()])],
+        ]);
+
+        if (!empty($errorsPlace)) {
+            return $errors;
+        }
+
+        $placeAddress = (isset($placeRequest['address'])) ? $placeRequest['address'] : null;
+        $placeCity = (isset($placeRequest['city'])) ? $placeRequest['city'] : null;
+        $placeZipcode = (isset($placeRequest['zipcode'])) ? $placeRequest['zipcode'] : null;
+        $placeCountry = (isset($placeRequest['country'])) ? $placeRequest['country'] : null;
+
+        $place = $this->placeService->create($placeRequest['name'], $placeRequest['latitude'], $placeRequest['longitude'], $placeAddress, $placeCity, $placeZipcode, $placeCountry);
+
         $startedAt = $this->getDate($request, $request->request->get('startedAt'));
         $endedAt = $this->getDate($request, $request->request->get('endedAt'));
 
         $travel = $this->travelService->create(
             $loggedUser,
+            $place,
             $parameters['name'],
             $parameters['budget'],
             $startedAt,

@@ -126,6 +126,13 @@ class Travel implements Statuable
      */
     private Collection $steps;
 
+    /**
+     * @Groups("travel:read")
+     * @ORM\ManyToOne(targetEntity="Place", inversedBy="travels")
+     * @ORM\JoinColumn(name="place_id", referencedColumnName="id", nullable="false")
+     */
+    private Place $placeId;
+
     // -------------------------- >
 
     public function getId(): int
@@ -263,8 +270,20 @@ class Travel implements Statuable
         return $this;
     }
 
-    public function __toString()
+    public function __toString(): string
     {
         return $this->id;
+    }
+
+    public function getPlaceId(): Place
+    {
+        return $this->placeId;
+    }
+
+    public function setPlaceId(Place $placeId): Travel
+    {
+        $this->placeId = $placeId;
+
+        return $this;
     }
 }

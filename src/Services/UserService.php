@@ -151,17 +151,8 @@ class UserService
 
         $existingEmail = $this->userRepository->findOneByEmail($email);
 
-        // Existing email
-        if (null !== $existingEmail) {
+        if ((null !== $existingEmail) && $user->getEmail() !== $existingEmail->getEmail()) {
             throw new Exception('cet email est déjà utilisé');
-        }
-
-        if (null === $user) {
-            $existingUsername = $this->userRepository->findOneByUsername($username);
-
-            if (null !== $existingUsername) {
-                throw new Exception('cet username est déjà utilisé');
-            }
         }
 
         $birthdate = (clone $birthdate)
@@ -174,9 +165,15 @@ class UserService
         $user
             ->setEmail($email)
             ->setUsername($username)
-            ->setFirstname($firstname)
-            ->setLastname($lastname)
             ->setDateOfBirth($birthdate);
+
+        if (null !== $firstname) {
+            $user->setFirstname($firstname);
+        }
+
+        if (null !== $lastname) {
+            $user->setFirstname($lastname);
+        }
 
         $this->em->persist($user);
         $this->em->flush();

@@ -29,6 +29,7 @@ class Place implements Statuable
     {
         $this->steps = new ArrayCollection();
         $this->wishLists = new ArrayCollection();
+        $this->travels = new ArrayCollection();
 
         $this->setUpdatedAt(new DateTime());
         $this->setCreatedAt(new DateTime());
@@ -57,37 +58,37 @@ class Place implements Statuable
      *     "step:nested",
      *     "wishList:nested",
      * })
-     * @ORM\Column(name="address", type="string", length="255")
+     * @ORM\Column(name="address", type="string", length="255",nullable=true)
      */
     private string $address;
 
     /**
      * @Groups({
-     *     "place:read",
-     *     "step:nested",
-     *     "wishList:nested",
+     *   "place:read",
+     *    "step:nested",
+     *    "wishList:nested",
      * })
-     * @ORM\Column(name="city", type="string", length="255")
+     * @ORM\Column(name="city", type="string", length="255", nullable=true)
      */
     private string $city;
 
     /**
      * @Groups({
-     *     "place:read",
-     *     "step:nested",
-     *     "wishList:nested",
+     *   "place:read",
+     *   "step:nested",
+     *   "wishList:nested",
      * })
-     * @ORM\Column(name="zipcode", type="string", length="255")
+     * @ORM\Column(name="zipcode", type="string", length="255", nullable=true)
      */
     private string $zipcode;
 
     /**
      * @Groups({
-     *     "place:read",
-     *     "step:nested",
-     *     "wishList:nested",
+     *   "place:read",
+     *    "step:nested",
+     *    "wishList:nested",
      * })
-     * @ORM\Column(name="country", type="string", length="255")
+     * @ORM\Column(name="country", type="string", length="255",nullable=true)
      */
     private string $country;
 
@@ -146,6 +147,11 @@ class Place implements Statuable
      * @ORM\OneToMany(targetEntity="WishList", mappedBy="place")
      */
     private Collection $wishLists;
+  
+    /**
+     * @ORM\OneToMany(targetEntity="Travel", mappedBy="placeId")
+     */
+    private Collection $travels;
 
     // -------------------------- >
 
@@ -267,7 +273,7 @@ class Place implements Statuable
         return $this->steps;
     }
 
-    public function __toString()
+    public function __toString(): string
     {
         return $this->id;
     }
